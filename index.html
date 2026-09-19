@@ -6,15 +6,17 @@
       name="viewport"
       content="width=device-width,initial-scale=1,viewport-fit=cover"
     />
-    <meta name="theme-color" content="#f5f7f6" />
+    <meta name="theme-color" content="#faf9f5" />
     <title>岩间 · 侧上方</title>
     <style>
       :root {
         color-scheme: light;
-        --ink: #303a39;
-        --muted: #75817e;
-        --accent: #ce6949;
-        --line: #e0e6e3;
+        --ink: #393e39;
+        --muted: #74796e;
+        --accent: #c97551;
+        --line: #e5e6dc;
+        --paper: #faf9f5;
+        --wall: #f1f2ec;
       }
 
       * {
@@ -34,7 +36,7 @@
         min-height: 340px;
         display: grid;
         grid-template-rows: auto minmax(180px, 1fr) auto;
-        background: #f5f7f6;
+        background: var(--paper);
         color: var(--ink);
         font-family: "Microsoft YaHei", "PingFang SC", "Segoe UI", sans-serif;
         overscroll-behavior: none;
@@ -72,15 +74,17 @@
         padding: 12px max(20px, env(safe-area-inset-right)) 12px
           max(20px, env(safe-area-inset-left));
         padding-top: max(12px, env(safe-area-inset-top));
-        background: #fcfdfc;
-        border-bottom: 1px solid var(--line);
+        background: var(--paper);
+        border-bottom: 1px solid transparent;
       }
 
       h1 {
         margin: 0;
         font-size: 25px;
         line-height: 1.2;
-        font-weight: 800;
+        font-family: "STSong", "SimSun", serif;
+        font-weight: 400;
+        letter-spacing: 2px;
       }
 
       h1 span {
@@ -110,7 +114,7 @@
         left: 6px;
         width: 7px;
         height: 7px;
-        background: #4868bc;
+        background: #6682be;
         border-radius: 50%;
         pointer-events: none;
       }
@@ -122,7 +126,7 @@
         height: 44px;
         padding: 0 22px 0 22px;
         border: 0;
-        border-radius: 6px;
+        border-radius: 10px;
         background: transparent;
         color: inherit;
         font: inherit;
@@ -174,7 +178,7 @@
         height: 44px;
         padding: 0;
         border: 0;
-        border-radius: 6px;
+        border-radius: 10px;
         background: transparent;
         text-decoration: none;
         transition: background 0.12s;
@@ -192,7 +196,7 @@
       }
 
       .icon-button:active:not(:disabled) {
-        background: #dfe8e0;
+        background: #e4e7dc;
       }
 
       .icon-button::after {
@@ -242,13 +246,13 @@
       }
 
       #undo:not(:disabled) {
-        background: #e3ece4;
+        background: #e7eadd;
         color: #345443;
       }
 
       @media (hover: hover) {
         .icon-button:hover:not(:disabled) {
-          background: #e9eee8;
+          background: #eeeee6;
         }
 
         .icon-button:hover:not(:disabled)::after {
@@ -265,6 +269,7 @@
         min-height: 0;
         overflow: hidden;
         isolation: isolate;
+        background: var(--wall);
       }
 
       canvas {
@@ -355,8 +360,8 @@
       }
 
       footer {
-        background: #fcfdfc;
-        border-top: 1px solid var(--line);
+        background: var(--paper);
+        border-top: 1px solid transparent;
         padding: 10px max(18px, env(safe-area-inset-right))
           max(10px, env(safe-area-inset-bottom))
           max(18px, env(safe-area-inset-left));
@@ -579,10 +584,10 @@
           left: 16px;
           min-height: 36px;
           max-width: 110px;
-          border: 1px solid #dce5df;
-          border-radius: 6px;
-          background: #fcfdfbd9;
-          color: #587064;
+          border: 1px solid transparent;
+          border-radius: 10px;
+          background: #faf9f5d9;
+          color: #606c5f;
           padding: 5px;
           font: 12px inherit;
         "
@@ -598,7 +603,7 @@
           bottom: 24px;
           right: 18px;
           font-size: 11px;
-          color: #75817e;
+          color: var(--muted);
           pointer-events: none;
         "
       ></span>
@@ -685,7 +690,7 @@
         max-height: none;
         margin: 0;
         color: var(--ink);
-        background: #f4f7f5;
+        background: var(--wall);
       }
 
       #photoEditor[open] {
@@ -708,7 +713,7 @@
         gap: 12px;
         padding: 10px max(16px, env(safe-area-inset-right)) 10px
           max(16px, env(safe-area-inset-left));
-        background: #fcfdfc;
+        background: var(--paper);
         border-bottom: 1px solid var(--line);
       }
 
@@ -751,7 +756,7 @@
         min-width: 0;
         min-height: 0;
         overflow: auto;
-        background: #e5ebe8;
+        background: var(--wall);
       }
 
       #photoCanvas {
@@ -766,7 +771,7 @@
         overflow: auto;
         padding: 16px;
         border-left: 1px solid var(--line);
-        background: #fcfdfc;
+        background: var(--paper);
       }
 
       .photo-side h3 {
@@ -825,9 +830,15 @@
       }
 
       .photo-side input[type="range"] {
-        width: 140px;
+        width: 100%;
+        min-height: 36px;
         accent-color: #597a6a;
       }
+      .photo-size-ends { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); }
+      .photo-command[aria-pressed="true"] { background: #e9e1d5; }
+      #photoColors { margin: 18px 0; }
+      #photoColors button { display: flex; align-items: center; gap: 8px; }
+      #photoColors i { width: 18px; height: 18px; border-radius: 50%; }
 
       .photo-row {
         display: flex;
@@ -909,13 +920,14 @@
       @media (max-width: 650px) {
         .photo-work {
           grid-template-columns: 1fr;
-          grid-template-rows: minmax(180px, 1fr) minmax(140px, 38%);
+          grid-template-rows: minmax(150px, 1fr) auto;
         }
 
         .photo-side {
           border-left: 0;
           border-top: 1px solid var(--line);
           padding: 10px 16px;
+          max-height: 230px;
         }
 
         .photo-side h3 {
@@ -992,51 +1004,30 @@
         <div id="photoPicture" class="photo-picture">
           <canvas
             id="photoCanvas"
-            aria-label="照片标点画布"
+            aria-label="岩壁预览；改一下时可点选或拖动岩点"
             tabindex="0"
           ></canvas>
         </div>
         <div class="photo-side">
-          <details id="photoView">
-            <summary>缩放与平移</summary>
-            <label
-              >缩放
-              <input
-                id="photoZoom"
-                aria-label="照片缩放"
-                type="range"
-                min="1"
-                max="3"
-                step=".25"
-                value="1"
-            /></label>
-            <button id="photoPan" class="photo-command" aria-pressed="false">
-              平移照片
-            </button>
-          </details>
-          <section id="photoCropPanel">
-            <h3>照片范围</h3>
+          <section id="photoSourcePanel">
+            <h3>把这面墙，变成一次尝试</h3>
+            <p class="photo-privacy">本机颜色识别，不上传照片。AI 尚未接通；生成后可补点或删掉误识别。</p>
+            <div id="photoColors" class="photo-row" hidden></div>
+          </section>
+          <section id="photoSetupPanel" hidden>
             <div class="photo-row">
-              <button
-                id="photoRotate"
-                class="icon-button"
-                aria-label="旋转照片"
-                title="旋转照片"
-              >
-                <svg viewBox="0 0 24 24">
-                  <path d="M21 12a9 9 0 1 1-3-6.7L21 8M21 3v5h-5" />
-                </svg>
-              </button>
-              <button id="photoApplyCrop" class="photo-command" disabled>
-                应用裁剪
-              </button>
-              <button id="photoResetCrop" class="photo-command">
-                重置选区
-              </button>
+              <button id="photoOriginal" class="photo-command" aria-pressed="false">原图</button>
+              <button id="photoEdit" class="photo-command" aria-pressed="false">改一下</button>
             </div>
+            <h3>摆一个自己</h3>
+            <label for="photoSize">人物大小</label>
+            <input id="photoSize" aria-label="人物大小" type="range" min=".65" max="1.6" step=".05" value="1" />
+            <div class="photo-size-ends"><span>较小</span><span>较大</span></div>
+            <p class="photo-privacy">看人与岩点的比例，合适了就开始。</p>
+            <button id="photoPickStart" class="photo-command" hidden>点选两个起手</button>
           </section>
           <section id="photoMarkPanel" hidden>
-            <h3>接触位置 <span id="photoCount"></span></h3>
+            <h3>改一下 <span id="photoCount"></span></h3>
             <div class="photo-row">
               <button
                 class="icon-button"
@@ -1061,8 +1052,8 @@
               <button
                 class="icon-button"
                 data-photo-mode="color"
-                aria-label="取色识别候选"
-                title="取色识别候选"
+                aria-label="补一组同色岩点"
+                title="补一组同色岩点"
               >
                 <svg viewBox="0 0 24 24">
                   <path d="m16 3 5 5M4 16l12-12 4 4L8 20H4zM14 6l4 4" />
@@ -1091,42 +1082,8 @@
                 </svg>
               </button>
             </div>
-            <details id="photoFine">
-              <summary>精细调整</summary>
-              <p class="photo-privacy">
-                本机颜色匹配 · 非 AI。识别不准时可以补画轮廓。
-              </p>
-              <label
-                >取色容差
-                <input
-                  id="photoTolerance"
-                  aria-label="取色容差"
-                  type="range"
-                  min="8"
-                  max="45"
-                  value="22"
-              /></label>
-              <div class="photo-row">
-                <button id="photoTraceShape" class="photo-command" disabled>
-                  提取此点轮廓
-                </button>
-                <button id="photoDrawShape" class="photo-command" disabled>
-                  补画轮廓
-                </button>
-                <button id="photoClearShape" class="photo-command" disabled>
-                  清除轮廓
-                </button>
-              </div>
-            </details>
-            <div id="photoOutlineActions" class="photo-row" hidden>
-              <button id="photoFinishShape" class="photo-command">
-                完成轮廓
-              </button>
-              <button id="photoCancelShape" class="photo-command">
-                取消描边
-              </button>
-            </div>
-            <div class="photo-row">
+            <p class="photo-privacy">拖动岩点调整抓踩位置，点空处补点；轮廓留在原处。</p>
+            <div id="photoCandidateActions" class="photo-row" hidden>
               <button id="photoAccept" class="photo-command" disabled>
                 添加候选
               </button>
@@ -1134,117 +1091,6 @@
                 清除候选
               </button>
             </div>
-            <label
-              >选中岩点
-              <select id="photoPoint" aria-label="选中岩点"></select
-            ></label>
-            <label
-              >用途
-              <select id="photoType">
-                <option value="jug">手点（也可踩）</option>
-                <option value="foot">仅脚点</option>
-              </select></label
-            >
-            <details>
-              <summary>位置坐标</summary>
-              <label
-                >横坐标 px <input id="photoPointX" type="number" step="1"
-              /></label>
-              <label
-                >纵坐标 px <input id="photoPointY" type="number" step="1"
-              /></label>
-            </details>
-          </section>
-          <section id="photoSetupPanel" hidden>
-            <h3>试一个起步</h3>
-            <label
-              >名称 <input id="photoName" maxlength="40" value="我的线路"
-            /></label>
-            <label
-              >人物大小
-              <input
-                id="photoSize"
-                type="range"
-                min=".65"
-                max="1.6"
-                step=".05"
-                value="1"
-            /></label>
-            <output id="photoScaleInfo" class="photo-privacy"
-              >估算比例 · 可直接试玩</output
-            >
-            <div id="photoChoices" class="photo-row"></div>
-            <div class="photo-row">
-              <button id="photoSuggest" class="photo-command">
-                重新推荐起步
-              </button>
-              <button id="photoPickStart" class="photo-command">
-                点选起手
-              </button>
-            </div>
-            <label
-              >TOP（可留空）
-              <select id="photoTop"></select
-            ></label>
-            <details id="photoCalibration">
-              <summary>校准真实距离（可选）</summary>
-              <label
-                >使用标定 <input id="photoCalibrated" type="checkbox"
-              /></label>
-              <button id="photoRuler" class="photo-command">
-                标定两点距离
-              </button>
-              <label
-                >实际距离 cm
-                <input
-                  id="photoCm"
-                  type="number"
-                  min="5"
-                  max="1000"
-                  value="100"
-              /></label>
-              <output id="photoRulerInfo" class="photo-privacy"
-                >尚未标定</output
-              >
-            </details>
-            <details id="photoManual">
-              <summary>手动调整起步（可选）</summary>
-              <h3>起始接触与终点</h3>
-              <label
-                >左手
-                <select id="photoStart0"></select
-              ></label>
-              <label
-                >右手
-                <select id="photoStart1"></select
-              ></label>
-              <label
-                >左脚
-                <select id="photoStart2"></select
-              ></label>
-              <label
-                >右脚
-                <select id="photoStart3"></select
-              ></label>
-              <div class="photo-row">
-                <button id="photoFindHip" class="photo-command">
-                  检查起步姿态
-                </button>
-                <button id="photoSetHip" class="photo-command">
-                  指定腰部位置
-                </button>
-              </div>
-              <label
-                >侧身
-                <input
-                  id="photoTurn"
-                  type="range"
-                  min="-1"
-                  max="1"
-                  step=".05"
-                  value="0"
-              /></label>
-            </details>
           </section>
         </div>
       </div>
@@ -1253,8 +1099,8 @@
           >照片线路是平面动作草稿，不代表真实攀爬能力。</output
         >
         <output id="photoSaved" aria-live="polite"></output>
-        <button id="photoBack" class="photo-command" hidden>上一步</button>
-        <button id="photoSave" class="photo-command" hidden>保留草稿</button>
+        <button id="photoBack" class="photo-command" hidden>返回照片</button>
+        <button id="photoSave" class="photo-command" hidden>重试保存</button>
         <button id="photoNext" class="photo-command primary" hidden>
           下一步
         </button>
@@ -1682,8 +1528,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       })();
 
       const $ = (id) => document.getElementById(id);
-      const canvas = $("canvas"),
-        ctx = canvas.getContext("2d");
+      const canvas = $("canvas");
+      let ctx = canvas.getContext("2d");
       const names = ["左手", "右手", "左脚", "右脚"];
       const routes = [
         {
@@ -3006,46 +2852,31 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           height = b.bottom - b.top;
         ctx.save();
         outlinePath(ctx, h.shape.outline);
-        ctx.shadowColor = "#34454b17";
-        ctx.shadowOffsetX = 1.5 * scale;
-        ctx.shadowOffsetY = 3 * scale;
         ctx.fillStyle = h.shape.color;
-        ctx.strokeStyle = "#354253";
-        ctx.lineWidth = 2.2;
-        ctx.lineJoin = "round";
         ctx.fill();
-        ctx.stroke();
-        ctx.shadowColor = "transparent";
         ctx.clip();
         ctx.beginPath();
-        ctx.moveTo(b.left, b.top + height * 0.7);
+        ctx.moveTo(b.left, b.top + height * 0.84);
         ctx.bezierCurveTo(
           b.left + w * 0.4,
           b.bottom,
           b.right,
-          b.top + height * 0.2,
+          b.top + height * 0.6,
           b.right,
-          b.top + height * 0.5,
+          b.top + height * 0.72,
         );
         ctx.lineTo(b.right, b.bottom + 2);
         ctx.lineTo(b.left, b.bottom + 2);
         ctx.closePath();
-        ctx.fillStyle = "#23324024";
+        ctx.fillStyle = "#2332401c";
         ctx.fill();
-        ctx.save();
-        ctx.translate(0, 3);
-        outlinePath(ctx, h.shape.outline);
-        ctx.strokeStyle = "#ffffff55";
-        ctx.lineWidth = 1.8;
-        ctx.stroke();
         ctx.restore();
-        ctx.restore();
-        circle(h, 3.2, "#e7ece5", "#354253", 1.2);
       }
-      function drawHold(h) {
+      // One paint path for each hold and its feedback. All contacts and hit zones
+      // stay in the existing model; photo contours are never smoothed or replaced.
+      function holdPath(h) {
         if (h.shape) {
-          drawPhotoHold(h);
-          if (h.goal) drawGoal(h);
+          outlinePath(ctx, h.shape.outline);
           return;
         }
         ctx.save();
@@ -3055,68 +2886,64 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ry = foot ? (h.feet === 2 ? 17 : 11) : 25;
         ctx.rotate(foot ? -0.12 : -0.06);
         ctx.beginPath();
-        ctx.moveTo(-rx, 0);
-        ctx.bezierCurveTo(
-          -rx,
-          -ry * 0.8,
-          -rx * 0.3,
-          -ry * 1.1,
-          rx * 0.2,
-          -ry * 0.87,
-        );
-        ctx.bezierCurveTo(
-          rx * 0.8,
-          -ry * 0.75,
-          rx * 1.04,
-          -ry * 0.2,
-          rx,
-          ry * 0.12,
-        );
-        ctx.bezierCurveTo(rx * 0.94, ry * 0.9, -rx * 0.76, ry * 1.08, -rx, 0);
+        if (!foot && h.hands !== 2) {
+          // A soft crescent and a rounded slope echo the approved wall study.
+          // Both include the original central grip and fit its original bounds.
+          if (holds.indexOf(h) % 2 === 0) {
+            ctx.moveTo(-rx, 0);
+            ctx.bezierCurveTo(-rx, -ry * 0.65, -rx * 0.55, -ry, -rx * 0.2, -ry * 0.9);
+            ctx.bezierCurveTo(0, -ry * 0.85, -rx * 0.3, -ry * 0.3, rx * 0.1, -ry * 0.3);
+            ctx.bezierCurveTo(rx * 0.5, -ry * 0.3, rx * 0.8, -ry * 0.85, rx, -ry * 0.4);
+            ctx.bezierCurveTo(rx * 1.1, ry * 0.6, -rx * 0.8, ry * 1.1, -rx, 0);
+          } else {
+            ctx.moveTo(-rx, ry * 0.15);
+            ctx.quadraticCurveTo(-rx, -ry * 0.2, rx * 0.05, -ry * 0.9);
+            ctx.quadraticCurveTo(rx * 0.3, -ry * 1.05, rx * 0.5, -ry * 0.6);
+            ctx.lineTo(rx * 0.95, ry * 0.1);
+            ctx.quadraticCurveTo(rx * 1.1, ry * 0.6, rx * 0.6, ry * 0.7);
+            ctx.lineTo(-rx * 0.6, ry * 0.8);
+            ctx.quadraticCurveTo(-rx * 0.95, ry * 0.7, -rx, ry * 0.15);
+          }
+        } else {
+          ctx.moveTo(-rx, 0);
+          ctx.bezierCurveTo(-rx, -ry * 0.8, -rx * 0.3, -ry * 1.1, rx * 0.2, -ry * 0.87);
+          ctx.bezierCurveTo(rx * 0.8, -ry * 0.75, rx * 1.04, -ry * 0.2, rx, ry * 0.12);
+          ctx.bezierCurveTo(rx * 0.94, ry * 0.9, -rx * 0.76, ry * 1.08, -rx, 0);
+        }
         ctx.closePath();
-        ctx.shadowColor = "#34454b17";
-        ctx.shadowOffsetX = 1.5 * scale;
-        ctx.shadowOffsetY = 3 * scale;
-        ctx.fillStyle = "#526fbe";
-        ctx.strokeStyle = "#354253";
-        ctx.lineWidth = 2.2;
-        ctx.fill();
-        ctx.stroke();
-        ctx.shadowColor = "transparent";
+        ctx.restore();
+      }
+      function drawHold(h) {
+        if (h.shape) {
+          drawPhotoHold(h);
+          if (h.goal) drawGoal(h);
+          return;
+        }
         ctx.save();
+        holdPath(h);
+        ctx.fillStyle = "#6682be";
+        ctx.fill();
         ctx.clip();
+        ctx.translate(h.x, h.y);
+        const foot = h.type === "foot",
+          rx = foot ? (h.feet === 2 ? 44 : 18) : h.hands === 2 ? 44 : 28,
+          ry = foot ? (h.feet === 2 ? 17 : 11) : 25;
+        ctx.rotate(foot ? -0.12 : -0.06);
         ctx.beginPath();
-        ctx.moveTo(-rx, ry * 0.22);
+        ctx.moveTo(-rx, ry * 0.58);
         ctx.bezierCurveTo(
           -rx * 0.3,
-          ry * 0.85,
+          ry * 0.95,
           rx * 0.6,
-          ry * 0.55,
+          ry * 0.78,
           rx,
-          -ry * 0.1,
+          ry * 0.28,
         );
         ctx.lineTo(rx, ry * 1.3);
         ctx.lineTo(-rx, ry * 1.3);
         ctx.closePath();
-        ctx.fillStyle = "#425da4";
+        ctx.fillStyle = "#5572af";
         ctx.fill();
-        ctx.beginPath();
-        ctx.moveTo(-rx * 0.65, -ry * 0.36);
-        ctx.quadraticCurveTo(-rx * 0.2, -ry * 0.74, rx * 0.36, -ry * 0.52);
-        ctx.strokeStyle = "#94a9dd";
-        ctx.lineWidth = foot ? 1.4 : 2;
-        ctx.lineCap = "round";
-        ctx.stroke();
-        ctx.restore();
-        circle({ x: 0, y: 1 }, foot ? 2.8 : 3.6, "#d6dde2", "#354253", 1.1);
-        line(
-          [
-            { x: -0.9, y: 1 },
-            { x: 0.9, y: 1 },
-          ],
-          "#52606c",
-          1,
-        );
         ctx.restore();
         if (h.goal) drawGoal(h);
       }
@@ -3132,11 +2959,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         ctx.lineTo(6, 19);
         ctx.lineTo(0, 22);
         ctx.closePath();
-        ctx.fillStyle = "#fcfdfb";
-        ctx.strokeStyle = "#71817c";
-        ctx.lineWidth = 1.4;
+        ctx.fillStyle = "#dcb08c";
         ctx.fill();
-        ctx.stroke();
         ctx.restore();
         ctx.font = "600 10px 'Segoe UI',sans-serif";
         ctx.textAlign = "center";
@@ -3144,36 +2968,120 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         ctx.fillText("TOP", h.x, top - 59);
         ctx.textAlign = "left";
       }
-      function limb(hip, points, i, ghost = false, ghostColor = "#688c78") {
+      // Study 10 is a skin over the shared game skeleton, not a new pose model.
+      const character = {
+        skin: "#e2b88b",
+        hair: "#303d39",
+        curl: "#414b43",
+        top: "#c97551",
+        pants: "#506259",
+      };
+      function characterFrame(hip) {
+        const sn = Math.sin(hip.turn * 0.95),
+          c = Math.cos(hip.turn * 0.95),
+          w = 25 * Math.sqrt(c * c + 0.36 * sn * sn),
+          shear = (-sn * 25) / 91,
+          world = (x, y) => ({ x: hip.x + x + shear * y, y: hip.y + y }),
+          outline = [];
+        for (let i = 0; i <= 24; i++) {
+          const angle = Math.PI + (i * Math.PI) / 24;
+          outline.push(world(w * Math.cos(angle), -81 + 23 * Math.sin(angle)));
+        }
+        for (let i = 0; i <= 24; i++) {
+          const angle = (i * Math.PI) / 24;
+          outline.push(world(w * Math.cos(angle), -10 + 23 * Math.sin(angle)));
+        }
+        return { sn, w, shear, world, outline };
+      }
+      function characterBodyPath(w) {
+        ctx.beginPath();
+        ctx.ellipse(0, -81, w, 23, 0, Math.PI, Math.PI * 2);
+        ctx.lineTo(w, -10);
+        ctx.ellipse(0, -10, w, 23, 0, 0, Math.PI);
+        ctx.closePath();
+      }
+      function characterLimbRoot(a, j, radius, frame) {
+        const dx = j.x - a.x,
+          dy = j.y - a.y,
+          distance = Math.hypot(dx, dy),
+          at = (t) => ({ x: a.x + dx * t, y: a.y + dy * t }),
+          clear = (p) =>
+            !insideOutline(p, frame.outline) &&
+            frame.outline.every(
+              (q, n) =>
+                segmentDistance(p, q, frame.outline[(n + 1) % frame.outline.length]) >=
+                radius + 2.6,
+            );
+        if (clear(a)) return a;
+        // Only trim paint at the root; joints, bones and planted contacts stay fixed.
+        const step = 2 / Math.max(distance, 1);
+        for (let t = step; t <= 0.65; t += step) {
+          if (!clear(at(t))) continue;
+          let lo = Math.max(0, t - step),
+            hi = t;
+          for (let k = 0; k < 6; k++) {
+            const mid = (lo + hi) / 2;
+            if (clear(at(mid))) hi = mid;
+            else lo = mid;
+          }
+          return at(hi);
+        }
+        // An occluded root stays behind the body rather than moving the joint.
+        return a;
+      }
+      function characterLeg(a, j, b, skin, cloth) {
+        const points = [a, j, b],
+          radii = [13, 11.5, 9.5];
+        for (let n = 0; n < 2; n++) {
+          const start = points[n],
+            end = points[n + 1],
+            d = Math.hypot(end.x - start.x, end.y - start.y) || 1,
+            nx = -(end.y - start.y) / d,
+            ny = (end.x - start.x) / d;
+          ctx.beginPath();
+          ctx.moveTo(start.x + nx * radii[n], start.y + ny * radii[n]);
+          ctx.lineTo(end.x + nx * radii[n + 1], end.y + ny * radii[n + 1]);
+          ctx.lineTo(end.x - nx * radii[n + 1], end.y - ny * radii[n + 1]);
+          ctx.lineTo(start.x - nx * radii[n], start.y - ny * radii[n]);
+          ctx.closePath();
+          ctx.fillStyle = skin;
+          ctx.fill();
+        }
+        points.forEach((p, n) => circle(p, radii[n], skin));
+        const angle = Math.atan2(j.y - a.y, j.x - a.x),
+          hem = { x: mix(a.x, j.x, 0.5), y: mix(a.y, j.y, 0.5) },
+          nx = -Math.sin(angle) * 13,
+          ny = Math.cos(angle) * 13;
+        ctx.beginPath();
+        ctx.arc(a.x, a.y, 13, angle + Math.PI / 2, angle + Math.PI * 1.5);
+        ctx.lineTo(hem.x - nx, hem.y - ny);
+        ctx.lineTo(hem.x + nx, hem.y + ny);
+        ctx.closePath();
+        ctx.fillStyle = cloth;
+        ctx.fill();
+      }
+      function limb(hip, points, i, ghost = false, ghostColor = "#688c78", frame) {
         const a = anchor(hip, i),
           b = points[i],
           j = joint(hip, i, b);
         const shade = (1 + (i % 2 ? -1 : 1) * Math.sin(hip.turn * 0.95)) / 2,
-          color = `rgb(${mix(232, 209, shade)}, ${mix(190, 160, shade)}, ${mix(148, 122, shade)})`;
-        line(
-          [a, j, b],
-          ghost ? ghostColor : "#343c3c",
-          ghost ? 2.3 / scale : i < 2 ? 17 : 20,
-        );
-        if (!ghost) {
-          line([a, j, b], color, i < 2 ? 12.6 : 15.6);
-          if (i >= 2) {
-            const hem = { x: mix(a.x, j.x, 0.32), y: mix(a.y, j.y, 0.32) };
-            line([a, hem], "#343c3c", 25);
-            line([a, hem], "#505957", 20.6);
-          } else {
-            const cuff = { x: mix(a.x, j.x, 0.18), y: mix(a.y, j.y, 0.18) };
-            line([a, cuff], "#343c3c", 22);
-            line([a, cuff], "#d7734b", 17.6);
-          }
+          skin = `rgb(${mix(226, 205, shade)}, ${mix(184, 167, shade)}, ${mix(139, 126, shade)})`,
+          cloth = `rgb(${mix(80, 69, shade)}, ${mix(98, 86, shade)}, ${mix(89, 78, shade)})`;
+        if (ghost) line([a, j, b], ghostColor, 2.3 / scale);
+        else {
+          const root = characterLimbRoot(
+            a, j, i < 2 ? 6.5 : 13, frame || characterFrame(hip),
+          );
+          if (i < 2) line([root, j, b], skin, 13);
+          else characterLeg(root, j, b, skin, cloth);
         }
         if (i < 2) {
           circle(
             b,
             ghost ? 9 : 8,
             ghost ? "#f5f8f1" : "#fbf6e7",
-            ghost ? ghostColor : "#343c3c",
-            ghost ? 1.5 / scale : 2.2,
+            ghost ? ghostColor : null,
+            1.5 / scale,
           );
         } else if (ghost) {
           ctx.beginPath();
@@ -3190,167 +3098,91 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ctx.moveTo(-11, -16);
           ctx.quadraticCurveTo(-5, -21, 3, -15);
           ctx.quadraticCurveTo(7, -9, 14, -5);
-          ctx.quadraticCurveTo(21, -2, 19, 4);
-          ctx.quadraticCurveTo(4, 8, -13, 4);
+          ctx.quadraticCurveTo(21, -2, 19, 9);
+          ctx.quadraticCurveTo(4, 12, -13, 9);
           ctx.quadraticCurveTo(-16, -3, -11, -16);
           ctx.closePath();
-          ctx.fillStyle = "#394748";
+          ctx.fillStyle = character.hair;
           ctx.fill();
-          ctx.strokeStyle = "#293435";
-          ctx.lineWidth = 2.2;
-          ctx.stroke();
-          ctx.save();
-          ctx.clip();
-          ctx.fillStyle = "#283334";
-          ctx.fillRect(-20, 1, 45, 12);
-          line(
-            [
-              { x: -5, y: -13 },
-              { x: 5, y: -5 },
-            ],
-            "#e29662",
-            4,
-          );
-          line(
-            [
-              { x: -12, y: 0 },
-              { x: 11, y: 0 },
-            ],
-            "#71817a",
-            1.2,
-          );
-          ctx.restore();
           ctx.restore();
         }
         return j;
       }
-      function body(hip) {
-        const t = hip.turn,
-          a = anchor(hip, 0),
-          b = anchor(hip, 1),
-          l = anchor(hip, 2),
-          r = anchor(hip, 3);
-        const center = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 },
-          sn = Math.sin(t * 0.95),
-          neck = { x: center.x + sn * 5, y: center.y - 28 };
-        line(
-          [
-            { x: neck.x, y: neck.y - 9 },
-            { x: center.x, y: center.y - 6 },
-          ],
-          "#343c3c",
-          17,
-        );
-        line(
-          [
-            { x: neck.x, y: neck.y - 9 },
-            { x: center.x, y: center.y - 6 },
-          ],
-          "#dfb38a",
-          12.6,
-        );
-        ctx.beginPath();
-        ctx.moveTo(l.x - 2, l.y - 2);
-        ctx.quadraticCurveTo(hip.x, hip.y + 2, r.x + 2, r.y - 2);
-        ctx.lineTo(r.x + 3, r.y + 17);
-        ctx.quadraticCurveTo(hip.x, hip.y + 25, l.x - 3, l.y + 17);
-        ctx.closePath();
-        ctx.fillStyle = "#505957";
-        ctx.strokeStyle = "#343c3c";
-        ctx.lineWidth = 2.2;
-        ctx.fill();
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(a.x - 3, a.y - 5);
-        ctx.quadraticCurveTo(a.x + 6, a.y - 12, center.x - 10, center.y - 15);
-        ctx.quadraticCurveTo(
-          center.x,
-          center.y - 8,
-          center.x + 10,
-          center.y - 15,
-        );
-        ctx.quadraticCurveTo(b.x - 6, b.y - 12, b.x + 3, b.y - 5);
-        ctx.bezierCurveTo(
-          b.x - 1,
-          b.y + 28,
-          r.x - 6,
-          r.y - 28,
-          r.x + 1,
-          r.y + 4,
-        );
-        ctx.quadraticCurveTo(hip.x, hip.y + 10, l.x - 1, l.y + 4);
-        ctx.bezierCurveTo(
-          l.x + 6,
-          l.y - 28,
-          a.x + 1,
-          a.y + 28,
-          a.x - 3,
-          a.y - 5,
-        );
-        ctx.closePath();
-        ctx.fillStyle = "#d97650";
-        ctx.fill();
-        ctx.strokeStyle = "#343c3c";
-        ctx.lineWidth = 2.2;
-        ctx.stroke();
+      function body(hip, frame, lookTarget) {
+        const { sn, w, shear, world } = frame;
         ctx.save();
+        ctx.transform(1, 0, shear, 1, hip.x, hip.y);
+        characterBodyPath(w);
+        ctx.fillStyle = character.skin;
+        ctx.fill();
         ctx.clip();
         ctx.beginPath();
-        ctx.moveTo(neck.x + sn * 8, neck.y);
-        ctx.quadraticCurveTo(
-          center.x + sn * 17,
-          center.y + 39,
-          hip.x + sn * 11,
-          hip.y + 24,
-        );
-        ctx.lineTo(t >= 0 ? l.x - 20 : r.x + 20, hip.y + 30);
-        ctx.lineTo(t >= 0 ? a.x - 20 : b.x + 20, neck.y);
+        ctx.moveTo(-w, -65);
+        ctx.quadraticCurveTo(0, -72, w, -65);
+        ctx.lineTo(w, -29);
+        ctx.quadraticCurveTo(0, -27, -w, -29);
         ctx.closePath();
-        ctx.fillStyle = "#b7553c";
-        ctx.globalAlpha = 0.12 + Math.abs(t) * 0.3;
+        ctx.fillStyle = character.top;
         ctx.fill();
+        line([{ x: -w * 0.65, y: -102 }, { x: w * 0.52, y: -63 }], character.top, 5.5);
+        line([{ x: w * 0.65, y: -102 }, { x: -w * 0.52, y: -63 }], character.top, 5.5);
+        ctx.fillStyle = character.pants;
+        ctx.fillRect(-30, -22, 60, 40);
         ctx.restore();
-        line(
-          [
-            { x: hip.x - 13, y: hip.y - 3 },
-            { x: hip.x + 11, y: hip.y - 2 },
-          ],
-          "#edaa82",
-          1.2,
-        );
-        const head = { x: neck.x + sn * 5, y: neck.y - 28 };
+        const neck = world(0, -105),
+          head = { x: neck.x + sn * 3, y: hip.y - 137 },
+          gaze = lookTarget ? clamp((lookTarget.x - head.x) / 130, -1, 1) : 0,
+          facing = clamp(sn * 0.85 + gaze * 0.32, -1, 1),
+          reveal = smooth(clamp((Math.abs(facing) - 0.12) / 0.75, 0, 1)),
+          lift = lookTarget ? clamp((head.y - lookTarget.y) / 100, 0, 1) : 0;
+        line([{ x: head.x, y: head.y + 20 }, neck], character.skin, 11);
         ctx.save();
         ctx.translate(head.x, head.y);
-        ctx.scale(1 - Math.abs(t) * 0.16, 1);
+        ctx.rotate(-facing * lift * 0.32);
+        ctx.scale(1 - Math.abs(facing) * 0.12, 1);
         ctx.beginPath();
-        ctx.moveTo(0, -27);
-        ctx.bezierCurveTo(20, -28, 28, -12, 25 + Math.max(0, sn) * 5, 6);
-        ctx.bezierCurveTo(24, 19, 12, 26, 0, 26);
-        ctx.bezierCurveTo(-17, 26, -27, 15, -25 - Math.max(0, -sn) * 5, 5);
-        ctx.bezierCurveTo(-28, -13, -20, -28, 0, -27);
-        ctx.closePath();
-        ctx.fillStyle = "#e6bc94";
-        ctx.strokeStyle = "#343c3c";
-        ctx.lineWidth = 2.2;
+        ctx.ellipse(0, 0, 21.5, 26.5, 0, 0, Math.PI * 2);
+        ctx.fillStyle = character.hair;
         ctx.fill();
-        ctx.stroke();
+        // A clipped crescent opens gradually; there is no front-facing face.
+        if (reveal > 0) {
+          ctx.save();
+          ctx.clip();
+          ctx.scale(facing < 0 ? -1 : 1, 1);
+          const edge = 23 - reveal * 20;
+          ctx.beginPath();
+          ctx.moveTo(edge, -24);
+          ctx.quadraticCurveTo(edge + 5, 0, edge - 2, 12);
+          ctx.lineTo(edge + 1, 30);
+          ctx.lineTo(30, 30);
+          ctx.lineTo(30, -30);
+          ctx.closePath();
+          ctx.fillStyle = character.skin;
+          ctx.fill();
+          ctx.restore();
+        }
+        ctx.translate(4 - facing * 23, -5);
+        ctx.scale(0.8, 0.88);
         ctx.beginPath();
-        ctx.moveTo(-25, 2);
-        ctx.bezierCurveTo(-31, -41, 29, -45, 27, -1);
-        ctx.quadraticCurveTo(15 + sn * 9, -9, 3 + sn * 8, -2);
-        ctx.quadraticCurveTo(-11, 4, -25, 2);
+        ctx.moveTo(-5, -6);
+        ctx.bezierCurveTo(-17, -11, -23, -3, -19, 5);
+        ctx.bezierCurveTo(-29, 10, -25, 21, -19, 23);
+        ctx.bezierCurveTo(-25, 32, -18, 40, -11, 40);
+        ctx.bezierCurveTo(-14, 49, -3, 52, 3, 44);
+        ctx.bezierCurveTo(-7, 42, -5, 34, 0, 29);
+        ctx.bezierCurveTo(5, 23, 1, 16, -5, 13);
+        ctx.bezierCurveTo(1, 7, 0, -1, -5, -6);
         ctx.closePath();
-        ctx.fillStyle = "#3a4140";
+        ctx.fillStyle = character.curl;
         ctx.fill();
-        ctx.stroke();
         ctx.beginPath();
-        ctx.moveTo(-18, -16);
-        ctx.quadraticCurveTo(-8, -31, 10, -25);
-        ctx.strokeStyle = "#56605b";
-        ctx.lineWidth = 1.5;
-        ctx.stroke();
-        if (Math.abs(t) > 0.22)
-          circle({ x: -sn * 23, y: 8 }, 4.5, "#e6bc94", "#a98568", 1);
+        ctx.moveTo(-9, -6);
+        ctx.lineTo(-3, -7);
+        ctx.lineTo(0, 0);
+        ctx.lineTo(-7, 2);
+        ctx.closePath();
+        ctx.fillStyle = character.top;
+        ctx.fill();
         ctx.restore();
       }
       function drawPreview(hip) {
@@ -3414,30 +3246,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ctx.stroke();
         }
         if (p.id !== null) {
-          const h = holds[p.id],
-            r = Math.max(
-              h.feet === 2 || h.hands === 2 ? 49 : h.type === "foot" ? 24 : 34,
-              24 / scale,
-            );
-          if (h.shape) {
-            outlinePath(ctx, h.shape.outline);
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 2 / scale;
-            ctx.stroke();
-            circle(h, 8 / scale, "transparent", color, 1.5 / scale);
-          } else {
-            ctx.beginPath();
-            ctx.arc(h.x, h.y, r, -2.6, accepted ? 2.6 : 0.1);
-            ctx.lineWidth = 2 / scale;
-            ctx.strokeStyle = color;
-            ctx.stroke();
-            if (!accepted) {
-              ctx.setLineDash([2 / scale, 4 / scale]);
-              ctx.beginPath();
-              ctx.arc(h.x, h.y, r, 0.4, 3.5);
-              ctx.stroke();
-            }
-          }
+          holdPath(holds[p.id]);
+          ctx.fillStyle = accepted ? "#faf5dc" : "#d9b39c";
+          ctx.fill();
+          // Mark the exact proposed slot, including photo contacts edited away
+          // from their silhouette. Feedback never implies an extra grip.
+          circle(p.point, 5 / scale, color);
         }
         ctx.restore();
       }
@@ -3466,18 +3280,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ...half(sorted.slice().reverse()).slice(0, -1),
         ];
       }
+      let balanceCueUntil = 0;
       function drawBalanceCue(pose) {
         const setting = $("balanceAid").value || "auto";
-        if (
-          setting === "off" ||
-          (setting !== "on" &&
-            !drag &&
-            !preview &&
-            !anim &&
-            selected === null &&
-            !keyboardStep)
-        )
-          return;
+        const now = performance.now(),
+          active = drag || preview || anim || keyboardStep;
+        if (active) balanceCueUntil = now + 420;
+        const fade = setting === "on" ? 1 : clamp((balanceCueUntil - now) / 420, 0, 1);
+        if (setting === "off" || !fade) return;
+        if (!active && setting === "auto") schedule();
         const b = gravity(
             { hip: pose.hip, limbs: pose.contact },
             pose.release,
@@ -3499,10 +3310,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               : "#527e68"
             : "#b26751";
           ctx.lineWidth = 1 / scale;
-          ctx.globalAlpha = dashed ? 0.55 : 0.25;
+          ctx.globalAlpha = (dashed ? 0.55 : 0.25) * fade;
           ctx.stroke();
           if (!dashed && hull.length > 2) {
-            ctx.globalAlpha = 0.035;
+            ctx.globalAlpha = 0.035 * fade;
             ctx.fillStyle = color;
             ctx.fill();
           }
@@ -3516,7 +3327,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             true,
           );
         }
-        ctx.globalAlpha = 0.6;
+        ctx.globalAlpha = 0.6 * fade;
         ctx.setLineDash([2 / scale, 3 / scale]);
         line([b.center, b.projection], color, 1.2 / scale);
         ctx.setLineDash([]);
@@ -3567,54 +3378,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         $("poseNote").textContent = note;
         $("poseNote").hidden = !note;
         ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = "#f4f7f5";
+        ctx.fillStyle = "#f1f2ec";
         ctx.fillRect(0, 0, width, height);
         ctx.save();
         ctx.translate(offsetX, offsetY);
         ctx.scale(scale, scale);
-        for (let x = -2000; x < 2200; x += 192)
-          line(
-            [
-              { x, y: -500 },
-              { x, y: 1500 },
-            ],
-            "#657c730b",
-            1,
-          );
-        for (let y = -500; y < 1500; y += 192)
-          line(
-            [
-              { x: -2000, y },
-              { x: 2200, y },
-            ],
-            "#657c730b",
-            1,
-          );
-        for (let y = 50; y < activeRoute.view.floor; y += 100)
-          for (let x = 120; x < 650; x += 100)
-            circle({ x, y }, 1.5, "#7e928329");
-        line(
-          [
-            { x: -2000, y: activeRoute.view.floor },
-            { x: 2200, y: activeRoute.view.floor },
-          ],
-          "#be947f",
-          1.4,
-        );
-        ctx.fillStyle = "#e3ebe6";
-        ctx.fillRect(-2000, activeRoute.view.floor + 3, 4200, 1200);
-        // Only the wall shadow moves; established contacts remain at their hold coordinates.
-        ctx.save();
-        ctx.translate(6 + 5 * (1 - Math.abs(pose.hip.turn)), 7);
-        ctx.globalAlpha = 0.045;
-        for (let i = 0; i < 4; i++) {
-          const a = anchor(pose.hip, i),
-            p = pose.points[i],
-            j = joint(pose.hip, i, p);
-          line([a, j, p], "#303c26", 20);
-        }
-        line([{ x: pose.hip.x, y: pose.hip.y - 110 }, pose.hip], "#303c26", 50);
-        ctx.restore();
         holds.forEach(drawHold);
         const hip = pose.hip,
           pts = pose.points,
@@ -3638,38 +3406,35 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ctx.restore();
         }
         const far = hip.turn >= 0 ? [2, 0] : [3, 1],
-          near = hip.turn >= 0 ? [3, 1] : [2, 0];
-        limb(hip, pts, far[0]);
-        limb(hip, pts, near[0]);
-        limb(hip, pts, far[1]);
-        body(hip);
-        limb(hip, pts, near[1]);
+          near = hip.turn >= 0 ? [3, 1] : [2, 0],
+          frame = characterFrame(hip),
+          lookTarget = anim && anim.i < 2
+            ? pts[anim.i]
+            : preview && preview.i < 2
+              ? preview.point
+              : null;
+        limb(hip, pts, far[0], false, undefined, frame);
+        limb(hip, pts, near[0], false, undefined, frame);
+        limb(hip, pts, far[1], false, undefined, frame);
+        body(hip, frame, lookTarget);
+        limb(hip, pts, near[1], false, undefined, frame);
         drawPreview(hip);
         drawBalanceCue(pose);
         if (!anim) {
           const active = drag?.kind === "hip" || hover?.kind === "hip";
-          circle(
-            hip,
-            active ? 12 : 9,
-            active ? "#dc7946" : "#f7eee0",
-            active ? "#fcfdf8" : "#c38158",
-            2 / scale,
-          );
-          circle(hip, 3, active ? "#fff4df" : "#d88150");
+          if (active)
+            circle(hip, 12, "#dc7946", "#fcfdf8", 2 / scale);
           const c = chest(hip),
             turning = drag?.kind === "chest" || hover?.kind === "chest";
-          ctx.beginPath();
-          ctx.moveTo(c.x - 15 * Math.cos(hip.turn * 0.95), c.y);
-          ctx.quadraticCurveTo(
-            c.x,
-            c.y + 5,
-            c.x + 15 * Math.cos(hip.turn * 0.95),
-            c.y,
-          );
-          ctx.strokeStyle = turning ? "#fff4df" : "#efb47e";
-          ctx.lineWidth = (turning ? 2.5 : 1.2) / scale;
-          ctx.stroke();
           if (turning) {
+            ctx.beginPath();
+            ctx.moveTo(c.x - 15 * Math.cos(hip.turn * 0.95), c.y);
+            ctx.quadraticCurveTo(
+              c.x, c.y + 5, c.x + 15 * Math.cos(hip.turn * 0.95), c.y,
+            );
+            ctx.strokeStyle = "#fff4df";
+            ctx.lineWidth = 2.5 / scale;
+            ctx.stroke();
             circle(c, 3 / scale, "#fff4df");
           }
           if (
@@ -3681,18 +3446,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             circle(
               { x: p.x, y: p.y - (selected >= 2 ? 5 : 0) },
               selected < 2 ? 15 : 22,
-              "transparent",
-              "#dd783c",
-              2 / scale,
+              "#dd783c24",
             );
           }
           if (hover?.kind === "limb" && hover.i !== selected)
             circle(
               pts[hover.i],
               hover.i < 2 ? 15 : 22,
-              "transparent",
-              "#d69a7066",
-              1.5 / scale,
+              "#d69a701e",
             );
           if (blocked) {
             for (let i = 0; i < 4; i++)
@@ -3700,9 +3461,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 circle(
                   pts[i],
                   i < 2 ? 15 : 22,
-                  "transparent",
-                  "#b47c5255",
-                  1.5 / scale,
+                  "#b47c5228",
                 );
           }
         }
@@ -3715,9 +3474,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           circle(
             h,
             (h.type === "foot" ? 22 : 30) + clamp(progress, 0, 1) * 8,
-            "transparent",
-            feedback.valid ? "#4f8268" : "#af805d",
-            2 / scale,
+            feedback.valid ? "#4f826838" : "#af805d40",
           );
           ctx.restore();
           schedule();
@@ -4291,6 +4048,45 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       window.photoRoutes = {
         bindCommand,
         validate: checkImportedRoute,
+        // Synchronous render-only bridge. Reuse the playable skin and bone
+        // geometry on the editor canvas; never change game state or contacts.
+        paintReference(target, x, baseline, units) {
+          const previous = ctx;
+          ctx = target;
+          ctx.save();
+          try {
+            ctx.translate(x, baseline - 215 / units);
+            ctx.scale(1 / units, 1 / units);
+            const hip = { x: 0, y: 0, turn: 0 },
+              points = [
+                { x: -52, y: 91 }, { x: 52, y: 91 },
+                { x: -26, y: 204 }, { x: 26, y: 204 },
+              ],
+              frame = characterFrame(hip);
+            for (let i = 0; i < 4; i++) limb(hip, points, i, false, undefined, frame);
+            body(hip, frame);
+          } finally {
+            ctx.restore();
+            ctx = previous;
+          }
+        },
+        paintHolds(target, points, units) {
+          const previous = ctx;
+          ctx = target;
+          ctx.save();
+          try {
+            ctx.scale(1 / units, 1 / units);
+            for (const p of points) drawHold({
+              x: p.x * units, y: p.y * units, type: p.type,
+              ...(p.shape ? { shape: { ...p.shape,
+                outline: p.shape.outline.map(q => ({ x: q.x * units, y: q.y * units })),
+              } } : {}),
+            });
+          } finally {
+            ctx.restore();
+            ctx = previous;
+          }
+        },
         suggest(route, pinned = [-1, -1]) {
           const previous = holds;
           try {
@@ -4407,6 +4203,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           option.textContent = "我的 · " + clean.name;
           if (activate) changeRoute(clean.id);
         },
+        rename(id, name) {
+          const route = routes.find(r => r.id === id);
+          if (!route || !id.startsWith("local-")) return;
+          route.name = name;
+          const option = [...$("routeSelect").options].find(o => o.value === id);
+          if (option) option.textContent = "我的 · " + name;
+          if (activeRoute.id === id) update();
+        },
         remove(id) {
           if (!id.startsWith("local-")) return;
           if (activeRoute.id === id) changeRoute("side");
@@ -4472,10 +4276,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           photoBlob = null,
           draft = null,
           step = -1,
-          mode = "crop",
+          mode = "view",
           selected = -1,
           candidates = [],
-          sample = null,
           history = [],
           gesture = null,
           factor = 1,
@@ -4488,16 +4291,14 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           saveQueue = Promise.resolve(),
           observed = "",
           savedJSON = "",
-          startChoices = [],
           pinned = [-1, -1],
           pickHand = 0,
           searchEpoch = 0;
         const copy = (value) => structuredClone(value),
           clamp = (value, lo, hi) => Math.max(lo, Math.min(hi, value)),
           dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
-        let crop = null,
-          cropStart = null;
-        let editingOutline = null;
+        let original = true, editing = false, previewBase = null,
+          previewFrame = null, startFailed = false;
         function status(text, error = false) {
           $("photoStatus").textContent = text;
           $("photoStatus").dataset.error = String(error);
@@ -4548,8 +4349,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         function invalidate() {
           draft.hip = null;
           candidates = [];
-          startChoices = [];
           searchEpoch++;
+          startFailed = false;
         }
         function newDraft() {
           return {
@@ -4558,7 +4359,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               Array.from(crypto.getRandomValues(new Uint8Array(16)), (value) =>
                 value.toString(16).padStart(2, "0"),
               ).join(""),
-            name: "我的线路",
+            name: "岩壁 · " + new Date().toLocaleDateString("zh-CN"),
             points: [],
             ruler: [],
             cm: 100,
@@ -4619,7 +4420,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             (d.estimatedUnits === null ||
               (Number.isFinite(d.estimatedUnits) &&
                 d.estimatedUnits > 0 &&
-                d.estimatedUnits <= 8))
+                // Includes explicit conversion of old measured scales
+                // (1000 cm / 10 px * 190 / 65), without a scale jump.
+                d.estimatedUnits <= 300))
           );
         }
         function migrate(record) {
@@ -4673,7 +4476,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               (!layoutOnly && actual.includes(d.top)))
           )
             return null;
-          const holds = d.points.map((p, i) => ({
+          const holds = visualPoints(d).map((p, i) => ({
               x: p.x * units,
               y: p.y * units,
               type: p.type,
@@ -4729,6 +4532,25 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           const route = compile(d);
           return route && api.validate(route) ? route : null;
         }
+        function visualPoints(d) {
+          // A contact without a detected contour gets a derived solid shape.
+          // Keep this in photo space too, so changing size scales every hold
+          // uniformly at play time. Legacy records remain unchanged on disk.
+          const base = unitsFor({ ...d, size: 1 }) || previewBase || 1;
+          return d.points.map(p => p.shape ? p : {
+            ...p,
+            shape: {
+              color: "#6682be", source: "manual",
+              outline: Array.from({ length: 16 }, (_, i) => {
+                const a = i * Math.PI / 8;
+                return {
+                  x: clamp(p.x + Math.cos(a) * (p.type === "foot" ? 18 : 28) / base, 0, 1600),
+                  y: clamp(p.y + Math.sin(a) * (p.type === "foot" ? 11 : 25) / base, 0, 1600),
+                };
+              }).filter((p, i, points) => !i || dist(p, points[i - 1]) > 1e-8),
+            },
+          });
+        }
         function queueSave() {
           if (!draft || !photoBlob || gesture) return;
           const json = JSON.stringify(draft);
@@ -4766,6 +4588,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 savedJSON = json;
                 dirty = JSON.stringify(draft) !== json;
                 $("photoSaved").textContent = dirty ? "保存中…" : "草稿已保存";
+                $("photoSave").hidden = true;
               }
             });
           saveQueue = write;
@@ -4774,7 +4597,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           } catch (error) {
             if (token === epoch) {
               dirty = true;
-              $("photoSaved").textContent = "未保存 · 点保留草稿重试";
+              $("photoSaved").textContent = "未保存";
+              $("photoSave").hidden = false;
             }
             throw error;
           }
@@ -4786,7 +4610,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           );
           draft.hip = { x: route.hip.x / units, y: route.hip.y / units };
           draft.turn = route.hip.turn;
-          mode = "hip";
+          mode = "view";
           refresh();
         }
         async function suggestStart() {
@@ -4799,12 +4623,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           const layout = compile(draft, true);
           if (!layout) {
             status(
-              draft.scaleMode === "calibrated"
-                ? "请完成距离标定，或关闭标定先试。"
-                : "至少标出三个岩点，其中两个可抓握。草稿仍可保存。",
+              "还需要至少三个岩点，其中两个可抓握。点“改一下”补点，照片和草稿会保留。",
               true,
             );
-            return;
+            startFailed = true;
+            refresh();
+            return false;
           }
           const token = ++searchEpoch;
           status("正在寻找脚点和起步姿态…");
@@ -4814,17 +4638,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           try {
             const choices = api.suggest(layout, pinned);
             if (token !== searchEpoch) return;
-            startChoices = choices;
             if (choices.length) {
               useStart(choices[0]);
-              status("选一个起步就可以试，TOP 可以稍后设置。");
+              startFailed = false;
+              return true;
             } else {
               draft.hip = null;
+              startFailed = true;
               refresh();
               status(
                 "还没找到起步。可放大人物、点选另一组起手或补脚点；草稿已保留。",
                 true,
               );
+              return false;
             }
           } finally {
             busy = false;
@@ -4868,79 +4694,46 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           );
         }
         function choose(stepNumber) {
-          editingOutline = null;
           step = stepNumber;
-          crop = null;
           gesture = null;
           candidates = [];
-          mode =
-            step === 0
-              ? "crop"
-              : step === 1
-                ? draft.points.length
-                  ? "select"
-                  : "color"
-                : "hip";
+          editing = false;
+          original = step !== 2;
+          mode = "view";
+          startFailed = false;
           canvas.style.touchAction = "none";
           $("photoPicture").scrollTo(0, 0);
           $("photoEditor").querySelector(".photo-side").scrollTop = 0;
           $("photoLibrary").hidden = step !== -1;
           $("photoWork").hidden = step === -1;
-          $("photoSteps").textContent =
-            step < 0 ? "" : ["裁剪 · 可选", "1 / 2 选点", "2 / 2 试动作"][step];
-          $("photoBack").hidden = step <= 0;
-          $("photoBack").textContent = step === 1 ? "裁剪" : "返回选点";
-          $("photoSave").hidden = step < 0;
+          $("photoSteps").textContent = step < 0 ? "" : step === 1 ? "一面墙" : "一次尝试";
+          $("photoBack").hidden = step !== 2;
+          $("photoSave").hidden = true;
           $("photoSaved").hidden = step < 0;
           $("photoNext").hidden = step < 0;
-          $("photoNext").textContent =
-            step === 2 ? "开始试" : step === 1 ? "推荐起步" : "完成裁剪";
-          for (const [i, id] of [
-            "photoCropPanel",
-            "photoMarkPanel",
-            "photoSetupPanel",
-          ].entries())
-            $(id).hidden = step !== i;
+          $("photoNext").textContent = step === 2 ? "开始爬" : "生成岩壁";
+          $("photoSourcePanel").hidden = step !== 1;
+          $("photoSetupPanel").hidden = step !== 2;
+          $("photoMarkPanel").hidden = true;
+          $("photoColors").hidden = true;
+          $("photoColors").replaceChildren();
           if (step >= 0) {
-            status(
-              step === 0
-                ? "拖出裁剪范围，可去除截图边框与遮挡文字。"
-                : step === 1
-                  ? "候选需要确认；被遮挡的岩点可手动补点。"
-                  : "比例先估算，起步自动选；想微调时再展开设置。",
-            );
+            status(step === 1 ? "照片只在本机处理。" : "调好人物大小，系统会帮你选起步。");
             refresh();
             requestAnimationFrame(draw);
           }
         }
-        function options(select, filter, value, placeholder) {
-          select.replaceChildren(new Option(placeholder, "-1"));
-          draft.points.forEach((p, i) => {
-            if (filter(p)) select.add(new Option(String(i + 1), String(i)));
-          });
-          select.value = String(value);
-        }
         function refresh() {
           $("photoWork").inert = busy;
           if (!draft || step < 0) return;
-          $("photoPan").setAttribute("aria-pressed", String(mode === "pan"));
-          $("photoApplyCrop").disabled =
-            !crop || crop.w < 30 || crop.h < 30 || busy;
-          $("photoName").value = draft.name;
-          $("photoCm").value = draft.cm;
-          $("photoTurn").value = draft.turn;
           $("photoSize").value = draft.size;
-          $("photoSize").disabled = draft.scaleMode === "calibrated";
-          $("photoCalibrated").checked = draft.scaleMode === "calibrated";
-          $("photoScaleInfo").textContent =
-            draft.scaleMode === "calibrated"
-              ? "已标定 · 按所填距离"
-              : "估算比例 · 可直接试玩";
-          const choices = $("photoChoices");
-          choices.replaceChildren();
-          startChoices.forEach((r, i) =>
-            choices.append(actionButton("起步 " + (i + 1), () => useStart(r))),
-          );
+          $("photoOriginal").setAttribute("aria-pressed", String(original));
+          $("photoOriginal").textContent = original ? "看生成" : "原图";
+          $("photoEdit").setAttribute("aria-pressed", String(editing));
+          $("photoEdit").textContent = editing ? "改好了" : "改一下";
+          $("photoMarkPanel").hidden = !editing;
+          $("photoPickStart").hidden = !startFailed && mode !== "start";
+          $("photoCandidateActions").hidden = !candidates.length;
           $("photoCount").textContent = draft.points.length + " 个";
           $("photoUndo").disabled = !history.length;
           $("photoAccept").disabled = $("photoReject").disabled =
@@ -4948,41 +4741,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           $("photoAccept").textContent = candidates.length
             ? `添加 ${candidates.length} 个候选`
             : "添加候选";
-          options($("photoPoint"), () => true, selected, "未选择");
           const point = draft.points[selected];
-          $("photoTraceShape").disabled = $("photoDrawShape").disabled =
-            !point || busy;
-          $("photoClearShape").disabled = !point?.shape || busy;
-          $("photoOutlineActions").hidden = editingOutline === null;
-          for (const id of [
-            "photoType",
-            "photoPointX",
-            "photoPointY",
-            "photoDeletePoint",
-          ])
-            $(id).disabled = !point;
-          if (point) {
-            $("photoType").value = point.type;
-            $("photoPointX").value = Math.round(point.x);
-            $("photoPointY").value = Math.round(point.y);
-          }
-          for (let i = 0; i < 4; i++)
-            options(
-              $("photoStart" + i),
-              (p) => i >= 2 || p.type === "jug",
-              draft.starts[i],
-              i >= 2 ? "自动 / 悬脚" : "自动选择",
-            );
-          options(
-            $("photoTop"),
-            (p) => p.type === "jug",
-            draft.top,
-            "暂不设置",
-          );
-          $("photoRulerInfo").textContent =
-            draft.ruler.length === 2
-              ? `${dist(...draft.ruler).toFixed(1)} px = ${draft.cm} cm`
-              : `标定点 ${draft.ruler.length} / 2`;
+          $("photoDeletePoint").disabled = !point;
           document
             .querySelectorAll("[data-photo-mode]")
             .forEach((b) =>
@@ -4999,136 +4759,39 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         function draw() {
           if (!dialog.open || step < 0 || !source) return;
           const box = $("photoPicture"),
-            zoom = +$("photoZoom").value;
-          factor =
-            Math.max(
-              0.03,
-              Math.min(
-                (box.clientWidth - 16) / source.width,
-                (box.clientHeight - 16) / source.height,
-              ),
-            ) * zoom;
-          canvas.width = source.width;
-          canvas.height = source.height;
-          canvas.style.width = source.width * factor + "px";
-          canvas.style.height = source.height * factor + "px";
+            frame = step === 2 ? previewFrame : { width: source.width, height: source.height },
+            units = unitsFor(draft) || previewBase || 1;
+          factor = Math.max(0.03, Math.min(
+            (box.clientWidth - 16) / frame.width, (box.clientHeight - 16) / frame.height,
+          ));
+          canvas.width = Math.ceil(frame.width);
+          canvas.height = Math.ceil(frame.height);
+          canvas.style.width = canvas.width * factor + "px";
+          canvas.style.height = canvas.height * factor + "px";
           canvas.style.margin = "8px auto";
-          ctx.drawImage(source, 0, 0);
-          const circle = (p, r, color, fill) => {
+          ctx.fillStyle = "#f1f2ec";
+          ctx.fillRect(0, 0, canvas.width, canvas.height);
+          if (original) ctx.drawImage(source, 0, 0);
+          else api.paintHolds(ctx, visualPoints(draft), previewBase);
+          if (step === 2) api.paintReference(ctx, frame.personX, frame.baseline, units);
+          const dot = (p, r, color) => {
             ctx.beginPath();
             ctx.arc(p.x, p.y, r / factor, 0, Math.PI * 2);
-            if (fill) {
-              ctx.fillStyle = fill;
-              ctx.fill();
-            }
-            ctx.strokeStyle = color;
-            ctx.lineWidth = 2 / factor;
-            ctx.stroke();
+            ctx.fillStyle = color;
+            ctx.fill();
           };
-          if (crop) {
-            ctx.fillStyle = "#172c3266";
-            ctx.beginPath();
-            ctx.rect(0, 0, source.width, source.height);
-            ctx.rect(crop.x, crop.y, crop.w, crop.h);
-            ctx.fill("evenodd");
-            ctx.strokeStyle = "#fff";
-            ctx.lineWidth = 2 / factor;
-            ctx.strokeRect(crop.x, crop.y, crop.w, crop.h);
-          }
-          if (step >= 1) {
-            const route = compile(draft);
-            if (step === 2 && route) {
-              const units = unitsFor(draft),
-                ok = api.validate(route);
-              ctx.lineJoin = ctx.lineCap = "round";
-              route.limbs.forEach((id, i) => {
-                const a = engine.anchor(route.hip, i),
-                  b =
-                    typeof id === "number"
-                      ? route.holds[id]
-                      : { x: a.x + id.dx, y: a.y + id.dy },
-                  j = engine.joint(route.hip, i, b);
-                ctx.beginPath();
-                ctx.moveTo(a.x / units, a.y / units);
-                ctx.lineTo(j.x / units, j.y / units);
-                ctx.lineTo(b.x / units, b.y / units);
-                ctx.strokeStyle = ok ? "#bfe9cf" : "#ffb2a2";
-                ctx.lineWidth = 5 / factor;
-                ctx.stroke();
-              });
-              const chest = engine.chest(route.hip);
-              ctx.beginPath();
-              ctx.moveTo(chest.x / units, chest.y / units);
-              ctx.lineTo(draft.hip.x, draft.hip.y);
-              ctx.stroke();
-              circle(draft.hip, 7, ok ? "#bfe9cf" : "#ffb2a2", "#31453a");
-            }
-            const outline = (p, color, fill) => {
-              if (!p.shape) return;
+          candidates.forEach(p => {
+            if (p.shape) {
               engine.outlinePath(ctx, p.shape.outline);
-              ctx.fillStyle = fill;
+              ctx.fillStyle = "#e9c18188";
               ctx.fill();
-              ctx.strokeStyle = color;
-              ctx.lineWidth = 1.5 / factor;
-              ctx.lineJoin = "round";
-              ctx.stroke();
-            };
-            candidates.forEach((p) => {
-              outline(p, "#f5ce66", "#f5ce6620");
-              circle(p, 11, "#f5ce66", "#66520a55");
-            });
-            draft.points.forEach((p, i) => {
-              outline(
-                p,
-                i === selected ? "#f3a576" : "#f2f6ef",
-                p.shape?.color + "22",
-              );
-              const start = draft.starts.indexOf(i),
-                top = draft.top === i;
-              circle(
-                p,
-                i === selected ? 13 : 10,
-                i === selected ? "#f3a576" : "#fff",
-                p.type === "foot" ? "#386853cc" : "#3654a9cc",
-              );
-              ctx.font = `600 ${11 / factor}px sans-serif`;
-              ctx.textAlign = "center";
-              ctx.textBaseline = "middle";
-              ctx.fillStyle = "#fff";
-              ctx.fillText(String(i + 1), p.x, p.y);
-              if (step === 2 && (start >= 0 || top)) {
-                const text = top
-                  ? "TOP"
-                  : ["左手", "右手", "左脚", "右脚"][start];
-                ctx.font = `600 ${12 / factor}px sans-serif`;
-                ctx.lineWidth = 3 / factor;
-                ctx.strokeStyle = "#203d35";
-                ctx.strokeText(text, p.x, p.y - 21 / factor);
-                ctx.fillText(text, p.x, p.y - 21 / factor);
-              }
-            });
-            if (step === 2) {
-              if (draft.ruler.length === 2) {
-                ctx.beginPath();
-                ctx.moveTo(draft.ruler[0].x, draft.ruler[0].y);
-                ctx.lineTo(draft.ruler[1].x, draft.ruler[1].y);
-                ctx.strokeStyle = "#ffe68e";
-                ctx.lineWidth = 2 / factor;
-                ctx.stroke();
-              }
-              draft.ruler.forEach((p) => circle(p, 5, "#fff", "#b98323"));
             }
-            if (editingOutline?.length) {
-              ctx.beginPath();
-              editingOutline.forEach((p, i) =>
-                i ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y),
-              );
-              ctx.strokeStyle = "#ffe28d";
-              ctx.lineWidth = 2 / factor;
-              ctx.stroke();
-              editingOutline.forEach((p) => circle(p, 3, "#fff", "#a27220"));
-            }
-          }
+            dot(p, 6, "#d8a660");
+          });
+          if (editing || mode === "start") draft.points.forEach((p, i) => {
+            if (i === selected || pinned.includes(i)) dot(p, 14, "#f3a57688");
+            dot(p, i === selected ? 5 : 3, "#faf9f5");
+          });
         }
         function hsv(r, g, b) {
           const hi = Math.max(r, g, b),
@@ -5144,8 +4807,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                   : (r - g) / d + 4;
           return [h * 60, hi ? d / hi : 0, hi / 255];
         }
-        function detect(point, attachTo = -1) {
-          if (attachTo < 0) sample = point;
+        function detect(point, attachTo = -1, quiet = false) {
           const mini = document.createElement("canvas"),
             ratio = Math.min(1, 640 / Math.max(source.width, source.height));
           mini.width = Math.round(source.width * ratio);
@@ -5158,9 +4820,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             index = (y * mini.width + x) * 4,
             target = hsv(...data.slice(index, index + 3)),
             mask = new Uint8Array(mini.width * mini.height),
-            tolerance = +$("photoTolerance").value;
+            tolerance = 22;
           if (target[1] < 0.16 || target[2] < 0.12) {
             if (attachTo >= 0) return false;
+            if (quiet) return [];
             candidates = [];
             refresh();
             status(
@@ -5261,7 +4924,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             draft.points[attachTo].shape = copy(region.shape);
             return true;
           }
-          candidates = result
+          const found = result
             .sort((a, b) => b.area - a.area)
             .slice(0, 80)
             .filter(
@@ -5272,46 +4935,132 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                     (p.shape && engine.insideOutline(q, p.shape.outline)),
                 ),
             );
+          if (quiet) return found;
+          candidates = found;
           refresh();
           status(
             candidates.length
               ? `找到 ${candidates.length} 个颜色候选，确认后保留轮廓与颜色。`
-              : "没有找到新候选，可调整容差或手动添加。",
+              : "没有找到新候选，可以点空处补点。",
           );
+        }
+        function preparePreview() {
+          const ys = draft.points.map(p => p.y);
+          const estimate = clamp(400 / Math.max(160,
+            ys.length > 1 ? Math.max(...ys) - Math.min(...ys) : source.height,
+          ), 0.2, 8);
+          if (draft.scaleMode === "estimate" && draft.estimatedUnits === null)
+            draft.estimatedUnits = estimate;
+          previewBase = draft.scaleMode === "calibrated"
+            ? (unitsFor(draft) || estimate) : draft.estimatedUnits;
+          // Reserve the maximum person, once. Slider input never reframes.
+          const height = Math.max(source.height, 405 * 1.6 / previewBase);
+          previewFrame = {
+            width: source.width + 190 * 1.6 / previewBase,
+            height,
+            personX: source.width + 95 * 1.6 / previewBase,
+            baseline: height - 20 / previewBase,
+          };
+          choose(2);
+        }
+        function acceptCandidates() {
+          savePoint();
+          for (const p of candidates.slice(0, 100 - draft.points.length))
+            draft.points.push({
+              x: p.x, y: p.y, type: "jug",
+              ...(p.shape ? { shape: copy(p.shape) } : {}),
+            });
+          invalidate();
+          refresh();
+        }
+        function generateWall() {
+          if (draft.points.length) { preparePreview(); return; }
+          // Local hue proposals only. Large background regions are rejected
+          // by the same component detector used by point correction.
+          const c = document.createElement("canvas");
+          c.width = 96;
+          c.height = Math.max(1, Math.round(96 * source.height / source.width));
+          c.getContext("2d").drawImage(source, 0, 0, c.width, c.height);
+          const pixels = c.getContext("2d").getImageData(0, 0, c.width, c.height).data,
+            bins = new Map();
+          for (let i = 0; i < pixels.length; i += 4) {
+            const [h, s, v] = hsv(...pixels.slice(i, i + 3));
+            if (s < .2 || v < .16) continue;
+            const key = Math.round(h / 30) % 12;
+            if (!bins.has(key)) bins.set(key, { count: 0, saturation: -1 });
+            const bin = bins.get(key);
+            if (s > bin.saturation) Object.assign(bin, { saturation: s, h, p: {
+              x: ((i / 4 % c.width) + .5) * source.width / c.width,
+              y: (Math.floor(i / 4 / c.width) + .5) * source.height / c.height,
+            } });
+            bin.count++;
+          }
+          const groups = [];
+          for (const b of [...bins.values()].sort((a,b) => b.count - a.count).slice(0, 8)) {
+            if (b.count < Math.max(5, c.width * c.height * .001)) continue;
+            if (groups.some(g => Math.min(Math.abs(g.h-b.h), 360-Math.abs(g.h-b.h)) < 32)) continue;
+            const ratio = Math.min(1, 640 / Math.max(source.width, source.height));
+            const points = detect(b.p, -1, true).filter(p =>
+              p.area >= 25 && (!p.shape ||
+                p.area / (Math.abs(engine.outlineArea(p.shape.outline)) * ratio * ratio) > .3),
+            );
+            if (points.length >= 2) groups.push({ ...b, points });
+          }
+          const apply = group => {
+            candidates = group.points;
+            acceptCandidates();
+            preparePreview();
+          };
+          if (groups.length === 1) { apply(groups[0]); return; }
+          if (!groups.length) {
+            preparePreview();
+            editing = true;
+            original = true;
+            mode = "select";
+            refresh();
+            status("没找到清楚的同色岩点。点照片补几个抓踩位置，再看生成效果。");
+            return;
+          }
+          const list = $("photoColors");
+          list.replaceChildren();
+          list.hidden = false;
+          groups.slice(0, 6).forEach((group, i) => {
+            const button = actionButton("线路 " + (i + 1), () => apply(group)),
+              swatch = document.createElement("i");
+            swatch.style.background = group.points[0].shape?.color || "#6883b2";
+            button.prepend(swatch);
+            list.append(button);
+          });
+          mode = "color-choice";
+          status("想试哪条？选一个颜色，或点照片上的岩点。");
         }
         function pointFrom(event) {
           const r = canvas.getBoundingClientRect();
           return {
-            x: clamp((event.clientX - r.left) / factor, 0, source.width),
-            y: clamp((event.clientY - r.top) / factor, 0, source.height),
+            x: (event.clientX - r.left) / factor,
+            y: (event.clientY - r.top) / factor,
           };
         }
         function cancelPointer() {
           if (!gesture) return;
           const id = gesture.id;
           draft = gesture.before;
-          crop = gesture.cropBefore;
           gesture = null;
-          cropStart = null;
           if (canvas.hasPointerCapture(id)) canvas.releasePointerCapture(id);
           refresh();
         }
         canvas.addEventListener("pointerdown", (event) => {
-          if (busy || gesture || event.button !== 0 || mode === "pan") return;
+          if (busy || gesture || event.button !== 0 || mode === "view") return;
           clearTimeout(saveTimer);
           const p = pointFrom(event);
+          if (p.x < 0 || p.y < 0 || p.x > source.width || p.y > source.height) return;
           gesture = {
             id: event.pointerId,
             p,
             before: copy(draft),
-            cropBefore: copy(crop),
             moved: false,
           };
           canvas.setPointerCapture(event.pointerId);
-          if (mode === "crop") {
-            cropStart = p;
-            crop = null;
-          }
           if (mode === "select") {
             selected =
               draft.points
@@ -5328,16 +5077,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           if (!gesture || event.pointerId !== gesture.id) return;
           const p = pointFrom(event);
           if (dist(p, gesture.p) * factor > 5) gesture.moved = true;
-          if (mode === "crop" && cropStart) {
-            crop = {
-              x: Math.min(p.x, cropStart.x),
-              y: Math.min(p.y, cropStart.y),
-              w: Math.abs(p.x - cropStart.x),
-              h: Math.abs(p.y - cropStart.y),
-            };
-            $("photoApplyCrop").disabled = crop.w < 30 || crop.h < 30;
-          } else if (mode === "select" && selected >= 0 && gesture.moved) {
-            Object.assign(draft.points[selected], p);
+          if (mode === "select" && selected >= 0 && gesture.moved) {
+            Object.assign(draft.points[selected], {
+              x: clamp(p.x, 0, source.width), y: clamp(p.y, 0, source.height),
+            });
             draft.hip = null;
           }
           draw();
@@ -5347,33 +5090,33 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           const p = pointFrom(event),
             g = gesture;
           gesture = null;
-          cropStart = null;
           if (canvas.hasPointerCapture(event.pointerId))
             canvas.releasePointerCapture(event.pointerId);
           if (mode === "select" && selected >= 0 && g.moved) {
             history.push(g.before);
             if (history.length > 60) history.shift();
             dirty = true;
+            invalidate();
           }
           if (!g.moved) {
-            if (mode === "outline") {
-              if (editingOutline.length < 128) editingOutline.push(p);
-            } else if (mode === "start") {
+            if (p.x < 0 || p.y < 0 || p.x > source.width || p.y > source.height) { refresh(); return; }
+            if (mode === "start") {
               const pick = draft.points
                 .map((p, i) => ({ i, d: dist(p, pointFrom(event)) * factor }))
                 .filter(
-                  (q) => draft.points[q.i].type === "jug" && q.i !== draft.top,
+                  (q) => draft.points[q.i].type === "jug" && q.i !== draft.top && !pinned.includes(q.i),
                 )
                 .sort((a, b) => a.d - b.d)[0];
               if (pick && pick.d < 24) {
                 pinned[pickHand] = pick.i;
                 pickHand++;
                 if (pickHand === 2) {
-                  mode = "hip";
-                  suggestStart();
+                  mode = "view";
+                  draft.hip = null;
+                  status("起手已选好，点“开始爬”试试。");
                 } else status("再点一个右手起点。");
               }
-            } else if (mode === "add") {
+            } else if (mode === "add" || (mode === "select" && selected < 0)) {
               if (draft.points.length >= 100) {
                 status("最多 100 个岩点。", true);
                 return;
@@ -5383,27 +5126,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               selected = draft.points.length - 1;
               detect(p, selected);
               invalidate();
+            } else if (mode === "color-choice") {
+              detect(p);
+              if (candidates.length) {
+                acceptCandidates();
+                preparePreview();
+              }
+              return;
             } else if (mode === "color") {
               detect(p);
               return;
-            } else if (mode === "ruler") {
-              savePoint();
-              if (draft.ruler.length === 2) draft.ruler = [];
-              draft.ruler.push(p);
-              draft.hip = null;
-            } else if (mode === "hip") {
-              savePoint();
-              draft.hip = p;
             }
           }
           refresh();
-          if (step === 2 && draft.hip)
-            status(
-              validDraft(draft)
-                ? "起步姿态有效，可以保存。"
-                : "起步受限，请检查接触位置、比例或腰部位置。",
-              !validDraft(draft),
-            );
         });
         canvas.addEventListener("pointercancel", cancelPointer);
         canvas.addEventListener("lostpointercapture", cancelPointer);
@@ -5411,30 +5146,27 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           cancelPointer();
           draw();
         });
-        $("photoZoom").oninput = () => {
+        $("photoOriginal").onclick = () => {
           cancelPointer();
-          draw();
-        };
-        $("photoPan").onclick = () => {
-          cancelPointer();
-          editingOutline = null;
-          mode =
-            mode === "pan"
-              ? step === 0
-                ? "crop"
-                : step === 1
-                  ? "select"
-                  : "hip"
-              : "pan";
-          canvas.style.touchAction = mode === "pan" ? "auto" : "none";
+          original = !original;
+          mode = editing ? "select" : "view";
+          candidates = [];
           refresh();
+        };
+        $("photoEdit").onclick = () => {
+          cancelPointer();
+          editing = !editing;
+          mode = editing ? "select" : "view";
+          candidates = [];
+          refresh();
+          status(editing ? "拖动调整，点空处补点；选中后可以删除。" : "调好大小就开始。");
         };
         document.querySelectorAll("[data-photo-mode]").forEach(
           (button) =>
             (button.onclick = () => {
               cancelPointer();
-              editingOutline = null;
               mode = button.dataset.photoMode;
+              if (mode === "color") original = true;
               canvas.style.touchAction = "none";
               refresh();
               status(
@@ -5446,44 +5178,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               );
             }),
         );
-        $("photoTolerance").onchange = () => {
-          if (sample) detect(sample);
-        };
-        $("photoAccept").onclick = () => {
-          savePoint();
-          for (const p of candidates.slice(0, 100 - draft.points.length))
-            draft.points.push({
-              x: p.x,
-              y: p.y,
-              type: "jug",
-              ...(p.shape ? { shape: copy(p.shape) } : {}),
-            });
-          candidates = [];
-          invalidate();
-          refresh();
-        };
+        $("photoAccept").onclick = acceptCandidates;
         $("photoReject").onclick = () => {
           candidates = [];
           refresh();
         };
         $("photoUndo").onclick = () => {
-          if (editingOutline) {
-            editingOutline.pop();
-            draw();
-            return;
-          }
           if (!history.length) return;
           draft = history.pop();
           dirty = true;
           selected = -1;
           candidates = [];
-          refresh();
-        };
-        $("photoPoint").onchange = () => {
-          selected = +$("photoPoint").value;
-          editingOutline = null;
-          mode = "select";
-          canvas.style.touchAction = "none";
+          pinned = [-1, -1];
+          searchEpoch++;
           refresh();
         };
         $("photoDeletePoint").onclick = () => {
@@ -5493,300 +5200,35 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           const remap = (id) =>
             id === selected ? -1 : id > selected ? id - 1 : id;
           draft.starts = draft.starts.map(remap);
+          pinned = pinned.map(remap);
           draft.top = remap(draft.top);
           selected = -1;
           invalidate();
           refresh();
         };
-        $("photoTraceShape").onclick = () => {
-          if (selected < 0) return;
-          savePoint();
-          if (detect(draft.points[selected], selected))
-            status("轮廓已提取，抓踩位置保持不变。");
-          else {
-            history.pop();
-            status("这处颜色没有形成清晰区域，可补画轮廓。", true);
-          }
-          refresh();
-        };
-        $("photoDrawShape").onclick = () => {
-          if (selected < 0) return;
-          mode = "outline";
-          editingOutline = [];
-          canvas.style.touchAction = "none";
-          status("沿岩点边缘依次点选，最后点完成。抓踩位置不会移动。");
-          refresh();
-        };
-        $("photoCancelShape").onclick = () => {
-          editingOutline = null;
-          mode = "select";
-          refresh();
-        };
-        $("photoFinishShape").onclick = () => {
-          if (selected < 0 || !editingOutline) return;
-          const p = draft.points[selected],
-            pixel = source
-              .getContext("2d")
-              .getImageData(
-                clamp(Math.round(p.x), 0, source.width - 1),
-                clamp(Math.round(p.y), 0, source.height - 1),
-                1,
-                1,
-              ).data,
-            color =
-              "#" +
-              Array.from(pixel)
-                .slice(0, 3)
-                .map((v) => v.toString(16).padStart(2, "0"))
-                .join(""),
-            shape = {
-              outline: editingOutline.map((p) => ({ ...p })),
-              color: p.shape?.color || color,
-              source: "manual",
-            };
-          if (!engine.shapeValid(shape, 1600)) {
-            status("至少三个边缘点，描边不能交叉。可取消后重画。", true);
-            return;
-          }
-          savePoint();
-          draft.points[selected].shape = shape;
-          editingOutline = null;
-          mode = "select";
-          refresh();
-          status("轮廓已保留，抓踩位置保持不变。");
-        };
-        $("photoClearShape").onclick = () => {
-          if (selected < 0) return;
-          savePoint();
-          delete draft.points[selected].shape;
-          refresh();
-        };
-        for (const [id, key, max] of [
-          ["photoPointX", "x", () => source.width],
-          ["photoPointY", "y", () => source.height],
-        ])
-          $(id).onchange = () => {
-            if (selected < 0) return;
-            const v = +$(id).value;
-            if (!Number.isFinite(v)) return;
-            savePoint();
-            draft.points[selected][key] = clamp(v, 0, max());
-            invalidate();
-            refresh();
-          };
-        $("photoType").onchange = () => {
-          if (selected < 0) return;
-          savePoint();
-          draft.points[selected].type = $("photoType").value;
-          if (draft.points[selected].type === "foot") {
-            draft.starts = draft.starts.map((id, i) =>
-              i < 2 && id === selected ? -1 : id,
-            );
-            if (draft.top === selected) draft.top = -1;
-          }
-          invalidate();
-          refresh();
-        };
-        for (let i = 0; i < 4; i++)
-          $("photoStart" + i).onchange = () => {
-            savePoint();
-            draft.starts[i] = +$("photoStart" + i).value;
-            invalidate();
-            refresh();
-          };
-        $("photoTop").onchange = () => {
-          savePoint();
-          draft.top = +$("photoTop").value;
-          invalidate();
-          refresh();
-        };
-        $("photoName").oninput = () => {
-          draft.name = $("photoName").value;
-          dirty = true;
-          queueSave();
-        };
-        $("photoCm").onchange = () => {
-          savePoint();
-          draft.cm = +$("photoCm").value;
-          draft.hip = null;
-          refresh();
-        };
-        $("photoTurn").oninput = () => {
-          draft.turn = +$("photoTurn").value;
-          dirty = true;
-          draw();
-          queueSave();
-        };
         $("photoSize").oninput = () => {
+          cancelPointer();
+          // A measured legacy draft keeps its calibration until the user
+          // explicitly changes size. Convert at the current ratio without
+          // rewriting any photo coordinates or historical ruler data.
+          if (draft.scaleMode === "calibrated") {
+            draft.estimatedUnits = previewBase;
+            draft.scaleMode = "estimate";
+          }
           draft.size = +$("photoSize").value;
           invalidate();
           refresh();
         };
-        $("photoSize").onchange = () => suggestStart();
-        $("photoCalibrated").onchange = () => {
-          draft.scaleMode = $("photoCalibrated").checked
-            ? "calibrated"
-            : "estimate";
-          invalidate();
-          refresh();
-        };
-        $("photoSuggest").onclick = () => {
-          pinned = [-1, -1];
-          suggestStart();
-        };
         $("photoPickStart").onclick = () => {
+          cancelPointer();
+          editing = false;
           mode = "start";
           canvas.style.touchAction = "none";
           pinned = [-1, -1];
           pickHand = 0;
-          status("在照片上点左手起点，再点右手起点。");
-        };
-        $("photoRuler").onclick = () => {
-          mode = "ruler";
-          canvas.style.touchAction = "none";
-          refresh();
-          status("点选一段已知距离的两个端点，再填写厘米数。");
-        };
-        $("photoSetHip").onclick = () => {
-          mode = "hip";
-          canvas.style.touchAction = "none";
-          refresh();
-          status("在照片上指定腰部位置，绿色为有效起步，红色为受限。");
-        };
-        $("photoFindHip").onclick = () => {
-          const test = copy(draft);
-          test.hip = { x: 0, y: 0 };
-          if (!compile(test)) {
-            status(
-              "需要至少 5 个岩点、4 个不同起点、独立手点 TOP 和有效距离标定。",
-              true,
-            );
-            return;
-          }
-          const route = compile(test),
-            starts = route.limbs
-              .filter((id) => typeof id === "number")
-              .map((id) => route.holds[id]),
-            middle = {
-              x: starts.reduce((s, p) => s + p.x, 0) / starts.length,
-              y: Math.max(...starts.map((p) => p.y)) - 145,
-            },
-            units = unitsFor(draft),
-            search = [];
-          for (let dx = -100; dx <= 100; dx += 10)
-            for (let dy = -100; dy <= 100; dy += 10)
-              for (const turn of [draft.turn, 0, -0.5, 0.5])
-                search.push({
-                  x: middle.x + dx,
-                  y: middle.y + dy,
-                  turn,
-                  cost: Math.hypot(dx, dy) + Math.abs(turn) * 18,
-                });
-          search.sort((a, b) => a.cost - b.cost);
-          const found = search.find((hip) => api.validate({ ...route, hip }));
-          if (!found) {
-            status(
-              "未找到有效起步：检查距离标定及手脚点，或手动指定腰部。岩点未被移动。",
-              true,
-            );
-            return;
-          }
-          savePoint();
-          draft.hip = { x: found.x / units, y: found.y / units };
-          draft.turn = found.turn;
-          mode = "hip";
-          canvas.style.touchAction = "none";
-          refresh();
-          status("起步姿态有效。未验证整条线路能否完成。");
-        };
-        async function replaceImage(image) {
-          const blob = await jpeg(image);
-          source = image;
-          photoBlob = blob;
-          draft.points = [];
-          draft.ruler = [];
-          draft.starts = [-1, -1, -1, -1];
-          draft.top = -1;
           draft.hip = null;
-          draft.scaleMode = "estimate";
-          draft.estimatedUnits = null;
-          draft.size = 1;
-          startChoices = [];
-          observed = "";
-          pinned = [-1, -1];
-          history = [];
-          selected = -1;
-          crop = null;
-          sample = null;
-          dirty = true;
-          $("photoApplyCrop").disabled = true;
-          $("photoZoom").value = 1;
           refresh();
-        }
-        function allowImageChange() {
-          return (
-            !draft.points.length ||
-            confirm("裁剪或旋转会清除当前岩点和标定，继续吗？")
-          );
-        }
-        $("photoRotate").onclick = async () => {
-          if (busy || !allowImageChange()) return;
-          busy = true;
-          try {
-            const image = document.createElement("canvas");
-            image.width = source.height;
-            image.height = source.width;
-            const c = image.getContext("2d");
-            c.translate(image.width, 0);
-            c.rotate(Math.PI / 2);
-            c.drawImage(source, 0, 0);
-            await replaceImage(image);
-          } catch (error) {
-            status(error.message, true);
-          } finally {
-            busy = false;
-            refresh();
-          }
-        };
-        $("photoApplyCrop").onclick = async () => {
-          if (
-            busy ||
-            !crop ||
-            crop.w < 30 ||
-            crop.h < 30 ||
-            !allowImageChange()
-          )
-            return;
-          busy = true;
-          try {
-            const image = document.createElement("canvas");
-            image.width = Math.round(crop.w);
-            image.height = Math.round(crop.h);
-            image
-              .getContext("2d")
-              .drawImage(
-                source,
-                crop.x,
-                crop.y,
-                crop.w,
-                crop.h,
-                0,
-                0,
-                image.width,
-                image.height,
-              );
-            await replaceImage(image);
-          } catch (error) {
-            status(error.message, true);
-          } finally {
-            busy = false;
-            refresh();
-          }
-        };
-        $("photoResetCrop").onclick = () => {
-          crop = null;
-          $("photoApplyCrop").disabled = true;
-          draw();
+          status("点一个左手起点，再点一个右手起点。");
         };
         async function readFile(file) {
           if (!file || busy) return;
@@ -5812,13 +5254,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             draft = newDraft();
             observed = "";
             savedJSON = "";
-            startChoices = [];
             pinned = [-1, -1];
             history = [];
             selected = -1;
-            sample = null;
             dirty = true;
-            $("photoZoom").value = 1;
+            previewFrame = null;
+            previewBase = null;
             choose(1);
           } catch (error) {
             status("无法读取照片，请转换为 JPEG 或 PNG 后重试。", true);
@@ -5852,19 +5293,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         };
         $("photoNext").onclick = async () => {
           if (busy) return;
-          if (editingOutline) {
-            status("先完成轮廓，或取消描边继续。", true);
-            return;
-          }
-          if (step === 0 && crop) {
-            status("请先应用裁剪，或重置选区后保留完整照片。", true);
-            return;
-          }
           if (step < 2) {
-            choose(step + 1);
-            if (step === 2) await suggestStart();
+            generateWall();
             return;
           }
+          cancelPointer();
+          if (!validDraft(draft) && !(await suggestStart())) return;
           const route = validDraft(draft);
           if (!route) {
             status(
@@ -5940,6 +5374,22 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 );
               }
               if (restored) {
+                row.append(actionButton("改名", async () => {
+                  if (busy) return;
+                  const name = prompt("线路名称", title.textContent)?.trim().slice(0, 40);
+                  if (!name || name === title.textContent) return;
+                  busy = true;
+                  try {
+                    const latest = (await store("getAll")).find(r => r.id === record.id);
+                    if (!latest) throw new Error("线路已删除");
+                    latest.draft.name = name;
+                    await store("put", latest);
+                    api.rename(record.id, name);
+                    await library();
+                  } catch (error) {
+                    status("改名未保存，请重试。", true);
+                  } finally { busy = false; }
+                }));
                 row.append(
                   actionButton("编辑", async () => {
                     if (busy) return;
@@ -5952,13 +5402,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                       photoBlob = record.photo;
                       draft = copy(restored);
                       observed = savedJSON = JSON.stringify(draft);
-                      startChoices = [];
                       pinned = [-1, -1];
                       dirty = false;
                       history = [];
                       selected = -1;
-                      $("photoZoom").value = 1;
-                      choose(1);
+                      if (draft.points.length) preparePreview();
+                      else choose(1);
                     } catch (error) {
                       status("照片数据无法读取，未修改已保存线路。", true);
                     } finally {
@@ -6022,7 +5471,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             try {
               await persistDraft();
             } catch (error) {
-              status("草稿未保存，请重试保留草稿。", true);
+              status("草稿未保存，请点“重试保存”或再次关闭。", true);
               busy = false;
               return;
             }
