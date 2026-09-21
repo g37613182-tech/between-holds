@@ -119,6 +119,28 @@
         pointer-events: none;
       }
 
+      .climb-settings {
+        grid-column: 1 / -1;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        color: var(--muted);
+        font-size: 11px;
+        margin-top: -8px;
+      }
+      .climb-settings label { display: flex; align-items: center; gap: 6px; }
+      .climb-settings select {
+        color: var(--ink);
+        background: transparent;
+        border: 0;
+        border-radius: 8px;
+        min-height: 36px;
+        font: inherit;
+        cursor: pointer;
+      }
+      .climb-settings select:focus-visible { outline: 2px solid var(--accent); }
+
       .view-tools {
         position: absolute;
         right: 12px;
@@ -532,6 +554,16 @@
             />
           </svg>
         </button>
+      </div>
+      <div class="climb-settings">
+        <span id="routeChallenge"></span>
+        <label for="strengthSelect">上肢力量
+          <select id="strengthSelect" title="各档分别保留进度；首次切换从起点开始">
+            <option value="gentle">较弱</option>
+            <option value="standard" selected>标准</option>
+            <option value="strong">较强</option>
+          </select>
+        </label>
       </div>
     </header>
     <main class="stage" aria-label="攀岩练习">
@@ -1756,7 +1788,31 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       );
       let activeRoute = routes[0],
         holds = activeRoute.holds;
+      // Authored grip difficulty, independent of painted shape or photo color.
+      const challenges = [
+        ["入门 · 找脚点", 1.12], ["基础 · 横移", 1.05],
+        ["进阶 · 抬脚上升", 1], ["进阶 · 选边侧身", 0.98],
+        ["挑战 · 换脚折返", 0.94], ["组合 · 上升与横移", 0.90],
+        ["复杂 · 多次转向", 0.86], ["综合 · 长横移与高脚", 0.82],
+      ];
+      routes.forEach((route, index) => {
+        route.challenge = challenges[index][0];
+        route.holds.forEach((hold, id) => {
+          if (hold.type === "jug") hold.grip = id < 2 ? 1 : challenges[index][1];
+        });
+      });
+      const strengthProfiles = {
+        gentle: { label: "较弱", grip: 0.78, pull: 0.27 },
+        standard: { label: "标准", grip: 1, pull: 0.66 },
+        strong: { label: "较强", grip: 1.18, pull: 0.82 },
+      };
+      let strengthLevel = "standard";
       const routeDrafts = new Map();
+      const draftKey = (id, level = strengthLevel) => id + ":" + level;
+      function discardRouteDrafts(id) {
+        for (const level of Object.keys(strengthProfiles))
+          routeDrafts.delete(draftKey(id, level));
+      }
       const routeViews = new Map();
       const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
       const mix = (a, b, t) => a + (b - a) * t;
@@ -1987,12 +2043,24 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       }
       // Quasi-static vertical contact forces: sum(F)=weight and sum(x*F)=xCOM*weight.
       // Quadprog distributes load within strength bounds; free limbs never supply force.
+      function handCapacity(s, i, point, tolerance = 1) {
+        const profile = strengthProfiles[strengthLevel],
+          ratio = clamp(distance(anchor(s.hip, i), point) / length(i), 0, 1),
+          // Shorter shoulder-to-hand distance increases active elbow demand.
+          // Straight-arm hanging uses less pull, but is still grip-limited.
+          demand = 0.2 + 0.8 * (1 - ratio * ratio),
+          grip = 0.8 * (0.65 + 0.35 * ratio) * profile.grip *
+            (holds[s.limbs[i]]?.grip ?? 1) * tolerance,
+          pull = profile.pull / demand;
+        return { grip, pull, capacity: Math.min(grip, pull), demand };
+      }
       function solveGravity(
         s,
         release = -1,
         points = pointsFor(s),
         strength = 1,
         allowance = 0,
+        unlimitedHands = false,
       ) {
         const center = massCenter(s, points),
           ids = [0, 1, 2, 3].filter(
@@ -2019,6 +2087,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           quality: 0,
           forceResidual: 1,
           momentResidual: Infinity,
+          reason: "balance",
         };
         if (ids.length < 2 || base.offset > allowance + 0.001) return base;
         const caps = ids.map((i) => {
@@ -2027,10 +2096,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             0,
             1,
           );
-          return (
-            strength *
-            (i < 2 ? 0.8 * (0.65 + 0.35 * ratio) : 1.05 * (0.45 + 0.55 * ratio))
-          );
+          return i < 2
+            ? unlimitedHands ? 4 : handCapacity(s, i, points[i], strength).capacity
+            : strength * 1.05 * (0.45 + 0.55 * ratio);
         });
         const n = ids.length,
           moment = maxX - minX > 0.001;
@@ -2061,7 +2129,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           A.push([null, ...rows.map((r) => r[k])]);
         }
         const solved = Quadprog.solveQP(D, d, A, [null, ...rhs], equalities);
-        if (solved.message || !solved.solution) return base;
+        if (solved.message || !solved.solution)
+          return { ...base, reason: ids.some(i => i < 2) ? "strength" : "balance" };
         ids.forEach((i, k) => (loads[i] = Math.max(0, solved.solution[k + 1])));
         const forceResidual = Math.abs(loads.reduce((a, b) => a + b, 0) - 1);
         const momentResidual = Math.abs(
@@ -2090,10 +2159,22 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           mixed = ids.some((i) => i < 2) && ids.some((i) => i >= 2),
           allowance = mixed ? (ids.length >= 3 ? 12 : 6) : 0,
           relaxed = solveGravity(s, release, points, 1.25, allowance);
-        return { ...relaxed, strained: relaxed.feasible };
+        const strengthLimited = !relaxed.feasible && relaxed.reason === "strength" &&
+          solveGravity(s, release, points, 1.25, allowance, true).feasible;
+        return {
+          ...relaxed, strained: relaxed.feasible,
+          reason: strengthLimited ? "strength" : "balance",
+        };
       }
       function balance(s, release = -1) {
         return gravity(s, release);
+      }
+      function supportIssue(b) {
+        return {
+          error: b.reason === "strength" ? "上肢力量不足 · 先找脚点" : "先调整支撑",
+          reason: b.reason === "strength" ? "strength" : "balance",
+          balance: b,
+        };
       }
       function support(s, release = -1, points) {
         const b = gravity(s, release, points);
@@ -2103,7 +2184,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         const direct = assessDirect(s, i, id);
         if (
           !direct.error ||
-          !["reach", "pose", "balance"].includes(direct.reason) ||
+          !["reach", "pose", "balance", "strength"].includes(direct.reason) ||
           !holds[id] ||
           distance(anchor(s.hip, i), holdPoint(id, i)) > length(i) + 24
         )
@@ -2178,11 +2259,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         const nextPose = { ...s, hip, limbs };
         const finalSupport = gravity(nextPose);
         if (!finalSupport.feasible)
-          return {
-            error: "重心偏离支撑",
-            reason: "balance",
-            balance: finalSupport,
-          };
+          return supportIssue(finalSupport);
         const m = support(nextPose, i);
         const cost =
           1.4 + (1 - m.feet) * 4 + clamp((d / length(i) - 0.8) / 0.2, 0, 1) * 3;
@@ -2226,7 +2303,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           return { error: "关节活动受限", reason: "pose" };
         const b = gravity({ ...s, limbs });
         if (!b.feasible)
-          return { error: "先调整支撑", reason: "balance", balance: b };
+          return supportIssue(b);
         const next = {
           hip: { ...s.hip },
           limbs,
@@ -2318,7 +2395,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             p.points,
           );
           if (!b.feasible)
-            return { error: "先调整支撑", reason: "balance", balance: b };
+            return supportIssue(b);
         }
         return null;
       }
@@ -2407,28 +2484,54 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           future: clone(future),
         };
       }
-      function changeRoute(id) {
+      function changeRoute(id, level = strengthLevel) {
         const next = routes.find((route) => route.id === id);
-        if (!next || next === activeRoute) return;
-        cancelGesture();
+        if (!next || !strengthProfiles[level] || drag ||
+            (next === activeRoute && level === strengthLevel)) {
+          update();
+          return false;
+        }
+        const previousLevel = strengthLevel, previousHolds = holds;
+        let startValid;
+        try {
+          strengthLevel = level;
+          holds = next.holds;
+          startValid = valid(next.hip, next.limbs || [0, 1, 2, 3]);
+        } finally {
+          strengthLevel = previousLevel;
+          holds = previousHolds;
+        }
+        if (!startValid && !routeDrafts.has(draftKey(id, level))) {
+          update();
+          notify("该档起步支撑不足 · 请在照片预览调整起点");
+          return false;
+        }
         finishKeyboardStep();
-        routeDrafts.set(activeRoute.id, {
+        routeDrafts.set(draftKey(activeRoute.id), {
           active: draftSnapshot(),
           comparison: clone(savedDraft),
         });
+        strengthLevel = level;
         activeRoute = next;
         holds = next.holds;
-        const retained = routeDrafts.get(id);
+        const retained = routeDrafts.get(draftKey(id));
         savedDraft = retained ? clone(retained.comparison) : null;
         if (retained) {
           past = clone(retained.active.past);
           future = clone(retained.active.future);
           restore(retained.active.current);
-        } else reset();
+        } else {
+          const view = routeViews.get(id);
+          reset();
+          if (view) routeViews.set(id, view);
+        }
         update();
         draw();
-        announce("已切换到" + next.name);
-        if (next.explore && !retained) notify("空白处拖动 · 双指缩放");
+        announce("已切换到" + next.name + " · 上肢力量" + strengthProfiles[level].label);
+        if (level !== previousLevel)
+          notify(retained ? "已恢复该力量档进度" : "新力量档 · 从起点尝试");
+        else if (next.explore && !retained) notify("空白处拖动 · 双指缩放");
+        return true;
       }
       function saveDraft() {
         if (anim || drag) return;
@@ -2486,7 +2589,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               0.97,
         );
         if (stretched) return "伸展很满";
-        if (blocked) return "姿态受限";
+        if (blocked) return typeof blocked === "string" ? blocked : "姿态受限";
         const m = support(state),
           footShare = m.loads[2] + m.loads[3];
         if (m.balance.strained) return "吃力，但可以试";
@@ -2504,7 +2607,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         if (reason === "type") return selected < 2 ? "脚点" : "手点";
         if (reason === "occupied") return "已有接触";
         if (reason === "pose") return "姿态受限";
-        if (reason === "balance") return preview.result.error;
+        if (reason === "balance" || reason === "strength") return preview.result.error;
         if (preview.mode === "flag") {
           if (!preview.ready) return "";
           const next = { ...state, ...preview.result };
@@ -2533,6 +2636,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           : "";
         $("routeSelect").value = activeRoute.id;
         $("routeSelect").disabled = !!drag;
+        $("strengthSelect").value = strengthLevel;
+        $("strengthSelect").disabled = !!drag;
+        $("routeChallenge").textContent = activeRoute.challenge
+          ? activeRoute.challenge + " · 标准档"
+          : "照片线路";
         $("routeDot").style.backgroundColor = activeRoute.color || "#6682be";
         for (const id of ["viewOut", "viewIn", "viewFit", "viewPerson"])
           $(id).disabled = !!drag;
@@ -2636,6 +2744,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         blocked =
           flatDistance(next, wanted) > 0.05 ||
           Math.abs(next.turn - wanted.turn) > 0.001;
+        if (blocked && geometryValid(wanted, state.limbs)) {
+          const b = gravity({ ...state, hip: wanted });
+          if (!b.feasible && b.reason === "strength")
+            blocked = "上肢力量不足 · 先找脚点";
+        }
         state.hip = next;
         if (preview)
           preview = previewMove(state, selected, preview.point, preview.id);
@@ -2716,8 +2829,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           canvas.height = h;
         }
         ctx.setTransform(d, 0, 0, d, 0, 0);
-        const topInset = activeRoute.id !== "side" && width < 600 ? 70 : 17,
-          availableHeight = height - topInset - 17;
+        const topInset = width < 600 ? 70 : 17,
+          availableHeight = height - topInset - (width < 600 ? 62 : 17);
         scale = Math.max(
           0.1,
           Math.min(
@@ -2741,7 +2854,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         if (width < 600)
           scale = Math.min(
             scale,
-            Math.max(0.1, (height - 80) / (artBottom - artTop)),
+            Math.max(0.1, (height - 140) / (artBottom - artTop)),
           );
         offsetX = width / 2 - activeRoute.view.x * scale;
         offsetY =
@@ -4264,6 +4377,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       $("routeSelect").addEventListener("change", (event) =>
         changeRoute(event.target.value),
       );
+      $("strengthSelect").addEventListener("change", (event) =>
+        changeRoute(activeRoute.id, event.target.value),
+      );
       function finishKeyboardStep() {
         if (!keyboardStep) return;
         remember(keyboardStep);
@@ -4382,6 +4498,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         motionIssue,
         assessDirect,
         strictGravity: solveGravity,
+        handCapacity,
+        strengthProfiles,
+        get strengthLevel() { return strengthLevel; },
         contactHull,
         componentOutline,
         shapeValid,
@@ -4411,6 +4530,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               Math.abs(h.x) <= 10000 &&
               Math.abs(h.y) <= 10000 &&
               ["jug", "foot"].includes(h.type) &&
+              h.grip === undefined &&
               !h.hands &&
               !h.feet &&
               shapeValid(h.shape),
@@ -4593,7 +4713,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           if (index >= 0) {
             if (activeRoute.id === clean.id) changeRoute("side");
             routes[index] = clean;
-            routeDrafts.delete(clean.id);
+            discardRouteDrafts(clean.id);
             routeViews.delete(clean.id);
           } else routes.push(clean);
           const selector = $("routeSelect");
@@ -4619,7 +4739,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           if (activeRoute.id === id) changeRoute("side");
           const index = routes.findIndex((r) => r.id === id);
           if (index >= 0) routes.splice(index, 1);
-          routeDrafts.delete(id);
+          discardRouteDrafts(id);
           routeViews.delete(id);
           [...$("routeSelect").options].find((o) => o.value === id)?.remove();
         },
@@ -4629,6 +4749,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         inspect: () =>
           clone({
             routeId: activeRoute.id,
+            strengthLevel,
             state,
             selected,
             preview,
