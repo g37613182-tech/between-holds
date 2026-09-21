@@ -119,6 +119,24 @@
         pointer-events: none;
       }
 
+      .view-tools {
+        position: absolute;
+        right: 12px;
+        bottom: 12px;
+        display: flex;
+        padding: 2px;
+        border-radius: 12px;
+        background: #faf9f5e8;
+      }
+      .view-tools .icon-button {
+        width: 44px;
+        height: 44px;
+        flex-basis: 44px;
+        font-size: 12px;
+        color: #606c5f;
+      }
+      .view-tools .icon-button svg { width: 17px; height: 17px; }
+
       .route select {
         appearance: none;
         -webkit-appearance: none;
@@ -327,7 +345,7 @@
 
       .outcome {
         position: absolute;
-        bottom: 18px;
+        bottom: 64px;
         left: 0;
         right: 0;
         text-align: center;
@@ -484,13 +502,16 @@
         <small>BETWEEN HOLDS</small>
       </div>
       <div class="route">
-        <i aria-hidden="true"></i>
+        <i id="routeDot" aria-hidden="true"></i>
         <select id="routeSelect" aria-label="选择线路">
           <option value="side">01 侧上方</option>
           <option value="traverse">02 横移</option>
           <option value="rise">03 高一步</option>
           <option value="fork">04 两条路</option>
           <option value="return">05 折返</option>
+          <option value="ladder">06 绕过屋檐</option>
+          <option value="switch">07 回旋</option>
+          <option value="west">08 长路回家</option>
         </select>
         <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="m6 9 6 6 6-6" />
@@ -596,11 +617,21 @@
         <option value="on">重心 · 常开</option>
         <option value="off">重心 · 关闭</option>
       </select>
+      <div class="view-tools" role="group" aria-label="岩壁视角">
+        <button id="viewOut" class="icon-button" aria-label="缩小视角" data-tip="缩小">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14"/></svg>
+        </button>
+        <button id="viewIn" class="icon-button" aria-label="放大视角" data-tip="放大">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5v14"/></svg>
+        </button>
+        <button id="viewFit" class="icon-button" aria-label="查看整条线路" data-tip="查看整条线路">全线</button>
+        <button id="viewPerson" class="icon-button" aria-label="回到人物" data-tip="回到人物">人物</button>
+      </div>
       <span
         id="routeScale"
         style="
           position: absolute;
-          bottom: 24px;
+          bottom: 62px;
           right: 18px;
           font-size: 11px;
           color: var(--muted);
@@ -995,7 +1026,8 @@
           <button id="photoCamera" class="photo-command">拍照</button>
         </div>
         <p class="photo-privacy">
-          仅保存在当前浏览器，不上传照片。清除浏览器数据会删除本机线路。
+          草稿保存在当前浏览器。选用 AI 时照片会发送至 DeepSeek；本机识别不上传。
+          清除浏览器数据会删除本机线路。
         </p>
         <h3>我的线路</h3>
         <div id="photoRecords"></div>
@@ -1011,7 +1043,14 @@
         <div class="photo-side">
           <section id="photoSourcePanel">
             <h3>把这面墙，变成一次尝试</h3>
-            <p class="photo-privacy">本机颜色识别，不上传照片。AI 尚未接通；生成后可补点或删掉误识别。</p>
+            <div id="photoMethodRow" class="photo-row" hidden>
+              <label for="photoMethod">生成方式</label>
+              <select id="photoMethod" aria-label="生成方式">
+                <option value="local">本机颜色识别</option>
+                <option value="ai">AI 视觉 · 试用</option>
+              </select>
+            </div>
+            <p id="photoPrivacy" class="photo-privacy">本机颜色识别，不上传照片。生成后可补点或删掉误识别。</p>
             <div id="photoColors" class="photo-row" hidden></div>
           </section>
           <section id="photoSetupPanel" hidden>
@@ -1024,6 +1063,7 @@
             <input id="photoSize" aria-label="人物大小" type="range" min=".65" max="1.6" step=".05" value="1" />
             <div class="photo-size-ends"><span>较小</span><span>较大</span></div>
             <p class="photo-privacy">看人与岩点的比例，合适了就开始。</p>
+            <p id="photoAINote" class="photo-privacy" hidden>AI 位置与轮廓需核对。切原图后，浅色叠层是 AI 轮廓；可用“改一下”补点、删点或移动抓踩位置。</p>
             <button id="photoPickStart" class="photo-command" hidden>点选两个起手</button>
           </section>
           <section id="photoMarkPanel" hidden>
@@ -1101,6 +1141,7 @@
         <output id="photoSaved" aria-live="polite"></output>
         <button id="photoBack" class="photo-command" hidden>返回照片</button>
         <button id="photoSave" class="photo-command" hidden>重试保存</button>
+        <button id="photoCancelAI" class="photo-command" hidden>取消识别</button>
         <button id="photoNext" class="photo-command primary" hidden>
           下一步
         </button>
@@ -1627,9 +1668,96 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ],
         },
       ];
+      routes.push(
+        {
+          id: "ladder",
+          name: "绕过屋檐",
+          color: "#bb944b", shade: "#a8803e", explore: true,
+          hip: { x: 320, y: 551, turn: 0 },
+          view: { x: 465, top: -105, width: 700, height: 860, floor: 742 },
+          holds: [
+            { x: 240, y: 410, type: "jug" },
+            { x: 400, y: 400, type: "jug", hands: 2 },
+            { x: 245, y: 710, type: "foot" },
+            { x: 410, y: 705, type: "foot" },
+            { x: 230, y: 300, type: "jug", hands: 2 },
+            { x: 420, y: 295, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 250, y: 610, type: "foot" },
+            { x: 410, y: 610, type: "foot" },
+            { x: 235, y: 195, type: "jug", hands: 2, silhouette: "slope" },
+            { x: 420, y: 190, type: "jug", hands: 2 },
+            { x: 255, y: 505, type: "foot" },
+            { x: 405, y: 505, type: "foot" },
+            { x: 330, y: 85, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 330, y: 435, type: "foot", feet: 2 },
+            { x: 510, y: 140, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 475, y: 420, type: "foot", feet: 2 },
+            { x: 640, y: 115, type: "jug" },
+            { x: 610, y: 380, type: "foot" },
+            { x: 535, y: 350, type: "foot", feet: 2, silhouette: "rail" },
+            { x: 680, y: -20, type: "jug", hands: 2, goal: true },
+          ],
+        },
+        {
+          id: "switch",
+          name: "回旋",
+          color: "#b87886", shade: "#a06473", explore: true,
+          hip: { x: 320, y: 491, turn: 0 },
+          view: { x: 355, top: -180, width: 650, height: 880, floor: 682 },
+          holds: [
+            { x: 240, y: 350, type: "jug" },
+            { x: 390, y: 340, type: "jug", hands: 2 },
+            { x: 245, y: 650, type: "foot" },
+            { x: 410, y: 645, type: "foot" },
+            { x: 335, y: 250, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 250, y: 550, type: "foot" },
+            { x: 410, y: 545, type: "foot" },
+            { x: 325, y: 480, type: "foot", feet: 2 },
+            { x: 170, y: 180, type: "jug", hands: 2 },
+            { x: 235, y: 430, type: "foot" },
+            { x: 365, y: 410, type: "foot" },
+            { x: 265, y: 110, type: "jug", hands: 2 },
+            { x: 420, y: 70, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 380, y: 375, type: "foot" },
+            { x: 490, y: 390, type: "foot", feet: 2 },
+            { x: 555, y: 20, type: "jug", hands: 2, silhouette: "slope" },
+            { x: 390, y: 305, type: "foot" },
+            { x: 450, y: -90, type: "jug", hands: 2, goal: true },
+          ],
+        },
+        {
+          id: "west",
+          name: "长路回家",
+          color: "#5f9b8e", shade: "#4f867a", explore: true,
+          hip: { x: 470, y: 431, turn: 0 },
+          view: { x: 235, top: -30, width: 900, height: 690, floor: 637 },
+          holds: [
+            { x: 415, y: 268, type: "jug", hands: 2 },
+            { x: 562, y: 289, type: "jug" },
+            { x: 374, y: 585, type: "foot" },
+            { x: 549, y: 590, type: "foot" },
+            { x: 390, y: 513, type: "foot" },
+            { x: 315, y: 300, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 280, y: 535, type: "foot", feet: 2 },
+            { x: 195, y: 295, type: "jug", hands: 2, silhouette: "slope" },
+            { x: 170, y: 505, type: "foot" },
+            { x: 460, y: 545, type: "foot" },
+            { x: 130, y: 225, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 215, y: 465, type: "foot" },
+            { x: -10, y: 235, type: "jug", hands: 2, silhouette: "rail" },
+            { x: 55, y: 490, type: "foot", feet: 2 },
+            { x: -95, y: 385, type: "foot" },
+            { x: -105, y: 150, type: "jug" },
+            { x: 130, y: 375, type: "foot" },
+            { x: 140, y: 30, type: "jug", hands: 2, goal: true },
+            { x: 70, y: 125, type: "jug", hands: 2, silhouette: "slope" },
+          ],
+        },
+      );
       let activeRoute = routes[0],
         holds = activeRoute.holds;
       const routeDrafts = new Map();
+      const routeViews = new Map();
       const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
       const mix = (a, b, t) => a + (b - a) * t;
       const smooth = (t) => {
@@ -1657,6 +1785,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         scale = 1,
         offsetX = 0,
         offsetY = 0;
+      let fitScale = 1, fitX = 0, fitY = 0;
       let past = [],
         future = [],
         savedDraft = null,
@@ -2299,6 +2428,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         update();
         draw();
         announce("已切换到" + next.name);
+        if (next.explore && !retained) notify("空白处拖动 · 双指缩放");
       }
       function saveDraft() {
         if (anim || drag) return;
@@ -2403,6 +2533,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           : "";
         $("routeSelect").value = activeRoute.id;
         $("routeSelect").disabled = !!drag;
+        $("routeDot").style.backgroundColor = activeRoute.color || "#6682be";
+        for (const id of ["viewOut", "viewIn", "viewFit", "viewPerson"])
+          $(id).disabled = !!drag;
         document.title = "岩间 · " + activeRoute.name;
         $("moveCount").textContent = String(state.moves).padStart(2, "0");
         $("selection").textContent =
@@ -2547,6 +2680,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         cancelGesture();
         keyboardStep = null;
         state = initial();
+        routeViews.delete(activeRoute.id);
         selected = null;
         hover = null;
         preview = null;
@@ -2615,6 +2749,58 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           (availableHeight - activeRoute.view.height * scale) / 2 -
           activeRoute.view.top * scale;
         if (width < 600) offsetY = Math.max(offsetY, 68 - artTop * scale);
+        fitScale = scale;
+        fitX = (width / 2 - offsetX) / scale;
+        fitY = (height / 2 - offsetY) / scale;
+        if (!routeViews.has(activeRoute.id))
+          routeViews.set(activeRoute.id, activeRoute.explore
+            ? personView()
+            : { x: fitX, y: fitY, zoom: 1, fit: true });
+        applyView();
+      }
+      function personView() {
+        const readableScale = Math.min(0.85, Math.max(0.1, (height - 96) / 440));
+        return { x: state.hip.x, y: state.hip.y - 50, zoom: clamp(readableScale / fitScale, 1, 6) };
+      }
+      function applyView() {
+        const camera = routeViews.get(activeRoute.id);
+        if (camera.fit) Object.assign(camera, { x: fitX, y: fitY, zoom: 1 });
+        camera.zoom = clamp(camera.zoom, 1, Math.max(1, Math.min(6, 3 / fitScale)));
+        scale = fitScale * camera.zoom;
+        // Keep a useful portion of the wall visible, even after a long empty drag.
+        const v = activeRoute.view, halfW = width / scale / 2, halfH = height / scale / 2;
+        const roomX = v.width / 2 + Math.min(45, halfW / 4);
+        const roomY = v.height / 2 + Math.min(65, halfH / 4);
+        camera.x = clamp(camera.x, fitX - roomX, fitX + roomX);
+        camera.y = clamp(camera.y, fitY - roomY, fitY + roomY);
+        offsetX = width / 2 - camera.x * scale;
+        offsetY = height / 2 - camera.y * scale;
+      }
+      function zoomView(factor, point = { x: width / 2, y: height / 2 }) {
+        if (drag) return;
+        measure();
+        const anchor = { x: (point.x - offsetX) / scale, y: (point.y - offsetY) / scale };
+        const camera = routeViews.get(activeRoute.id);
+        camera.fit = false;
+        camera.zoom *= factor;
+        applyView();
+        camera.x = anchor.x - (point.x - width / 2) / scale;
+        camera.y = anchor.y - (point.y - height / 2) / scale;
+        applyView();
+        preview = null;
+        hover = null;
+        schedule();
+      }
+      function frameView(person = false) {
+        if (drag) return;
+        measure();
+        routeViews.set(activeRoute.id, person
+          ? personView()
+          : { x: fitX, y: fitY, zoom: 1, fit: true });
+        applyView();
+        preview = null;
+        hover = null;
+        schedule();
       }
       function line(pts, color, w) {
         ctx.beginPath();
@@ -2675,7 +2861,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         if (
           !shape ||
           !/^#[0-9a-f]{6}$/i.test(shape.color) ||
-          !["color", "manual"].includes(shape.source) ||
+          !["color", "manual", "ai"].includes(shape.source) ||
           !Array.isArray(shape.outline) ||
           shape.outline.length < 3 ||
           shape.outline.length > 128 ||
@@ -2846,6 +3032,128 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         poly.slice(1).forEach((p) => context.lineTo(p.x, p.y));
         context.closePath();
       }
+      // Derive a cleaner silhouette without modifying the observed polygon.
+      // All distances are relative to the hold, so preview/play scales agree.
+      const cleanOutlineCache = new WeakMap();
+      function cleanHoldOutline(input) {
+        if (cleanOutlineCache.has(input)) return cleanOutlineCache.get(input);
+        if (input.length < 4) return input.map(p => ({ ...p }));
+        const xs = input.map(p => p.x), ys = input.map(p => p.y),
+          minor = Math.min(Math.max(...xs) - Math.min(...xs), Math.max(...ys) - Math.min(...ys)),
+          epsilon = minor * 1e-9,
+          area = Math.abs(outlineArea(input));
+        if (minor <= 0) return input;
+        function simplify(points, tolerance) {
+          const keep = new Set([0, points.length - 1]), stack = [[0, points.length - 1]];
+          while (stack.length) {
+            const [a, b] = stack.pop();
+            let best = tolerance, index = -1;
+            for (let i = a + 1; i < b; i++) {
+              const d = segmentDistance(points[i], points[a], points[b]);
+              if (d > best + epsilon) { best = d; index = i; }
+            }
+            if (index >= 0) { keep.add(index); stack.push([a, index], [index, b]); }
+          }
+          return points.filter((_, i) => keep.has(i));
+        }
+        // Start at a stable extreme, not an arbitrary detector seam.
+        let first = 0;
+        input.forEach((p,i) => {
+          if (p.x < input[first].x - epsilon ||
+              (Math.abs(p.x - input[first].x) <= epsilon && p.y < input[first].y)) first = i;
+        });
+        const ring = [...input.slice(first), ...input.slice(0, first)];
+        let split = 1;
+        ring.forEach((p,i) => {
+          if (flatDistance(p, ring[0]) > flatDistance(ring[split], ring[0]) + epsilon) split = i;
+        });
+        const valid = poly => poly.length <= 128 &&
+          Math.abs(Math.abs(outlineArea(poly)) / area - 1) <= .1 &&
+          shapeValid({outline:poly,color:"#000000",source:"color"}, Number.MAX_VALUE);
+        let result;
+        // Budget samples for curves instead of dropping all rounding when
+        // a detailed outline would exceed 128 vertices. Try gentler rounding
+        // or a finer scaffold if area/topology needs it; never use a hull.
+        for (const tolerance of [.035, .018, .05]) {
+          const simple = [
+            ...simplify(ring.slice(0, split + 1), minor * tolerance).slice(0, -1),
+            ...simplify([...ring.slice(split), ring[0]], minor * tolerance).slice(0, -1),
+          ];
+          for (const softness of [.46, .32, .18]) {
+            const corners = simple.map((p,i) => {
+              const a = simple[(i + simple.length - 1) % simple.length],
+                b = simple[(i + 1) % simple.length],
+                da = flatDistance(a,p), db = flatDistance(b,p),
+                cosine = ((a.x-p.x)*(b.x-p.x)+(a.y-p.y)*(b.y-p.y))/(da*db || 1);
+              if (cosine > .26 || !da || !db) return { p };
+              const trim = Math.min(minor * .16, da * softness, db * softness),
+                u = { x:p.x+(a.x-p.x)*trim/da, y:p.y+(a.y-p.y)*trim/da },
+                v = { x:p.x+(b.x-p.x)*trim/db, y:p.y+(b.y-p.y)*trim/db };
+              return { p, u, v, steps:1, bend:flatDistance(p, {
+                x:(u.x+v.x)/2, y:(u.y+v.y)/2,
+              }) / 2 };
+            });
+            let count = corners.reduce((n,c) => n + (c.u ? 2 : 1), 0);
+            if (count > 128) continue;
+            while (count < 128) {
+              let next, error = minor * .0015;
+              for (const c of corners) if (c.u && c.bend / c.steps ** 2 > error + epsilon) {
+                next = c; error = c.bend / c.steps ** 2;
+              }
+              if (!next) break;
+              next.steps++;
+              count++;
+            }
+            const rounded = corners.flatMap(({p,u,v,steps}) => {
+              if (!u) return [{ ...p }];
+              return Array.from({length:steps+1},(_,i) => {
+                const t = i / steps;
+                return {
+                  x:(1-t)**2*u.x+2*t*(1-t)*p.x+t*t*v.x,
+                  y:(1-t)**2*u.y+2*t*(1-t)*p.y+t*t*v.y,
+                };
+              });
+            });
+            if (valid(rounded)) { result = rounded; break; }
+          }
+          if (result) break;
+        }
+        result ||= input.map(p => ({ ...p }));
+        cleanOutlineCache.set(input, result);
+        return result;
+      }
+      function cleanPhotoShapes(points) {
+        const result = points.map(p => ["color", "ai"].includes(p.shape?.source) ? {
+          ...p, shape: { ...p.shape, outline: cleanHoldOutline(p.shape.outline) },
+        } : p);
+        const bounds = poly => ({
+          l:Math.min(...poly.map(p=>p.x)), r:Math.max(...poly.map(p=>p.x)),
+          t:Math.min(...poly.map(p=>p.y)), b:Math.max(...poly.map(p=>p.y)),
+        });
+        const overlap = (a,b) => {
+          const x=bounds(a), y=bounds(b);
+          if(x.r<y.l || y.r<x.l || x.b<y.t || y.b<x.t) return false;
+          if(a.some(p=>insideOutline(p,b)) || b.some(p=>insideOutline(p,a))) return true;
+          const cross=(a,b,c)=>(b.x-a.x)*(c.y-a.y)-(b.y-a.y)*(c.x-a.x);
+          return a.some((p,i)=>b.some((q,j)=>{
+            const r=a[(i+1)%a.length], s=b[(j+1)%b.length];
+            return cross(p,r,q)*cross(p,r,s)<0 && cross(q,s,p)*cross(q,s,r)<0;
+          }));
+        };
+        // Never close the gap between separate observed holds. Revert both
+        // derived silhouettes if a shortcut would introduce a new overlap.
+        const revert = new Set();
+        for(let i=0;i<points.length;i++) for(let j=i+1;j<points.length;j++) {
+          if(!points[i].shape || !points[j].shape) continue;
+          if((overlap(result[i].shape.outline,result[j].shape.outline) ||
+              overlap(result[i].shape.outline,points[j].shape.outline) ||
+              overlap(points[i].shape.outline,result[j].shape.outline)) &&
+            !overlap(points[i].shape.outline,points[j].shape.outline)) {
+            revert.add(i); revert.add(j);
+          }
+        }
+        return result.map((p,i)=>revert.has(i)?points[i]:p);
+      }
       function drawPhotoHold(h) {
         const b = holdBounds(h),
           w = b.right - b.left,
@@ -2873,7 +3181,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         ctx.restore();
       }
       // One paint path for each hold and its feedback. All contacts and hit zones
-      // stay in the existing model; photo contours are never smoothed or replaced.
+      // stay in the existing model; photo routes supply their derived display contours.
       function holdPath(h) {
         if (h.shape) {
           outlinePath(ctx, h.shape.outline);
@@ -2886,10 +3194,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ry = foot ? (h.feet === 2 ? 17 : 11) : 25;
         ctx.rotate(foot ? -0.12 : -0.06);
         ctx.beginPath();
-        if (!foot && h.hands !== 2) {
+        if (h.silhouette === "rail") {
+          ctx.moveTo(-rx, -ry * .2);
+          ctx.quadraticCurveTo(-rx, -ry * .55, -rx * .65, -ry * .58);
+          ctx.lineTo(rx * .65, -ry * .38);
+          ctx.quadraticCurveTo(rx * 1.06, -ry * .35, rx, ry * .1);
+          ctx.quadraticCurveTo(rx * .95, ry * .65, rx * .55, ry * .65);
+          ctx.lineTo(-rx * .65, ry * .55);
+          ctx.quadraticCurveTo(-rx, ry * .5, -rx, -ry * .2);
+        } else if (!foot && (h.hands !== 2 || h.silhouette === "slope")) {
           // A soft crescent and a rounded slope echo the approved wall study.
           // Both include the original central grip and fit its original bounds.
-          if (holds.indexOf(h) % 2 === 0) {
+          if (h.silhouette !== "slope" && holds.indexOf(h) % 2 === 0) {
             ctx.moveTo(-rx, 0);
             ctx.bezierCurveTo(-rx, -ry * 0.65, -rx * 0.55, -ry, -rx * 0.2, -ry * 0.9);
             ctx.bezierCurveTo(0, -ry * 0.85, -rx * 0.3, -ry * 0.3, rx * 0.1, -ry * 0.3);
@@ -2921,7 +3237,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         }
         ctx.save();
         holdPath(h);
-        ctx.fillStyle = "#6682be";
+        ctx.fillStyle = activeRoute.color || "#6682be";
         ctx.fill();
         ctx.clip();
         ctx.translate(h.x, h.y);
@@ -2942,7 +3258,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         ctx.lineTo(rx, ry * 1.3);
         ctx.lineTo(-rx, ry * 1.3);
         ctx.closePath();
-        ctx.fillStyle = "#5572af";
+        ctx.fillStyle = activeRoute.shade || "#5572af";
         ctx.fill();
         ctx.restore();
         if (h.goal) drawGoal(h);
@@ -3628,6 +3944,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         if (!drag) return;
         const old = drag;
         drag = null;
+        if (old.camera) {
+          routeViews.set(activeRoute.id, old.camera);
+          applyView();
+        }
         if (old.kind === "hip" || old.kind === "chest")
           state = clone(old.before.state);
         selected = old.before.selected;
@@ -3638,10 +3958,35 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         blocked = false;
         canvas.style.cursor = "default";
         releaseCapture(old.pointer);
+        old.pointers?.forEach((_, id) => releaseCapture(id));
         update();
         schedule();
       }
+      function screenPoint(e) {
+        const r = canvas.getBoundingClientRect();
+        return { x: e.clientX - r.left, y: e.clientY - r.top };
+      }
+      function pinchFrame(pointers) {
+        const [a, b] = [...pointers.values()];
+        return { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2, distance: Math.max(1, flatDistance(a, b)) };
+      }
       canvas.addEventListener("pointerdown", (e) => {
+        if (e.pointerType === "touch" && drag?.kind === "pan" &&
+            drag.pointerType === "touch" && drag.pointers.size === 1) {
+          drag.pointers.set(e.pointerId, screenPoint(e));
+          canvas.setPointerCapture(e.pointerId);
+          drag.kind = "pinch";
+          drag.moved = true;
+          const middle = pinchFrame(drag.pointers);
+          drag.pinch = {
+            ...middle, zoom: routeViews.get(activeRoute.id).zoom,
+            world: { x: (middle.x - offsetX) / scale, y: (middle.y - offsetY) / scale },
+          };
+          preview = null;
+          hover = null;
+          update();
+          return;
+        }
         if (e.button !== 0 || drag || anim || e.isPrimary === false) return;
         finishKeyboardStep();
         recoil = null;
@@ -3654,6 +3999,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           before = snapshot();
         drag = {
           ...picked,
+          kind: picked.kind === "empty" ? "pan" : picked.kind,
           pointer: e.pointerId,
           pointerType: e.pointerType,
           start: { x: e.clientX, y: e.clientY },
@@ -3661,6 +4007,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           moved: false,
           before,
         };
+        if (drag.kind === "pan") {
+          drag.camera = clone(routeViews.get(activeRoute.id));
+          drag.pointers = new Map([[e.pointerId, screenPoint(e)]]);
+          drag.screenLast = screenPoint(e);
+        }
         if (picked.kind === "limb") {
           selected = picked.i;
           preview = null;
@@ -3674,6 +4025,21 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         schedule();
       });
       canvas.addEventListener("pointermove", (e) => {
+        if (drag?.kind === "pinch") {
+          if (!drag.pointers.has(e.pointerId)) return;
+          drag.pointers.set(e.pointerId, screenPoint(e));
+          if (drag.pointers.size !== 2) return;
+          const middle = pinchFrame(drag.pointers), start = drag.pinch;
+          const camera = routeViews.get(activeRoute.id);
+          camera.fit = false;
+          camera.zoom = start.zoom * middle.distance / start.distance;
+          applyView();
+          camera.x = start.world.x - (middle.x - width / 2) / scale;
+          camera.y = start.world.y - (middle.y - height / 2) / scale;
+          applyView();
+          schedule();
+          return;
+        }
         if (drag && e.pointerId !== drag.pointer) return;
         if (anim) return;
         const p = world(e);
@@ -3682,7 +4048,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             flatDistance({ x: e.clientX, y: e.clientY }, drag.start) > 6;
           if (!drag.moved && !moved) return;
           drag.moved = true;
-          if (drag.kind === "hip") {
+          if (drag.kind === "pan") {
+            const point = screenPoint(e), camera = routeViews.get(activeRoute.id);
+            camera.fit = false;
+            camera.x -= (point.x - drag.screenLast.x) / scale;
+            camera.y -= (point.y - drag.screenLast.y) / scale;
+            drag.screenLast = point;
+            drag.pointers.set(e.pointerId, point);
+            applyView();
+            preview = null;
+            hover = null;
+            schedule();
+          } else if (drag.kind === "hip") {
             changeHip({
               ...state.hip,
               x: state.hip.x + p.x - drag.last.x,
@@ -3715,10 +4092,22 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             ? "grab"
             : hover.kind === "target" && selected !== null
               ? "pointer"
-              : "default";
+              : "grab";
         schedule();
       });
       canvas.addEventListener("pointerup", (e) => {
+        if (drag?.kind === "pinch") {
+          if (!drag.pointers.has(e.pointerId)) return;
+          drag.pointers.delete(e.pointerId);
+          releaseCapture(e.pointerId);
+          // The remaining finger stays owned by the camera until both are up.
+          if (drag.pointers.size) return;
+          drag = null;
+          canvas.style.cursor = "grab";
+          update();
+          schedule();
+          return;
+        }
         if (!drag || drag.pointer !== e.pointerId) return;
         const action = drag,
           p = world(e);
@@ -3753,7 +4142,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             returnTrial(preview);
             preview = null;
           }
-        } else if (action.kind === "empty") {
+        } else if (action.kind === "pan" && !action.moved) {
           selected = null;
           preview = null;
         }
@@ -3763,11 +4152,18 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         schedule();
       });
       canvas.addEventListener("pointercancel", (e) => {
-        if (drag?.pointer === e.pointerId) cancelGesture();
+        if (drag?.pointer === e.pointerId || drag?.pointers?.has(e.pointerId)) cancelGesture();
       });
       canvas.addEventListener("lostpointercapture", (e) => {
-        if (drag?.pointer === e.pointerId) cancelGesture();
+        if (drag?.kind === "pinch" && !drag.pointers.has(e.pointerId)) return;
+        if (drag?.pointer === e.pointerId || drag?.pointers?.has(e.pointerId)) cancelGesture();
       });
+      canvas.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        if (drag) return;
+        const delta = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? height : 1);
+        zoomView(Math.exp(clamp(-delta * .0015, -.4, .4)), screenPoint(e));
+      }, { passive: false });
       canvas.addEventListener("pointerleave", () => {
         if (!drag) {
           hover = null;
@@ -3861,6 +4257,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       bindCommand($("reset"), reset);
       bindCommand($("saveDraft"), saveDraft);
       bindCommand($("swapDraft"), swapDraft);
+      bindCommand($("viewOut"), () => zoomView(1 / 1.25));
+      bindCommand($("viewIn"), () => zoomView(1.25));
+      bindCommand($("viewFit"), () => frameView());
+      bindCommand($("viewPerson"), () => frameView(true));
       $("routeSelect").addEventListener("change", (event) =>
         changeRoute(event.target.value),
       );
@@ -3989,6 +4389,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         holdBounds,
         outlinePath,
         outlineArea,
+        cleanHoldOutline,
+        cleanPhotoShapes,
       };
       // Imported geometry is checked in an isolated, synchronous hold context.
       function checkImportedRoute(route) {
@@ -4192,6 +4594,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
             if (activeRoute.id === clean.id) changeRoute("side");
             routes[index] = clean;
             routeDrafts.delete(clean.id);
+            routeViews.delete(clean.id);
           } else routes.push(clean);
           const selector = $("routeSelect");
           let option = [...selector.options].find((o) => o.value === clean.id);
@@ -4217,6 +4620,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           const index = routes.findIndex((r) => r.id === id);
           if (index >= 0) routes.splice(index, 1);
           routeDrafts.delete(id);
+          routeViews.delete(id);
           [...$("routeSelect").options].find((o) => o.value === id)?.remove();
         },
       };
@@ -4239,6 +4643,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                   redo: savedDraft.future.length,
                 }
               : null,
+            camera: { ...routeViews.get(activeRoute.id), scale, fitScale, offsetX, offsetY },
             gesture: drag
               ? { kind: drag.kind, pointer: drag.pointer, moved: drag.moved }
               : null,
@@ -4299,6 +4704,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           dist = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
         let original = true, editing = false, previewBase = null,
           previewFrame = null, startFailed = false;
+        let visionConfig = null, visionController = null, visionGroups = [], visionRejected = 0;
         function status(text, error = false) {
           $("photoStatus").textContent = text;
           $("photoStatus").dataset.error = String(error);
@@ -4426,7 +4832,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           );
         }
         function migrate(record) {
-          if (!record || ![1, 2, 3].includes(record.version)) return null;
+          if (!record || ![1, 2, 3, 4].includes(record.version)) return null;
           const d = copy(record.draft);
           if (record.version === 1 && d)
             Object.assign(d, {
@@ -4537,7 +4943,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           // Keep this in photo space too, so changing size scales every hold
           // uniformly at play time. Legacy records remain unchanged on disk.
           const base = unitsFor({ ...d, size: 1 }) || previewBase || 1;
-          return d.points.map(p => p.shape ? p : {
+          return engine.cleanPhotoShapes(d.points).map(p => p.shape ? p : {
             ...p,
             shape: {
               color: "#6682be", source: "manual",
@@ -4579,7 +4985,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 throw new Error("最多保存20条草稿，请删除不需要的线路");
               await store("put", {
                 id: data.id,
-                version: 3,
+                version: data.points.some(p => p.shape?.source === "ai") ? 4 : 3,
                 draft: data,
                 photo: blob,
                 updated: Date.now(),
@@ -4611,6 +5017,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           draft.hip = { x: route.hip.x / units, y: route.hip.y / units };
           draft.turn = route.hip.turn;
           mode = "view";
+          visionGroups = [];
           refresh();
         }
         async function suggestStart() {
@@ -4697,6 +5104,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           step = stepNumber;
           gesture = null;
           candidates = [];
+          visionGroups = [];
           editing = false;
           original = step !== 2;
           mode = "view";
@@ -4711,21 +5119,24 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           $("photoSave").hidden = true;
           $("photoSaved").hidden = step < 0;
           $("photoNext").hidden = step < 0;
-          $("photoNext").textContent = step === 2 ? "开始爬" : "生成岩壁";
+          $("photoNext").textContent = step === 2 ? "开始爬" :
+            visionConfig && $("photoMethod").value === "ai" ? "AI 生成岩壁" : "生成岩壁";
           $("photoSourcePanel").hidden = step !== 1;
           $("photoSetupPanel").hidden = step !== 2;
           $("photoMarkPanel").hidden = true;
           $("photoColors").hidden = true;
           $("photoColors").replaceChildren();
           if (step >= 0) {
-            status(step === 1 ? "照片只在本机处理。" : "调好人物大小，系统会帮你选起步。");
+            status(step === 1 ? "选好生成方式后，开始这一面墙。" : "调好人物大小，系统会帮你选起步。");
             refresh();
             requestAnimationFrame(draw);
           }
         }
         function refresh() {
           $("photoWork").inert = busy;
+          $("photoCancelAI").hidden = !visionController;
           if (!draft || step < 0) return;
+          $("photoAINote").hidden = !draft.points.some(p => p.shape?.source === "ai");
           $("photoSize").value = draft.size;
           $("photoOriginal").setAttribute("aria-pressed", String(original));
           $("photoOriginal").textContent = original ? "看生成" : "原图";
@@ -4773,6 +5184,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ctx.fillRect(0, 0, canvas.width, canvas.height);
           if (original) ctx.drawImage(source, 0, 0);
           else api.paintHolds(ctx, visualPoints(draft), previewBase);
+          if (original && step === 2) {
+            for (const p of visualPoints(draft)) if (p.shape?.source === "ai") {
+              engine.outlinePath(ctx,p.shape.outline);
+              ctx.fillStyle = "#c2eee4a6";
+              ctx.fill();
+            }
+          }
           if (step === 2) api.paintReference(ctx, frame.personX, frame.baseline, units);
           const dot = (p, r, color) => {
             ctx.beginPath();
@@ -4809,7 +5227,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         }
         function detect(point, attachTo = -1, quiet = false) {
           const mini = document.createElement("canvas"),
-            ratio = Math.min(1, 640 / Math.max(source.width, source.height));
+            ratio = Math.min(1, 1200 / Math.max(source.width, source.height));
           mini.width = Math.round(source.width * ratio);
           mini.height = Math.round(source.height * ratio);
           const c = mini.getContext("2d");
@@ -4973,6 +5391,110 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           invalidate();
           refresh();
         }
+        function refreshMethod() {
+          const ai = visionConfig && $("photoMethod").value === "ai";
+          $("photoMethodRow").hidden = !visionConfig;
+          $("photoPrivacy").textContent = ai
+            ? "点击生成后，所选照片会发送至 DeepSeek。AI 位置和轮廓需核对，生成后可改点。"
+            : "本机颜色识别，不上传照片。镁粉、遮挡和相邻岩点可能影响结果，生成后可改点。";
+          if (step === 1) $("photoNext").textContent = ai ? "AI 生成岩壁" : "生成岩壁";
+        }
+        async function checkVision() {
+          // Offline file pages remain fully offline. Static hosting also keeps the local path.
+          if (!["http:", "https:"].includes(location.protocol) || visionConfig) return;
+          try {
+            const response = await fetch("/api/vision/config", {signal:AbortSignal.timeout(3000)});
+            if (!response.ok) return;
+            const config = await response.json();
+            if (!config.available || config.provider !== "DeepSeek" || typeof config.token !== "string") return;
+            visionConfig = config;
+            // Explicit AI choice; local recognition remains the default until chosen.
+            refreshMethod();
+          } catch {}
+        }
+        function applyVisionGroup(group) {
+          savePoint();
+          draft.points = copy(group.points);
+          draft.name = group.name;
+          draft.starts = [-1,-1,-1,-1];
+          draft.top = -1;
+          selected = -1;
+          pinned = [-1,-1];
+          invalidate();
+          preparePreview();
+          status("AI 草稿已生成。请切原图核对岩点，再调整人物大小。"+
+            (visionRejected ? ` ${visionRejected} 个无效候选未应用，可手动补点。` : ""));
+        }
+        async function generateVision() {
+          if (!visionConfig || !source || visionController) return;
+          if (draft.points.length) { preparePreview(); return; }
+          const controller = new AbortController(), token = epoch;
+          visionController = controller;
+          busy = true;
+          visionGroups = [];
+          visionRejected = 0;
+          $("photoColors").replaceChildren();
+          $("photoColors").hidden = true;
+          refresh();
+          status("AI 正在辨认岩点与镁粉覆盖区域…");
+          try {
+            const response = await fetch("/api/vision/detect", {
+              method:"POST", headers:{"Content-Type":"application/json","X-Vision-Token":visionConfig.token},
+              signal:AbortSignal.any([controller.signal,AbortSignal.timeout(95000)]),
+              body:JSON.stringify({image:source.toDataURL("image/jpeg",.86)}),
+            });
+            const result = await response.json();
+            if (!response.ok) throw new Error(typeof result.error === "string" ? result.error : "AI 暂时不可用。");
+            if (token !== epoch || !dialog.open || controller.signal.aborted) return;
+            if (result.image?.width !== source.width || result.image?.height !== source.height ||
+                !Array.isArray(result.routes) || !result.routes.length || result.routes.length > 12)
+              throw new Error("AI 返回的照片尺寸或线路结构不一致。");
+            for (const group of result.routes) {
+              if (typeof group.name !== "string" || group.name.length > 30 ||
+                  !/^#[a-f0-9]{6}$/i.test(group.color) || !Array.isArray(group.points) ||
+                  !group.points.length || !draftDataValid({...draft,points:group.points}) ||
+                  group.points.some(p => p.shape?.source !== "ai" ||
+                    p.x > source.width || p.y > source.height ||
+                    p.shape.outline.some(q=>q.x>source.width||q.y>source.height) ||
+                    !engine.insideOutline(p,p.shape.outline)))
+                throw new Error("AI 岩点数据不完整，没有修改草稿。");
+            }
+            visionRejected = Number.isInteger(result.rejected) ? result.rejected : 0;
+            visionGroups = result.routes;
+            if (visionGroups.length === 1) { applyVisionGroup(visionGroups[0]); return; }
+            const list = $("photoColors");
+            list.hidden = false;
+            visionGroups.forEach(group => {
+              const button = actionButton(group.name+" · "+group.points.length+" 个",()=>applyVisionGroup(group)),
+                swatch = document.createElement("i");
+              swatch.style.background = group.color;
+              button.prepend(swatch);
+              list.append(button);
+            });
+            mode = "ai-choice";
+            status("AI 找到了几组颜色，选一条或点照片上的岩点。"+
+              (result.rejected ? "部分无效轮廓已略过，生成后可补点。" : ""));
+          } catch (error) {
+            if (token === epoch && dialog.open) status(controller.signal.aborted
+              ? "已取消识别，照片草稿仍保留。"
+              : (error.name === "TimeoutError" ? "AI 响应超时。" : error.message)+
+                " 可重试，或将生成方式改为本机颜色识别。", !controller.signal.aborted);
+          } finally {
+            if (visionController === controller) {
+              visionController = null;
+              busy = false;
+              refresh();
+            }
+          }
+        }
+        $("photoMethod").onchange = () => {
+          visionGroups = [];
+          $("photoColors").replaceChildren();
+          $("photoColors").hidden = true;
+          mode = "view";
+          refreshMethod();
+        };
+        $("photoCancelAI").onclick = () => visionController?.abort();
         function generateWall() {
           if (draft.points.length) { preparePreview(); return; }
           // Local hue proposals only. Large background regions are rejected
@@ -4999,7 +5521,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           for (const b of [...bins.values()].sort((a,b) => b.count - a.count).slice(0, 8)) {
             if (b.count < Math.max(5, c.width * c.height * .001)) continue;
             if (groups.some(g => Math.min(Math.abs(g.h-b.h), 360-Math.abs(g.h-b.h)) < 32)) continue;
-            const ratio = Math.min(1, 640 / Math.max(source.width, source.height));
+            const ratio = Math.min(1, 1200 / Math.max(source.width, source.height));
             const points = detect(b.p, -1, true).filter(p =>
               p.area >= 25 && (!p.shape ||
                 p.area / (Math.abs(engine.outlineArea(p.shape.outline)) * ratio * ratio) > .3),
@@ -5067,7 +5589,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 .map((q, i) => ({ i, d: dist(p, q) * factor }))
                 .sort((a, b) => a.d - b.d)
                 .find((q) => q.d <= 20)?.i ??
-              draft.points.findIndex(
+              (original ? draft.points : visualPoints(draft)).findIndex(
                 (q) => q.shape && engine.insideOutline(p, q.shape.outline),
               );
           }
@@ -5126,6 +5648,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               selected = draft.points.length - 1;
               detect(p, selected);
               invalidate();
+            } else if (mode === "ai-choice") {
+              const group = visionGroups.find(group =>
+                group.points.some(q => engine.insideOutline(p,q.shape.outline)));
+              if (group) applyVisionGroup(group);
+              else status("这里不在 AI 轮廓内，可以直接选择右侧颜色。");
+              return;
             } else if (mode === "color-choice") {
               detect(p);
               if (candidates.length) {
@@ -5294,7 +5822,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         $("photoNext").onclick = async () => {
           if (busy) return;
           if (step < 2) {
-            generateWall();
+            if (visionConfig && $("photoMethod").value === "ai") await generateVision();
+            else generateWall();
             return;
           }
           cancelPointer();
@@ -5459,8 +5988,16 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           dialog.showModal();
           status("照片线路是平面动作草稿，不代表真实攀爬能力。");
           await library();
+          await checkVision();
         });
         async function closeEditor() {
+          if (visionController) {
+            visionController.abort();
+            visionController = null;
+            busy = false;
+            epoch++;
+            refresh();
+          }
           if (busy) {
             status("正在处理照片，请稍后关闭。");
             return;
@@ -5499,7 +6036,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         dialog.addEventListener(
           "click",
           (event) => {
-            if (busy && event.target.closest("button")?.id !== "photoClose") {
+            if (busy && !["photoClose","photoCancelAI"].includes(event.target.closest("button")?.id)) {
               event.preventDefault();
               event.stopImmediatePropagation();
             }
@@ -5511,7 +6048,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           if (!handler) continue;
           button.onclick = null;
           api.bindCommand(button, () => {
-            if (busy && button.id !== "photoClose") return;
+            if (busy && !["photoClose","photoCancelAI"].includes(button.id)) return;
             handler();
           });
         }
