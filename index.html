@@ -367,14 +367,20 @@
 
       .outcome {
         position: absolute;
-        bottom: 64px;
-        left: 0;
-        right: 0;
+        top: 72px;
+        left: 12px;
+        width: max-content;
+        max-width: calc(100% - 24px);
+        padding: 8px 12px;
+        border-radius: 12px;
+        background: #faf9f5f2;
         text-align: center;
         pointer-events: none;
-        font-size: 14px;
+        font-size: 13px;
+        line-height: 1.6;
         color: #41644a;
-        font-weight: 600;
+        font-weight: 500;
+        z-index: 3;
       }
 
       .outcome[hidden] {
@@ -484,9 +490,6 @@
           top: 6px;
         }
 
-        .outcome {
-          bottom: 5px;
-        }
       }
 
       @media (max-width: 380px) {
@@ -1834,6 +1837,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         feedback = null,
         recoil = null,
         notice = null,
+        flagDiscovered = false,
         blocked = false,
         frame = false;
       let width = 1,
@@ -2315,6 +2319,38 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         };
         return motionIssue(s, { ...s, ...next }, i) || next;
       }
+      // Follow the connected valid region; every accepted endpoint also passes
+      // the original-to-final animation check used on release.
+      function constrainFlag(s, i, from, wanted) {
+        const d = flatDistance(from, wanted),
+          count = Math.max(1, Math.ceil(Math.min(d, length(i) * 2) / 4));
+        let point = { ...from }, result = assessFlag(s, i, point), boundary = null;
+        for (let n = 1; n <= count; n++) {
+          const candidate = {
+            x: mix(from.x, wanted.x, n / count),
+            y: mix(from.y, wanted.y, n / count),
+          };
+          const next = assessFlag(s, i, candidate);
+          if (!next.error || next.reason === "same") {
+            point = candidate;
+            result = next;
+            continue;
+          }
+          boundary = next;
+          let lo = point, hi = candidate;
+          for (let k = 0; k < 7; k++) {
+            const mid = { x: (lo.x + hi.x) / 2, y: (lo.y + hi.y) / 2 },
+              trial = assessFlag(s, i, mid);
+            if (!trial.error || trial.reason === "same") {
+              lo = mid;
+              result = trial;
+            } else hi = mid;
+          }
+          point = lo;
+          break;
+        }
+        return { point, result, boundary };
+      }
       function poseMix(a, b, t) {
         return {
           x: mix(a.x, b.x, t),
@@ -2572,10 +2608,36 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       function announce(text) {
         $("announcement").textContent = text;
       }
-      function notify(text) {
-        notice = { text, until: performance.now() + 1000 };
+      function notify(text, duration = 1800) {
+        notice = { text, until: performance.now() + duration };
         announce(text);
         schedule();
+      }
+      function footHint(i) {
+        if (i < 2 || flagDiscovered) return;
+        notify(isFree(state.limbs[i])
+          ? "左右拖动悬脚，试试调整重心"
+          : "拖到空处，停一下可悬脚", 3200);
+      }
+      function placeNote() {
+        const el = $("poseNote");
+        el.style.maxWidth = Math.min(280, width - 24) + "px";
+        const w = el.offsetWidth, h = el.offsetHeight,
+          center = { x: width > 600 && height < 360 ? 12 : (width - w) / 2, y: 72 },
+          finger = drag?.pointerType === "touch" ? drag.screen : null,
+          clear = (p) => !finger ||
+            Math.hypot(finger.x - clamp(finger.x, p.x, p.x + w),
+              finger.y - clamp(finger.y, p.y, p.y + h)) >= 58;
+        let position = center;
+        if (!clear(center)) {
+          const candidates = [
+            { x: 12, y: 72 }, { x: width - w - 12, y: 72 },
+            { x: center.x, y: Math.min(height - h - 12, finger.y + 76) },
+          ];
+          position = candidates.find(clear) || candidates[2];
+        }
+        el.style.left = position.x + "px";
+        el.style.top = position.y + "px";
       }
       function poseSignal() {
         const stretched = state.limbs.some(
@@ -2603,22 +2665,21 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       function trialSignal() {
         if (!preview) return "";
         const reason = preview.result?.reason;
+        if (preview.mode === "flag") {
+          if (preview.boundary?.reason === "strength" ||
+              preview.boundary?.reason === "balance")
+            return preview.boundary.error + " · 已停在边界";
+          if (preview.boundary) return "到活动边界了 · 往回拖即可";
+          if (!preview.result?.error)
+            return isFree(state.limbs[preview.i])
+              ? "松开调整悬脚"
+              : preview.ready ? "松开悬脚" : "停一下悬脚";
+        }
         if (reason === "same") return "";
         if (reason === "type") return selected < 2 ? "脚点" : "手点";
         if (reason === "occupied") return "已有接触";
         if (reason === "pose") return "姿态受限";
         if (reason === "balance" || reason === "strength") return preview.result.error;
-        if (preview.mode === "flag") {
-          if (!preview.ready) return "";
-          const next = { ...state, ...preview.result };
-          const before = balance(state),
-            after = balance(next);
-          if (after.strained) return "悬脚 · 吃力但可试";
-          return after.feasible &&
-            (!before.feasible || after.quality > before.quality + 0.08)
-            ? "悬脚 · 重心回到支撑内"
-            : "悬脚";
-        }
         if (preview.result && !preview.result.error) {
           if (gravity({ ...state, ...preview.result }).strained)
             return "吃力，但可以试";
@@ -2696,6 +2757,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         recoil = null;
         notice = null;
         announce(names[i]);
+        footHint(i);
         update();
         schedule();
       }
@@ -2710,6 +2772,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           returnTrial(trial);
           feedback = {
             id,
+            point: flagPoint,
             i: selected,
             valid: false,
             until: performance.now() + 650,
@@ -2735,6 +2798,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         feedback = null;
         recoil = null;
         notice = null;
+        if (flagPoint && !flagDiscovered) {
+          flagDiscovered = true;
+          notify("试试左右摆脚，调整重心 · 旗式", 3500);
+        }
         update();
         schedule();
       }
@@ -3802,10 +3869,11 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           drag?.kind === "hip" || drag?.kind === "chest" || keyboardStep
             ? poseSignal()
             : preview
-              ? trialSignal()
+              ? trialSignal() || notice?.text || ""
               : notice?.text || "";
         $("poseNote").textContent = note;
         $("poseNote").hidden = !note;
+        if (note) placeNote();
         ctx.clearRect(0, 0, width, height);
         ctx.fillStyle = "#f1f2ec";
         ctx.fillRect(0, 0, width, height);
@@ -4013,13 +4081,28 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         preview = previewMove(state, selected, point, id);
         if (drag) {
           const alreadyFree = selected >= 2 && isFree(state.limbs[selected]);
+          if (alreadyFree && drag.kind === "limb" && drag.moved && id === null) {
+            const from = drag.freePoint || limbPoint(state.hip, state.limbs, selected),
+              wanted = drag.freePoint
+                ? { x: from.x + point.x - drag.last.x, y: from.y + point.y - drag.last.y }
+                : point,
+              bounded = constrainFlag(state, selected, from, wanted);
+            drag.freePoint = bounded.point;
+            drag.flagIntent = null;
+            preview = { ...preview, ...bounded, mode: "flag", progress: 1, ready: true };
+            schedule();
+            return;
+          }
           const eligible =
             id === null &&
             drag.kind === "limb" &&
             drag.moved &&
             selected >= 2 &&
             point.y >= state.hip.y + 24 &&
-            point.y < 620 &&
+            offsetY + point.y * scale >= 0 &&
+            offsetY + point.y * scale <= height &&
+            offsetX + point.x * scale >= 0 &&
+            offsetX + point.x * scale <= width &&
             flatDistance(point, limbPoint(state.hip, state.limbs, selected)) *
               scale >=
               (alreadyFree ? 6 : 32) &&
@@ -4116,6 +4199,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           pointer: e.pointerId,
           pointerType: e.pointerType,
           start: { x: e.clientX, y: e.clientY },
+          screen: screenPoint(e),
           last: p,
           moved: false,
           before,
@@ -4129,6 +4213,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           selected = picked.i;
           preview = null;
           announce(names[selected]);
+          footHint(selected);
         } else if (picked.kind === "hip" || picked.kind === "chest")
           preview = null;
         else if (picked.kind === "target" && selected !== null)
@@ -4157,6 +4242,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         if (anim) return;
         const p = world(e);
         if (drag) {
+          drag.screen = screenPoint(e);
           const moved =
             flatDistance({ x: e.clientX, y: e.clientY }, drag.start) > 6;
           if (!drag.moved && !moved) return;
@@ -4224,7 +4310,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         if (!drag || drag.pointer !== e.pointerId) return;
         const action = drag,
           p = world(e);
-        if (action.kind === "limb" && action.moved) updatePreview(p);
+        if (action.kind === "limb" && action.moved) {
+          updatePreview(p);
+          action.last = p;
+        }
         drag = null;
         releaseCapture(e.pointerId);
         if (action.kind === "hip" || action.kind === "chest") {
@@ -4252,6 +4341,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           )
             move(null, preview.point);
           else {
+            if (preview?.mode === "flag" && preview.ready && preview.result?.error &&
+                preview.result.reason !== "same")
+              notify(preview.result.error);
             returnTrial(preview);
             preview = null;
           }
@@ -4486,6 +4578,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         constrainPose,
         previewMove,
         assessFlag,
+        constrainFlag,
         isFree,
         limbPoint,
         pointsFor,
