@@ -4,20 +4,24 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#faf9f5" />
+  <meta name="theme-color" content="#f3f2e9" />
   <title>岩间 · 侧上方</title>
   <style>
     :root {
       color-scheme: light;
-      --ink: #354137;
-      --muted: #71776b;
-      --accent: #b86a49;
-      --line: #e1e4d9;
-      --paper: #faf9f5;
-      --wall: #f1f2ec;
-      --forest: #4c6857;
-      --sage: #e3e9dd;
-      --clay: #f1e2d5;
+      --ink: #181b16;
+      --muted: #70746b;
+      --accent: #e45b2f;
+      --sun: #f3b72f;
+      --sky: #3b92cf;
+      --line: #dedfd3;
+      --paper: #f8f4e9;
+      --surface: #fffdf4;
+      --wall: #eef0e8;
+      --forest: #3f745f;
+      --sage: #dfe9d8;
+      --clay: #f2dfca;
+      --shadow: 0 10px 28px #1b241314;
     }
 
     * {
@@ -37,7 +41,9 @@
       min-height: 340px;
       display: grid;
       grid-template-rows: auto minmax(180px, 1fr) auto;
-      background: var(--paper);
+      background:
+        linear-gradient(135deg, #f5f0e1 0 28%, transparent 28% 100%),
+        var(--paper);
       color: var(--ink);
       font-family: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
       overscroll-behavior: none;
@@ -63,8 +69,8 @@
     button:focus-visible,
     a:focus-visible,
     .keyboard-navigation canvas:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: -3px;
+      outline: 3px solid var(--sun);
+      outline-offset: 2px;
     }
 
     header {
@@ -75,7 +81,7 @@
       width: 100%;
       max-width: 1120px;
       margin: auto;
-      padding: 18px max(24px, env(safe-area-inset-right)) 10px max(24px, env(safe-area-inset-left));
+      padding: 16px max(24px, env(safe-area-inset-right)) 10px max(24px, env(safe-area-inset-left));
       padding-top: max(18px, env(safe-area-inset-top));
       background: var(--paper);
       border-bottom: 1px solid transparent;
@@ -83,23 +89,28 @@
 
     h1 {
       margin: 0;
-      font-size: 30px;
-      line-height: 1.2;
-      font-family: "STSong", "SimSun", serif;
-      font-weight: 400;
-      letter-spacing: 2px;
+      width: max-content;
+      padding: 1px 9px 3px;
+      border-radius: 15px;
+      background: var(--sun);
+      box-shadow: 5px 5px 0 #161914;
+      font-size: 28px;
+      line-height: 1.15;
+      font-family: "STKaiti", "KaiTi", "STSong", "SimSun", serif;
+      font-weight: 700;
+      letter-spacing: 1px;
     }
 
     h1 span {
-      color: var(--accent);
+      color: #fffaf0;
     }
 
     .brand small {
       display: block;
-      margin-top: 5px;
+      margin-top: 9px;
       font-size: 8px;
-      color: var(--muted);
-      letter-spacing: 1.5px;
+      color: #4f574e;
+      letter-spacing: 1.4px;
     }
 
     .route {
@@ -110,16 +121,19 @@
       min-height: 48px;
       font-size: 13px;
       white-space: nowrap;
-      border-radius: 14px;
-      background: #eceee5;
+      border: 1px solid #23251f;
+      border-radius: 18px;
+      background: var(--surface);
+      box-shadow: 4px 4px 0 #20231d;
+      color: var(--ink);
     }
 
     .route i {
       position: absolute;
       left: 14px;
-      width: 8px;
-      height: 8px;
-      background: #6682be;
+      width: 10px;
+      height: 10px;
+      background: var(--sky);
       border-radius: 50%;
       pointer-events: none;
     }
@@ -144,18 +158,18 @@
 
     .climb-settings select {
       color: var(--ink);
-      background: #eceee5;
-      border: 0;
-      border-radius: 12px;
+      background: var(--surface);
+      border: 1px solid #d2d5c7;
+      border-radius: 16px;
       min-width: 64px;
       min-height: 44px;
-      padding: 0 8px;
+      padding: 0 10px;
       font: inherit;
       cursor: pointer;
     }
 
     .climb-settings select:focus-visible {
-      outline: 2px solid var(--accent);
+      outline: 3px solid var(--sun);
     }
 
     .view-tools {
@@ -163,9 +177,12 @@
       right: 12px;
       bottom: 12px;
       display: flex;
-      padding: 2px;
-      border-radius: 16px;
-      background: #faf9f5ed;
+      gap: 2px;
+      padding: 4px;
+      border: 1px solid #d9dccf;
+      border-radius: 18px;
+      background: #fffdf4f2;
+      box-shadow: 0 8px 20px #1b241314;
     }
 
     .view-tools .icon-button {
@@ -186,18 +203,19 @@
       -webkit-appearance: none;
       width: 100%;
       height: 48px;
-      padding: 0 32px 0 32px;
+      padding: 0 34px 0 34px;
       border: 0;
-      border-radius: 14px;
+      border-radius: 18px;
       background: transparent;
       color: inherit;
       font: inherit;
+      font-weight: 600;
       cursor: pointer;
     }
 
     .route select:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: -2px;
+      outline: 3px solid var(--sun);
+      outline-offset: 2px;
     }
 
     .route select:disabled {
@@ -239,11 +257,11 @@
       width: 44px;
       height: 44px;
       padding: 0;
-      border: 0;
-      border-radius: 12px;
+      border: 1px solid transparent;
+      border-radius: 15px;
       background: transparent;
       text-decoration: none;
-      transition: background 140ms, color 140ms, opacity 140ms;
+      transition: background 140ms, border-color 140ms, color 140ms, opacity 140ms, transform 140ms;
     }
 
     .icon-button svg {
@@ -259,6 +277,7 @@
 
     .icon-button:active:not(:disabled) {
       background: var(--sage);
+      transform: translateY(1px);
     }
 
     .icon-button::after {
@@ -269,7 +288,7 @@
       transform: translateX(-50%);
       padding: 6px 9px;
       border-radius: 8px;
-      background: #303a36;
+      background: #181b16;
       color: white;
       font-size: 11px;
       white-space: nowrap;
@@ -306,16 +325,19 @@
     #swapDraft:not(:disabled) {
       color: var(--forest);
       background: var(--sage);
+      border-color: #bfd1b8;
     }
 
     #undo:not(:disabled) {
       background: var(--sage);
       color: var(--forest);
+      border-color: #bfd1b8;
     }
 
     @media (hover: hover) {
       .icon-button:hover:not(:disabled) {
-        background: #eeeee6;
+        background: var(--surface);
+        border-color: #d2d5c7;
       }
 
       .icon-button:hover:not(:disabled)::after {
@@ -333,7 +355,9 @@
       overflow: hidden;
       isolation: isolate;
       background: var(--wall);
-      border-radius: 22px;
+      border: 1px solid #d9dccf;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
     }
 
     canvas {
@@ -363,17 +387,18 @@
       gap: 6px;
       min-width: 80px;
       height: 36px;
-      padding: 0 8px;
-      border-radius: 10px;
+      padding: 0 10px;
+      border-radius: 999px;
       color: var(--muted);
       font-size: 12px;
       white-space: nowrap;
+      background: #fffdf4c7;
     }
 
     .selection::before {
       content: "";
-      width: 4px;
-      height: 4px;
+      width: 6px;
+      height: 6px;
       border-radius: 50%;
       background: var(--accent);
       opacity: 0;
@@ -384,8 +409,8 @@
     }
 
     .selection.active {
-      color: #825339;
-      background: var(--clay);
+      color: #7b3d28;
+      background: #f7dfc6;
     }
 
     .limb-actions {
@@ -402,14 +427,16 @@
       min-width: 60px;
       height: 44px;
       padding: 0 10px;
-      border: 0;
-      border-radius: 12px;
+      border: 1px solid #1f4639;
+      border-radius: 999px;
       background: var(--forest);
       color: #fffdf8;
       font: inherit;
       font-size: 12px;
+      font-weight: 600;
       white-space: nowrap;
       pointer-events: auto;
+      box-shadow: 3px 3px 0 #1b2413;
     }
 
     .action-button:active:not(:disabled) {
@@ -424,9 +451,13 @@
       background: var(--sage);
       color: var(--forest);
       opacity: 0.6;
+      box-shadow: none;
     }
 
     .counter {
+      padding: 0 9px;
+      border-radius: 999px;
+      background: #fffdf4c7;
       font-variant-numeric: tabular-nums;
       font-size: 10px;
     }
@@ -444,10 +475,11 @@
       left: 12px;
       width: max-content;
       max-width: calc(100% - 24px);
-      padding: 8px 14px;
-      border-radius: 14px;
-      background: #faf9f5f5;
-      box-shadow: 0 3px 16px #35413708;
+      padding: 9px 14px;
+      border: 1px solid #d9dccf;
+      border-radius: 16px;
+      background: #fffdf4f5;
+      box-shadow: 0 8px 22px #1b241314;
       text-align: center;
       pointer-events: none;
       font-size: 13px;
@@ -492,6 +524,11 @@
       gap: 12px;
       max-width: 580px;
       margin: auto;
+      padding: 4px;
+      border: 1px solid #d9dccf;
+      border-radius: 22px;
+      background: #fffdf4d9;
+      box-shadow: 0 8px 22px #1b24130f;
     }
 
     .turn {
@@ -554,8 +591,9 @@
     #openPhotos {
       flex-basis: 76px;
       width: 76px;
+      border-color: #d5956d;
       background: var(--clay);
-      color: #825339;
+      color: #7b3d28;
     }
 
     #openPhotos:active {
@@ -568,9 +606,9 @@
       left: 16px;
       min-height: 44px;
       max-width: 110px;
-      border: 0;
-      border-radius: 14px;
-      background: #faf9f5ed;
+      border: 1px solid #d9dccf;
+      border-radius: 18px;
+      background: #fffdf4f2;
       color: var(--forest);
       padding: 0 8px;
       font: inherit;
@@ -588,7 +626,7 @@
     }
 
     select:focus-visible {
-      outline: 2px solid var(--accent);
+      outline: 3px solid var(--sun);
       outline-offset: 2px;
     }
 
@@ -788,151 +826,222 @@
   </style>
 </head>
 
-<body>
-  <header>
-    <div class="brand">
-      <h1>岩<span>间</span></h1>
-      <small>BETWEEN HOLDS</small>
-    </div>
-    <div class="route">
-      <i id="routeDot" aria-hidden="true"></i>
-      <select id="routeSelect" aria-label="选择线路">
-        <option value="side">01 侧上方</option>
-        <option value="traverse">02 横移</option>
-        <option value="rise">03 高一步</option>
-        <option value="fork">04 两条路</option>
-        <option value="return">05 折返</option>
-        <option value="ladder">06 绕过屋檐</option>
-        <option value="switch">07 回旋</option>
-        <option value="west">08 长路回家</option>
-      </select>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="m6 9 6 6 6-6" />
-      </svg>
-    </div>
-    <div class="header-actions">
-      <button id="reset" class="icon-button label-button" aria-label="重新开始" data-tip="重新开始">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M20 9V7a2 2 0 0 0-2-2h-6" />
-          <path d="m15 2-3 3 3 3" />
-          <path d="M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" />
-        </svg>
-        <span class="button-label">重来</span>
-      </button>
-    </div>
-    <div class="climb-settings">
-      <span id="routeChallenge"></span>
-      <label for="strengthSelect">上肢力量
-        <select id="strengthSelect" title="各档分别保留进度；首次切换从起点开始">
-          <option value="gentle">较弱</option>
-          <option value="standard" selected>标准</option>
-          <option value="strong">较强</option>
-        </select>
-      </label>
-    </div>
-  </header>
-  <main class="stage" aria-label="攀岩练习">
-    <canvas id="canvas" tabindex="0" aria-label="岩间攀岩墙"></canvas>
-    <div class="stage-meta">
-      <div class="limb-actions" role="group" aria-label="所选肢体动作">
-        <span id="selection" class="selection"></span>
-        <button id="flagAction" class="action-button" hidden>旗式</button>
-      </div>
-      <div class="draft-tools" role="group" aria-label="姿势对照">
-        <span class="counter"><b id="moveCount">00</b>次换点</span>
-        <button id="saveDraft" class="icon-button label-button" aria-label="保留姿势" data-tip="保留姿势">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z" />
-            <line x1="12" x2="12" y1="7" y2="13" />
-            <line x1="15" x2="9" y1="10" y2="10" />
-          </svg>
-          <span class="button-label">保留</span>
-        </button>
-        <button id="swapDraft" class="icon-button label-button" aria-label="切换对照姿势" data-tip="切换对照姿势" disabled>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M8 3 4 7l4 4" />
-            <path d="M4 7h16" />
-            <path d="m16 21 4-4-4-4" />
-            <path d="M20 17H4" />
-          </svg>
-          <span class="button-label">对照</span>
-        </button>
-      </div>
-    </div>
-    <button class="pick" data-limb="0" aria-label="左手" aria-pressed="false"></button>
-    <button class="pick" data-limb="1" aria-label="右手" aria-pressed="false"></button>
-    <button class="pick" data-limb="2" aria-label="左脚" aria-pressed="false"></button>
-    <button class="pick" data-limb="3" aria-label="右脚" aria-pressed="false"></button>
-    <button class="pick" id="hipTarget" aria-label="重心"></button>
-    <button class="pick" id="chestTarget" aria-label="胸肩侧身"></button>
-    <div id="poseNote" class="outcome" role="status" hidden></div>
-    <div id="announcement" class="sr-only" aria-live="polite"></div>
-    <select id="balanceAid" aria-label="重心辅助">
-      <option value="auto">重心 · 自动</option>
-      <option value="on">重心 · 常开</option>
-      <option value="off">重心 · 关闭</option>
-    </select>
-    <div class="view-tools" role="group" aria-label="岩壁视角">
-      <button id="viewOut" class="icon-button" aria-label="缩小视角" data-tip="缩小">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14" />
-        </svg>
-      </button>
-      <button id="viewIn" class="icon-button" aria-label="放大视角" data-tip="放大">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M5 12h14M12 5v14" />
-        </svg>
-      </button>
-      <button id="viewFit" class="icon-button" aria-label="查看整条线路" data-tip="查看整条线路">全线</button>
-      <button id="viewPerson" class="icon-button" aria-label="回到人物" data-tip="回到人物">人物</button>
-    </div>
-    <span id="routeScale"></span>
-  </main>
-  <footer>
-    <div class="controls">
-      <div class="history" role="group" aria-label="动作历史">
-        <button id="undo" class="icon-button label-button" aria-label="撤销" data-tip="退一步" disabled>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M9 14 4 9l5-5" />
-            <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
-          </svg>
-          <span class="button-label">退一步</span>
-        </button>
-        <button id="redo" class="icon-button label-button" aria-label="重做" data-tip="重做" disabled>
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m15 14 5-5-5-5" />
-            <path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
-          </svg>
-          <span class="button-label">重做</span>
-        </button>
-      </div>
-      <button id="openPhotos" class="icon-button label-button" aria-label="照片线路" data-tip="照片线路">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z" />
-          <circle cx="12" cy="13" r="3" />
-        </svg>
-        <span class="button-label">照片线路</span>
-      </button>
-      <div class="turn" role="group" aria-label="身体朝向">
-        <button id="turnLeft" class="icon-button" aria-label="向左侧身" data-tip="向左侧身">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-            <path d="M3 3v5h5" />
-          </svg>
-        </button>
-        <div class="orientation">
-          <span>身体朝向</span>
-          <output id="orientation" aria-live="polite">正对</output>
+<body data-screen="library">
+  <section id="routeLibrary" class="route-library" aria-label="线路册">
+    <nav class="library-nav" aria-label="主导航">
+      <a class="wordmark" href="#routes" aria-label="岩间线路册">岩间<span>BETWEEN<br>HOLDS</span></a>
+      <span class="nav-caption">把每一种走法，都试一遍。</span>
+      <button class="pill-button" data-open-photos>我的岩壁 <span aria-hidden="true">↗</span></button>
+    </nav>
+    <div class="library-content">
+      <section class="welcome">
+        <div><span class="eyebrow">A LITTLE ROOM TO EXPLORE</span>
+          <h1>下一步，<br class="phone-break">换个走法。</h1>
         </div>
-        <button id="turnRight" class="icon-button" aria-label="向右侧身" data-tip="向右侧身">
+        <p>找脚点，移重心，试试另一种可能。<br>这是你的攀爬动作草稿本。</p>
+      </section>
+      <section class="library-feature" aria-label="开始攀爬">
+        <div class="feature-copy">
+          <span id="featureEyebrow" class="eyebrow">从第一条线开始</span>
+          <h2 id="featureTitle">侧上方</h2>
+          <p id="featureDescription">先找到脚下的支撑，<br>再去够更远的地方。</p>
+          <button id="continueClimb" class="pill-button dark-button">开始试动作 <span aria-hidden="true">↗</span></button>
+          <span id="featureProgress" class="feature-progress">随时撤销，放心试。</span>
+        </div>
+        <div class="feature-wall">
+          <span class="wall-label">YOUR NEXT MOVE</span>
+          <canvas id="featureCanvas" aria-label="当前线路与人物姿势预览"></canvas>
+          <span class="feature-sticker" aria-hidden="true">试<br>试看</span>
+        </div>
+      </section>
+      <section id="routes" class="route-collection" aria-labelledby="collectionTitle">
+        <div class="collection-head">
+          <div><span class="eyebrow">THE ROUTE COLLECTION</span>
+            <h2 id="collectionTitle">选一条，慢慢琢磨<span>08</span></h2>
+          </div>
+          <div class="route-filters" role="group" aria-label="按线路类型筛选">
+            <button data-route-filter="all" aria-pressed="true">全部</button>
+            <button data-route-filter="start" aria-pressed="false">找感觉</button>
+            <button data-route-filter="skills" aria-pressed="false">换走法</button>
+            <button data-route-filter="long" aria-pressed="false">长线挑战</button>
+          </div>
+        </div>
+        <div id="routeCards" class="route-grid"></div>
+      </section>
+      <button class="own-wall-card" data-open-photos>
+        <span class="own-wall-symbol" aria-hidden="true">＋</span>
+        <span><small>BRING YOUR OWN WALL</small><strong>把常爬的岩壁，放进口袋。</strong><span>选张照片 · 生成岩点 · 开始试动作</span></span>
+        <span class="round-arrow" aria-hidden="true">↗</span>
+      </button>
+      <div class="library-foot"><span>小小一步，也有很多种走法。</span><span>岩间 / 动作实验室</span></div>
+    </div>
+  </section>
+  <div id="playShell" class="play-shell" inert>
+    <header class="play-header">
+      <div class="brand">
+        <button id="backToRoutes" class="back-button" aria-label="返回线路册"><span
+            aria-hidden="true">←</span><span>线路册</span></button>
+        <span class="play-wordmark">岩间</span>
+      </div>
+      <div class="route">
+        <i id="routeDot" aria-hidden="true"></i>
+        <select id="routeSelect" aria-label="选择线路">
+          <option value="side">01 侧上方</option>
+          <option value="traverse">02 横移</option>
+          <option value="rise">03 高一步</option>
+          <option value="fork">04 两条路</option>
+          <option value="return">05 折返</option>
+          <option value="ladder">06 绕过屋檐</option>
+          <option value="switch">07 回旋</option>
+          <option value="west">08 长路回家</option>
+        </select>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="m6 9 6 6 6-6" />
+        </svg>
+      </div>
+      <div class="header-actions">
+        <button id="reset" class="icon-button label-button" aria-label="重新开始" data-tip="重新开始">
           <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8" />
-            <path d="M21 3v5h-5" />
+            <path d="M20 9V7a2 2 0 0 0-2-2h-6" />
+            <path d="m15 2-3 3 3 3" />
+            <path d="M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" />
           </svg>
+          <span class="button-label">重来</span>
         </button>
       </div>
+      <div class="climb-settings">
+        <label for="strengthSelect">上肢力量
+          <select id="strengthSelect" title="各档分别保留进度；首次切换从起点开始">
+            <option value="gentle">较弱</option>
+            <option value="standard" selected>标准</option>
+            <option value="strong">较强</option>
+          </select>
+        </label>
+      </div>
+    </header>
+    <main class="stage" aria-label="攀岩练习">
+      <canvas id="canvas" tabindex="0" aria-label="岩间攀岩墙"></canvas>
+      <div class="stage-meta">
+        <span id="routeChallenge" class="route-challenge"></span>
+        <span class="counter"><b id="moveCount">00</b> 次换点</span>
+      </div>
+      <button class="pick" data-limb="0" aria-label="左手" aria-pressed="false"></button>
+      <button class="pick" data-limb="1" aria-label="右手" aria-pressed="false"></button>
+      <button class="pick" data-limb="2" aria-label="左脚" aria-pressed="false"></button>
+      <button class="pick" data-limb="3" aria-label="右脚" aria-pressed="false"></button>
+      <button class="pick" id="hipTarget" aria-label="重心"></button>
+      <button class="pick" id="chestTarget" aria-label="胸肩侧身"></button>
+      <div id="poseNote" class="outcome" role="status" hidden></div>
+      <div id="announcement" class="sr-only" aria-live="polite"></div>
+      <select id="balanceAid" aria-label="重心辅助">
+        <option value="auto">重心 · 自动</option>
+        <option value="on">重心 · 常开</option>
+        <option value="off">重心 · 关闭</option>
+      </select>
+      <div class="view-tools" role="group" aria-label="岩壁视角">
+        <button id="viewOut" class="icon-button" aria-label="缩小视角" data-tip="缩小">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14" />
+          </svg>
+        </button>
+        <button id="viewIn" class="icon-button" aria-label="放大视角" data-tip="放大">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M12 5v14" />
+          </svg>
+        </button>
+        <button id="viewFit" class="icon-button" aria-label="查看整条线路" data-tip="查看整条线路">全线</button>
+        <button id="viewPerson" class="icon-button" aria-label="回到人物" data-tip="回到人物">人物</button>
+      </div>
+      <span id="routeScale"></span>
+    </main>
+    <footer class="play-dock">
+      <div class="action-shelf">
+        <div class="mode-switch" role="group" aria-label="操作对象">
+          <button id="limbMode" aria-pressed="true">手脚</button>
+          <button id="bodyMode" aria-pressed="false">身体</button>
+        </div>
+        <div id="limbPanel" class="limb-panel" role="group" aria-label="选择手脚">
+          <button class="limb-chip" data-select-limb="0" aria-pressed="false"><span>左</span>手</button>
+          <button class="limb-chip" data-select-limb="1" aria-pressed="false"><span>右</span>手</button>
+          <button class="limb-chip" data-select-limb="2" aria-pressed="false"><span>左</span>脚</button>
+          <button class="limb-chip" data-select-limb="3" aria-pressed="false"><span>右</span>脚</button>
+        </div>
+        <div id="bodyPanel" class="body-panel" hidden>
+          <div class="nudge-tools" role="group" aria-label="微调重心">
+            <span>重心</span>
+            <button data-nudge="-8,0" aria-label="重心向左">←</button>
+            <button data-nudge="0,-8" aria-label="重心向上">↑</button>
+            <button data-nudge="0,8" aria-label="重心向下">↓</button>
+            <button data-nudge="8,0" aria-label="重心向右">→</button>
+          </div>
+          <div class="turn" role="group" aria-label="身体朝向">
+            <button id="turnLeft" class="icon-button" aria-label="向左侧身" data-tip="向左侧身">↶</button>
+            <output id="orientation" aria-live="polite">正对</output>
+            <button id="turnRight" class="icon-button" aria-label="向右侧身" data-tip="向右侧身">↷</button>
+          </div>
+        </div>
+        <div class="limb-actions" role="group" aria-label="所选肢体动作">
+          <div><span id="selection" class="selection"></span><span id="actionHint" class="action-hint">选手脚，再点岩点</span>
+          </div>
+          <button id="flagAction" class="action-button" hidden>旗式</button>
+        </div>
+      </div>
+      <div class="controls">
+        <div class="history" role="group" aria-label="动作历史">
+          <button id="undo" class="icon-button label-button" aria-label="撤销" data-tip="退一步" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M9 14 4 9l5-5" />
+              <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11" />
+            </svg>
+            <span class="button-label">退一步</span>
+          </button>
+          <button id="redo" class="icon-button label-button" aria-label="重做" data-tip="重做" disabled>
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path d="m15 14 5-5-5-5" />
+              <path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
+            </svg>
+            <span class="button-label">重做</span>
+          </button>
+        </div>
+        <button id="openComparison" class="pill-button comparison-entry" aria-haspopup="dialog"><span
+            aria-hidden="true">▣</span> 姿势对照 <span id="comparisonDot" hidden></span></button>
+        <button id="openPhotos" class="icon-button label-button" aria-label="照片线路" data-tip="照片线路">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z" />
+            <circle cx="12" cy="13" r="3" />
+          </svg>
+          <span class="button-label">照片线路</span>
+        </button>
+      </div>
+    </footer>
+  </div>
+  <dialog id="comparisonDialog" class="comparison-dialog" aria-labelledby="comparisonTitle">
+    <div class="sheet-head">
+      <div><span class="eyebrow">TRY ANOTHER WAY</span>
+        <h2 id="comparisonTitle">一个动作，两种想法。</h2>
+      </div><button id="closeComparison" class="icon-button" aria-label="关闭姿势对照">×</button>
     </div>
-  </footer>
+    <p class="sheet-intro">保留现在的姿势，再试另一种走法。切换时，两边的撤销记录也会一起回来。</p>
+    <div class="comparison-grid">
+      <section class="pose-card">
+        <div><strong>正在尝试</strong><span id="currentPoseCount"></span></div><canvas id="currentPoseCanvas"
+          aria-label="当前姿势预览"></canvas>
+      </section>
+      <section class="pose-card retained">
+        <div><strong>保留的想法</strong><span id="savedPoseCount"></span></div><canvas id="savedPoseCanvas"
+          aria-label="保留姿势预览" hidden></canvas>
+        <div id="emptyComparison" class="empty-comparison"><span aria-hidden="true">＋</span><strong>留一个想法在这里</strong>
+          <p>遇到值得比较的姿势，<br>先按下「保留姿势」。</p>
+        </div>
+      </section>
+    </div>
+    <div class="comparison-actions">
+      <button id="saveDraft" class="pill-button" aria-label="保留姿势">保留姿势 <span aria-hidden="true">＋</span></button>
+      <button id="swapDraft" class="pill-button dark-button" aria-label="切换对照姿势" disabled>切换对照 <span
+          aria-hidden="true">⇄</span></button>
+    </div>
+    <p id="comparisonStatus" class="sheet-note" role="status">姿势只在本次打开页面时保留。</p>
+  </dialog>
   <style>
     #photoEditor {
       padding: 0;
@@ -943,7 +1052,9 @@
       max-height: none;
       margin: 0;
       color: var(--ink);
-      background: var(--wall);
+      background:
+        linear-gradient(135deg, #f5f0e1 0 26%, transparent 26% 100%),
+        var(--wall);
     }
 
     #photoEditor[open] {
@@ -967,7 +1078,7 @@
       gap: 12px;
       padding: 10px max(16px, env(safe-area-inset-right)) 10px max(16px, env(safe-area-inset-left));
       background: var(--paper);
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid #d9dccf;
     }
 
     .photo-head {
@@ -976,8 +1087,8 @@
 
     .photo-head h2 {
       font-size: 22px;
-      font-family: "STSong", "SimSun", serif;
-      font-weight: 400;
+      font-family: "STKaiti", "KaiTi", "STSong", "SimSun", serif;
+      font-weight: 700;
       margin: 0;
       flex: 1;
     }
@@ -1011,7 +1122,7 @@
       min-width: 0;
       min-height: 0;
       overflow: auto;
-      background: var(--wall);
+      background: #e9ece1;
     }
 
     #photoCanvas {
@@ -1025,8 +1136,8 @@
     .photo-side {
       overflow: auto;
       padding: 24px;
-      border-left: 1px solid var(--line);
-      background: var(--paper);
+      border-left: 1px solid #d9dccf;
+      background: #fffdf4;
     }
 
     .photo-side h3 {
@@ -1076,12 +1187,12 @@
     .photo-side select {
       width: 145px;
       min-width: 0;
-      border: 1px solid var(--line);
-      border-radius: 12px;
+      border: 1px solid #d2d5c7;
+      border-radius: 16px;
       min-height: 44px;
       padding: 8px;
       font: inherit;
-      background: var(--paper);
+      background: #fffdf4;
       color: inherit;
     }
 
@@ -1101,6 +1212,7 @@
     .photo-command[aria-pressed="true"] {
       background: var(--sage);
       border-color: #a9b8a3;
+      color: #274e40;
     }
 
     #photoColors {
@@ -1127,26 +1239,29 @@
     }
 
     .photo-command {
-      border: 1px solid var(--line);
-      background: var(--paper);
+      border: 1px solid #d2d5c7;
+      background: #fffdf4;
       color: var(--forest);
-      border-radius: 12px;
+      border-radius: 999px;
       min-height: 44px;
       padding: 10px 16px;
       font: inherit;
       font-size: 13px;
+      font-weight: 600;
       cursor: pointer;
-      transition: background 140ms, border-color 140ms;
+      transition: background 140ms, border-color 140ms, transform 140ms;
     }
 
     .photo-command.primary {
       background: var(--forest);
       color: #fffdf8;
       border-color: var(--forest);
+      box-shadow: 3px 3px 0 #1b2413;
     }
 
     .photo-command:active:not(:disabled) {
       background: var(--sage);
+      transform: translateY(1px);
     }
 
     .photo-command.primary:active:not(:disabled) {
@@ -1159,13 +1274,14 @@
     }
 
     .photo-row .icon-button {
-      border-radius: 12px;
-      background: #eceee5;
+      border-radius: 15px;
+      background: #f1f2e9;
     }
 
     .photo-row .icon-button[aria-pressed="true"] {
-      color: #b35130;
-      background: #f4e5da;
+      color: #b94b2b;
+      background: #f7dfc6;
+      border-color: #e3ad87;
     }
 
     #photoCount,
@@ -1193,9 +1309,9 @@
     }
 
     .photo-library .photo-intro h3 {
-      font-family: "STSong", "SimSun", serif;
+      font-family: "STKaiti", "KaiTi", "STSong", "SimSun", serif;
       font-size: 28px;
-      font-weight: 400;
+      font-weight: 700;
       margin: 14px 0 12px;
     }
 
@@ -1224,7 +1340,7 @@
       align-items: center;
       gap: 8px;
       padding: 14px 0;
-      border-bottom: 1px solid var(--line);
+      border-bottom: 1px solid #d9dccf;
       flex-wrap: wrap;
     }
 
@@ -1313,6 +1429,7 @@
         height: min(880px, calc(100dvh - 64px));
         margin: auto;
         border-radius: 24px;
+        box-shadow: 0 18px 44px #1b241326;
       }
 
       .photo-head,
@@ -1334,9 +1451,9 @@
     </div>
     <div id="photoLibrary" class="photo-library">
       <div class="photo-intro">
-        <small>自己的岩壁</small>
-        <h3>从一张照片，开始试动作</h3>
-        <p>生成岩壁，调好人物大小，就可以开始爬。</p>
+        <small>YOUR WALL, YOUR WAY</small>
+        <h3>熟悉的岩壁，<br>新的走法。</h3>
+        <p>把照片变成可以拖动手脚的动作草稿。</p>
         <div class="photo-row">
           <button id="photoChoose" class="photo-command primary">
             选择照片
@@ -1344,6 +1461,11 @@
           <button id="photoCamera" class="photo-command">拍照</button>
         </div>
       </div>
+      <ol class="photo-process" aria-label="照片线路步骤">
+        <li><b>1</b>选照片</li>
+        <li><b>2</b>生成岩壁</li>
+        <li><b>3</b>调大小，开爬</li>
+      </ol>
       <p class="photo-privacy">
         草稿保存在当前浏览器。选用 AI 时照片会发送至 DeepSeek；本机识别不上传。
         清除浏览器数据会删除本机线路。
@@ -1357,7 +1479,7 @@
       </div>
       <div class="photo-side">
         <section id="photoSourcePanel">
-          <h3>把这面墙，变成一次尝试</h3>
+          <h3>02 / 找出这条线</h3>
           <div id="photoMethodRow" class="photo-row" hidden>
             <label for="photoMethod">生成方式</label>
             <select id="photoMethod" aria-label="生成方式">
@@ -1373,7 +1495,7 @@
             <button id="photoOriginal" class="photo-command" aria-pressed="false">原图</button>
             <button id="photoEdit" class="photo-command" aria-pressed="false">改一下</button>
           </div>
-          <h3>摆一个自己</h3>
+          <h3>03 / 放上一个自己</h3>
           <label for="photoSize">人物大小</label>
           <input id="photoSize" aria-label="人物大小" type="range" min=".65" max="1.6" step=".05" value="1" />
           <div class="photo-size-ends"><span>较小</span><span>较大</span></div>
@@ -1435,6 +1557,1874 @@
     <input id="photoFile" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" hidden />
     <input id="photoCapture" type="file" accept="image/*" capture="environment" hidden />
   </dialog>
+  <style id="experience-design">
+    :root {
+      --ink: #242721;
+      --muted: #686e62;
+      --paper: #f3f2e9;
+      --surface: #fffef8;
+      --wall: #f1f2ec;
+      --line: #dddfd3;
+      --forest: #386756;
+      --sage: #e2e9da;
+      --clay: #f3d5ba;
+      --sun: #f3cf55;
+      --accent: #a8492d;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    body {
+      display: block;
+      overflow: hidden;
+      background: var(--paper);
+      min-height: 340px;
+    }
+
+    button,
+    select {
+      font-family: inherit;
+    }
+
+    button {
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    button:focus-visible,
+    a:focus-visible,
+    select:focus-visible {
+      outline: 3px solid #bb552f;
+      outline-offset: 3px;
+    }
+
+    .eyebrow {
+      display: block;
+      font: 600 10px/1.5 "Trebuchet MS", sans-serif;
+      letter-spacing: 1.6px;
+    }
+
+    .pill-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      border: 0;
+      min-height: 48px;
+      padding: 0 22px;
+      border-radius: 999px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+      transition: background .16s, transform .16s;
+    }
+
+    .pill-button>span[aria-hidden] {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .dark-button {
+      background: var(--ink);
+      color: var(--surface);
+    }
+
+    .pill-button:active:not(:disabled),
+    .route-card:active {
+      transform: translateY(2px);
+    }
+
+    .route-library {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      background: var(--paper);
+      overflow: auto;
+      overscroll-behavior: contain;
+    }
+
+    .library-nav {
+      max-width: 1248px;
+      margin: auto;
+      min-height: 106px;
+      padding: max(24px, env(safe-area-inset-top)) 40px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .wordmark {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      text-decoration: none;
+      font-size: 34px;
+      font-weight: 850;
+      letter-spacing: -2px;
+    }
+
+    .wordmark span {
+      padding-left: 12px;
+      border-left: 1px solid #b8bcaf;
+      font: 800 9px/1.35 "Trebuchet MS", sans-serif;
+      letter-spacing: .8px;
+    }
+
+    .nav-caption {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .library-nav .pill-button {
+      background: var(--sage);
+    }
+
+    .library-content {
+      max-width: 1248px;
+      margin: auto;
+      padding: 26px 40px 30px;
+    }
+
+    .route-library canvas,
+    .comparison-dialog canvas,
+    .record-thumb {
+      pointer-events: none;
+      touch-action: auto;
+    }
+
+    .welcome {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: 32px;
+    }
+
+    .welcome .eyebrow {
+      color: var(--forest);
+      margin-bottom: 14px;
+    }
+
+    .welcome h1 {
+      width: auto;
+      padding: 0;
+      margin: 0;
+      border-radius: 0;
+      background: none;
+      box-shadow: none;
+      font-family: inherit;
+      font-size: clamp(38px, 4.4vw, 62px);
+      line-height: 1.22;
+      font-weight: 850;
+      letter-spacing: -3px;
+    }
+
+    .welcome p {
+      margin: 0 4px 6px 0;
+      font-size: 13px;
+      line-height: 1.95;
+      color: var(--muted);
+    }
+
+    .phone-break {
+      display: none;
+    }
+
+    .library-feature {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      min-height: 336px;
+      background: var(--sun);
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .feature-copy {
+      padding: 38px 48px;
+      display: flex;
+      align-items: start;
+      flex-direction: column;
+    }
+
+    .feature-copy h2 {
+      font-size: 45px;
+      font-weight: 850;
+      letter-spacing: -2px;
+      line-height: 1.2;
+      margin: 20px 0 12px;
+    }
+
+    .feature-copy p {
+      font-size: 14px;
+      line-height: 1.8;
+      margin: 0 0 24px;
+    }
+
+    .feature-copy .pill-button {
+      min-width: 182px;
+      margin-top: auto;
+      justify-content: space-between;
+    }
+
+    .feature-progress {
+      font-size: 10px;
+      margin-top: 12px;
+      color: #53523e;
+    }
+
+    .feature-wall {
+      position: relative;
+      min-height: 310px;
+      margin: 16px 16px 16px 0;
+      border-radius: 90px 18px 18px 18px;
+      background: #f7f3d9;
+      overflow: hidden;
+    }
+
+    .feature-wall canvas {
+      position: absolute;
+      inset: 25px 8px 8px;
+      width: calc(100% - 16px);
+      height: calc(100% - 33px);
+    }
+
+    .wall-label {
+      position: absolute;
+      top: 20px;
+      right: 22px;
+      font: 600 9px "Trebuchet MS", sans-serif;
+      letter-spacing: 2px;
+      color: #71745e;
+    }
+
+    .feature-sticker {
+      position: absolute;
+      left: 24px;
+      bottom: 24px;
+      width: 68px;
+      height: 68px;
+      display: grid;
+      place-content: center;
+      border-radius: 50%;
+      background: #e49373;
+      font-size: 17px;
+      line-height: 1.1;
+      font-weight: 800;
+      transform: rotate(-12deg);
+    }
+
+    .route-collection {
+      margin-top: 44px;
+      scroll-margin-top: 24px;
+    }
+
+    .collection-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 20px;
+      margin-bottom: 22px;
+    }
+
+    .collection-head .eyebrow {
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .collection-head h2 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 750;
+      letter-spacing: -1px;
+    }
+
+    .collection-head h2 span {
+      display: inline-block;
+      margin-left: 12px;
+      padding: 4px 8px;
+      vertical-align: middle;
+      background: #e4e6d9;
+      border-radius: 8px;
+      font: 600 12px "Trebuchet MS", sans-serif;
+      letter-spacing: 0;
+    }
+
+    .route-filters {
+      display: flex;
+      gap: 4px;
+    }
+
+    .route-filters button {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0 17px;
+      border: 0;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--muted);
+      font-size: 12px;
+      white-space: nowrap;
+    }
+
+    .route-filters button[aria-pressed="true"] {
+      background: var(--ink);
+      color: #fffef8;
+    }
+
+    .route-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .route-card {
+      position: relative;
+      text-align: left;
+      padding: 10px 10px 17px;
+      border: 0;
+      border-radius: 22px;
+      background: var(--surface);
+      color: var(--ink);
+      transition: transform .18s, box-shadow .18s;
+    }
+
+    .route-card-art {
+      height: 146px;
+      position: relative;
+      border-radius: 15px;
+      overflow: hidden;
+      background: var(--card-color, #e1e5eb);
+    }
+
+    .route-card-art canvas {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+
+    .route-index {
+      position: absolute;
+      left: 12px;
+      top: 10px;
+      font: 800 24px "Trebuchet MS", sans-serif;
+      letter-spacing: -1px;
+      opacity: .65;
+    }
+
+    .route-card h3 {
+      margin: 17px 8px 7px;
+      font-size: 18px;
+      letter-spacing: -.5px;
+    }
+
+    .route-card p {
+      margin: 0 8px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.6;
+    }
+
+    .route-card-bottom {
+      margin: 16px 8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      font-size: 10px;
+      color: var(--forest);
+    }
+
+    .route-card-bottom b {
+      display: grid;
+      place-content: center;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--ink);
+      color: var(--surface);
+      font-size: 18px;
+      font-weight: 400;
+    }
+
+    .own-wall-card {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      width: 100%;
+      padding: 28px 32px;
+      margin-top: 26px;
+      border: 0;
+      border-radius: 24px;
+      background: #dce7df;
+      text-align: left;
+      color: var(--ink);
+    }
+
+    .own-wall-symbol {
+      font-size: 60px;
+      font-weight: 300;
+      color: var(--forest);
+      line-height: 1;
+    }
+
+    .own-wall-card small {
+      display: block;
+      font: 600 9px/1.5 "Trebuchet MS", sans-serif;
+      letter-spacing: 1.5px;
+      color: var(--forest);
+    }
+
+    .own-wall-card strong {
+      display: block;
+      margin: 8px 0;
+      font-size: 23px;
+      font-weight: 750;
+    }
+
+    .own-wall-card span span {
+      font-size: 12px;
+      color: #587264;
+    }
+
+    .round-arrow {
+      display: grid;
+      place-content: center;
+      margin-left: auto;
+      width: 48px;
+      height: 48px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--forest);
+      color: white;
+      font-size: 25px;
+    }
+
+    .library-foot {
+      display: flex;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 10px;
+      padding: 26px 2px 0;
+    }
+
+    .play-shell {
+      display: grid;
+      grid-template-rows: auto minmax(180px, 1fr) auto;
+      height: 100dvh;
+      min-height: 340px;
+    }
+
+    .play-shell .play-header {
+      width: 100%;
+      max-width: 1264px;
+      padding: max(14px, env(safe-area-inset-top)) 32px 14px;
+      margin: auto;
+      grid-template-columns: 1fr minmax(150px, 230px) 1fr 48px;
+      gap: 16px;
+      background: transparent;
+      border: 0;
+    }
+
+    .play-header .brand {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+    }
+
+    .back-button {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      min-width: 44px;
+      min-height: 44px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--surface);
+      font-size: 12px;
+    }
+
+    .back-button>span:first-child {
+      font-size: 20px;
+    }
+
+    .play-wordmark {
+      font-size: 24px;
+      font-weight: 850;
+      letter-spacing: -2px;
+    }
+
+    .play-header .route {
+      background: var(--surface);
+      border: 0;
+      border-radius: 16px;
+      box-shadow: none;
+      min-height: 48px;
+    }
+
+    .play-header .route select {
+      font-size: 14px;
+      border-radius: 16px;
+    }
+
+    .play-header .climb-settings {
+      grid-column: 3;
+      grid-row: 1;
+      justify-content: flex-end;
+      min-height: 44px;
+      font-size: 11px;
+    }
+
+    .play-header .climb-settings select {
+      background: var(--sage);
+      border: 0;
+      border-radius: 12px;
+    }
+
+    .play-header .header-actions {
+      grid-column: 4;
+      grid-row: 1;
+    }
+
+    .play-header .icon-button {
+      background: transparent;
+      width: 44px;
+    }
+
+    .play-shell .stage {
+      width: calc(100% - 64px);
+      max-width: 1200px;
+      margin: 0 auto;
+      border: 0;
+      box-shadow: none;
+      border-radius: 24px;
+      background: var(--wall);
+    }
+
+    .play-shell .stage-meta {
+      top: 18px;
+      left: 24px;
+      right: 24px;
+    }
+
+    .route-challenge {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .stage-meta .counter {
+      background: var(--surface);
+      padding: 8px 12px;
+      color: var(--muted);
+      font-size: 10px;
+    }
+
+    .counter b {
+      color: var(--ink);
+      font: 700 18px "Trebuchet MS", sans-serif;
+    }
+
+    .view-tools {
+      padding: 2px;
+      gap: 0;
+      border: 0;
+      box-shadow: none;
+      background: var(--surface);
+      border-radius: 999px;
+    }
+
+    .view-tools .icon-button {
+      border-radius: 50%;
+      font-size: 11px;
+    }
+
+    #balanceAid {
+      border: 0;
+      border-radius: 999px;
+      background: var(--surface);
+      max-width: 110px;
+    }
+
+    .outcome {
+      border: 0;
+      color: #365745;
+      background: #fffef8f5;
+      box-shadow: 0 6px 24px #2433270d;
+    }
+
+    .play-shell .play-dock {
+      padding: 10px 24px max(12px, env(safe-area-inset-bottom));
+      background: var(--paper);
+      border: 0;
+    }
+
+    .action-shelf {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-height: 66px;
+      max-width: 940px;
+      margin: auto;
+    }
+
+    .mode-switch {
+      display: flex;
+      flex: 0 0 auto;
+      padding: 4px;
+      border-radius: 16px;
+      background: #e4e6da;
+    }
+
+    .mode-switch button {
+      min-height: 44px;
+      min-width: 60px;
+      padding: 0 12px;
+      border: 0;
+      background: transparent;
+      border-radius: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .mode-switch button[aria-pressed="true"] {
+      background: var(--surface);
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .limb-panel {
+      display: flex;
+      gap: 8px;
+    }
+
+    .limb-chip {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      width: 62px;
+      min-height: 48px;
+      border: 0;
+      border-radius: 14px;
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 15px;
+    }
+
+    .limb-chip span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .limb-chip[aria-pressed="true"] {
+      background: var(--clay);
+      color: #723c27;
+    }
+
+    .limb-chip[aria-pressed="true"] span {
+      color: #723c27;
+    }
+
+    .action-shelf .limb-actions {
+      margin-left: auto;
+      gap: 12px;
+    }
+
+    .action-shelf .selection {
+      display: block;
+      min-width: 0;
+      height: auto;
+      padding: 0;
+      border-radius: 0;
+      background: none;
+      font-size: 13px;
+      font-weight: 650;
+      color: var(--ink);
+    }
+
+    .action-shelf .selection::before {
+      display: none;
+    }
+
+    .action-hint {
+      display: block;
+      margin-top: 4px;
+      font-size: 10px;
+      color: var(--muted);
+      white-space: nowrap;
+    }
+
+    .action-button {
+      min-width: 68px;
+      height: 44px;
+      padding: 0 14px;
+      background: var(--forest);
+      border: 0;
+      box-shadow: none;
+      border-radius: 999px;
+      font-size: 13px;
+    }
+
+    .body-panel {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .nudge-tools {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .nudge-tools>span {
+      font-size: 11px;
+      margin-right: 5px;
+      color: var(--muted);
+    }
+
+    .nudge-tools button {
+      min-width: 44px;
+      height: 44px;
+      border: 0;
+      background: var(--surface);
+      border-radius: 12px;
+      font-size: 19px;
+    }
+
+    .body-panel .turn {
+      padding: 2px;
+      border-radius: 14px;
+      background: var(--sage);
+      gap: 0;
+    }
+
+    .turn .icon-button {
+      font-size: 24px;
+      flex-basis: 44px;
+    }
+
+    .turn output {
+      width: 48px;
+      font-size: 11px;
+    }
+
+    .play-dock .controls {
+      max-width: 940px;
+      padding: 8px 0 0;
+      margin-top: 6px;
+      border: 0;
+      border-top: 1px solid var(--line);
+      border-radius: 0;
+      box-shadow: none;
+      background: none;
+    }
+
+    .play-dock .history {
+      gap: 6px;
+    }
+
+    .play-dock .label-button {
+      height: 44px;
+      width: auto;
+      flex-basis: auto;
+      flex-direction: row;
+      gap: 7px;
+      padding: 0 12px;
+      border-radius: 999px;
+    }
+
+    .play-dock .label-button .button-label {
+      font-size: 11px;
+    }
+
+    .play-dock .label-button svg {
+      width: 17px;
+      height: 17px;
+    }
+
+    .play-dock #openPhotos {
+      background: transparent;
+      color: var(--forest);
+      border: 0;
+    }
+
+    .comparison-entry {
+      margin-left: auto;
+      min-height: 44px;
+      padding: 0 17px;
+      background: var(--ink);
+      color: white;
+      font-size: 11px;
+    }
+
+    #comparisonDot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--sun);
+    }
+
+    .comparison-dialog {
+      width: min(680px, calc(100vw - 40px));
+      max-height: calc(100dvh - 48px);
+      padding: 28px;
+      border: 0;
+      border-radius: 28px;
+      background: var(--paper);
+      color: var(--ink);
+      overflow: auto;
+    }
+
+    .comparison-dialog::backdrop,
+    #photoEditor::backdrop {
+      background: #242c2680;
+      backdrop-filter: blur(6px);
+    }
+
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .sheet-head .eyebrow {
+      color: var(--forest);
+      font-size: 9px;
+    }
+
+    .sheet-head h2 {
+      font-size: 24px;
+      margin: 8px 0 0;
+      letter-spacing: -1px;
+    }
+
+    .sheet-head .icon-button {
+      background: var(--surface);
+      border-radius: 50%;
+      font-size: 24px;
+    }
+
+    .sheet-intro {
+      font-size: 12px;
+      line-height: 1.9;
+      color: var(--muted);
+      margin: 18px 0;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .pose-card {
+      min-width: 0;
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 16px 12px 0;
+    }
+
+    .pose-card.retained {
+      background: #e2e9da;
+    }
+
+    .pose-card>div:first-child {
+      display: flex;
+      justify-content: space-between;
+      gap: 4px;
+      font-size: 12px;
+    }
+
+    .pose-card>div:first-child span {
+      font-size: 10px;
+      color: var(--muted);
+    }
+
+    .pose-card canvas {
+      height: 270px;
+      width: 100%;
+    }
+
+    .empty-comparison {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      min-height: 270px;
+      text-align: center;
+    }
+
+    .empty-comparison>span {
+      font-size: 34px;
+      color: var(--forest);
+      margin-bottom: 18px;
+    }
+
+    .empty-comparison strong {
+      font-size: 12px;
+    }
+
+    .empty-comparison p {
+      font-size: 11px;
+      line-height: 1.8;
+      color: var(--muted);
+    }
+
+    .comparison-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .comparison-actions>button {
+      flex: 1;
+      font-size: 12px;
+    }
+
+    .comparison-actions #swapDraft:not(:disabled) {
+      background: var(--forest);
+      color: var(--surface);
+    }
+
+    .sheet-note {
+      font-size: 10px;
+      color: var(--muted);
+      text-align: center;
+      margin: 18px 0 0;
+      line-height: 1.6;
+    }
+
+    #photoEditor {
+      background: var(--paper);
+    }
+
+    .photo-head {
+      background: var(--paper);
+      padding: 16px 24px;
+    }
+
+    .photo-head h2 {
+      font-family: inherit;
+      font-weight: 750;
+      letter-spacing: -1px;
+    }
+
+    #photoClose {
+      background: var(--surface);
+      border-radius: 50%;
+    }
+
+    #photoSteps {
+      background: var(--sage);
+      border-radius: 999px;
+      padding: 9px 14px;
+      font-size: 11px;
+    }
+
+    #photoSteps:empty {
+      display: none;
+    }
+
+    .photo-library {
+      max-width: 960px;
+      padding: 32px;
+    }
+
+    .photo-intro {
+      position: relative;
+      background: var(--sun);
+      padding: 30px;
+      border: 0;
+      border-radius: 24px;
+    }
+
+    .photo-intro small {
+      font: 600 10px "Trebuchet MS", sans-serif;
+      letter-spacing: 1.5px;
+      color: #57543c;
+    }
+
+    .photo-library .photo-intro h3 {
+      font-family: inherit;
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.35;
+      letter-spacing: -1.5px;
+    }
+
+    .photo-intro p {
+      color: #5f5c46;
+      margin-bottom: 22px;
+    }
+
+    .photo-command {
+      background: var(--surface);
+      border: 0;
+      font-weight: 600;
+    }
+
+    .photo-command.primary {
+      box-shadow: none;
+      background: var(--forest);
+      border: 0;
+    }
+
+    .photo-intro .primary {
+      background: var(--ink);
+    }
+
+    .photo-record {
+      background: var(--surface);
+      border: 0;
+      border-radius: 18px;
+      margin: 10px 0;
+      padding: 16px;
+      gap: 10px;
+    }
+
+    .photo-record .photo-command {
+      background: var(--sage);
+    }
+
+    .photo-record .photo-command:first-of-type {
+      background: var(--forest);
+      color: var(--surface);
+    }
+
+    .photo-record>.record-thumb {
+      width: 74px;
+      height: 88px;
+      border-radius: 12px;
+      background: var(--sage);
+      flex: 0 0 74px;
+    }
+
+    .photo-empty {
+      padding: 28px;
+      border: 1px dashed #b8c4b1;
+      border-radius: 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.8;
+      text-align: center;
+    }
+
+    .photo-side {
+      background: var(--surface);
+      padding: 24px;
+    }
+
+    .photo-side h3 {
+      font-weight: 700;
+      margin-top: 10px;
+    }
+
+    .photo-picture {
+      background: var(--wall);
+    }
+
+    .photo-side input[type="range"] {
+      margin: 0;
+    }
+
+    .photo-bottom {
+      background: var(--paper);
+    }
+
+    .photo-process {
+      display: flex;
+      gap: 18px;
+      padding: 18px 2px 0;
+      margin: 0;
+      list-style: none;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .photo-process b {
+      display: inline-grid;
+      place-content: center;
+      width: 24px;
+      height: 24px;
+      background: var(--sage);
+      border-radius: 50%;
+      margin-right: 6px;
+      font: 600 11px "Trebuchet MS", sans-serif;
+    }
+
+    @media (hover: hover) {
+      .route-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 12px 24px #2733220b;
+      }
+
+      .route-filters button:hover:not([aria-pressed="true"]) {
+        background: #e7e9df;
+      }
+
+      .pill-button:hover:not(:disabled) {
+        background: #e3e8d8;
+        color: var(--ink);
+      }
+
+      .dark-button:hover:not(:disabled),
+      .comparison-entry:hover:not(:disabled) {
+        background: var(--forest);
+        color: white;
+      }
+
+      .limb-chip:hover {
+        background: var(--clay);
+      }
+    }
+
+    @media (max-width: 960px) {
+      .library-nav {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .library-content {
+        padding-left: 24px;
+        padding-right: 24px;
+      }
+
+      .route-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .route-card-art {
+        height: 180px;
+      }
+
+      .collection-head {
+        align-items: start;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .feature-copy {
+        padding: 30px;
+      }
+
+      .play-header .play-wordmark {
+        display: none;
+      }
+
+      .play-shell .play-header {
+        padding-left: 18px;
+        padding-right: 18px;
+        gap: 12px;
+      }
+
+      .play-shell .stage {
+        width: 100%;
+        border-radius: 20px;
+      }
+
+      .action-shelf {
+        gap: 10px;
+      }
+
+      .limb-chip {
+        width: 50px;
+      }
+
+      .body-panel {
+        gap: 6px;
+      }
+
+      .body-panel .nudge-tools>span {
+        display: none;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .library-nav {
+        min-height: 84px;
+        padding: max(20px, env(safe-area-inset-top)) 20px 16px;
+        gap: 10px;
+      }
+
+      .wordmark {
+        font-size: 30px;
+        gap: 9px;
+      }
+
+      .wordmark span {
+        font-size: 8px;
+        padding-left: 9px;
+      }
+
+      .nav-caption {
+        display: none;
+      }
+
+      .library-nav .pill-button {
+        font-size: 11px;
+        min-height: 44px;
+        padding: 0 14px;
+        gap: 10px;
+      }
+
+      .library-content {
+        padding: 16px 20px 24px;
+      }
+
+      .welcome {
+        display: block;
+        margin-bottom: 22px;
+      }
+
+      .phone-break {
+        display: initial;
+      }
+
+      .welcome h1 {
+        font-size: 42px;
+        letter-spacing: -2px;
+      }
+
+      .welcome p {
+        font-size: 11px;
+        margin-top: 14px;
+        line-height: 1.8;
+      }
+
+      .welcome .eyebrow {
+        font-size: 8px;
+        margin-bottom: 10px;
+      }
+
+      .library-feature {
+        grid-template-columns: 54% 46%;
+        border-radius: 22px;
+        min-height: 278px;
+      }
+
+      .feature-copy {
+        padding: 24px 0 24px 22px;
+        position: relative;
+        z-index: 1;
+      }
+
+      .feature-copy .eyebrow {
+        font-size: 9px;
+        letter-spacing: .3px;
+      }
+
+      .feature-copy h2 {
+        font-size: 31px;
+        letter-spacing: -1.5px;
+        margin: 19px 0 12px;
+      }
+
+      .feature-copy p {
+        font-size: 11px;
+        line-height: 1.7;
+        margin-bottom: 24px;
+      }
+
+      .feature-copy .pill-button {
+        min-width: 0;
+        font-size: 11px;
+        padding: 0 14px;
+        gap: 12px;
+        min-height: 44px;
+      }
+
+      .feature-progress {
+        font-size: 9px;
+      }
+
+      .feature-wall {
+        margin: 10px 10px 10px 0;
+        min-height: 0;
+        border-radius: 65px 14px 14px 14px;
+      }
+
+      .feature-wall canvas {
+        inset: 28px 0 0;
+        width: 100%;
+        height: calc(100% - 28px);
+      }
+
+      .wall-label {
+        top: 16px;
+        right: 8px;
+        font-size: 6px;
+        letter-spacing: 1px;
+      }
+
+      .feature-sticker {
+        width: 44px;
+        height: 44px;
+        left: 10px;
+        bottom: 16px;
+        font-size: 13px;
+      }
+
+      .route-collection {
+        margin-top: 30px;
+      }
+
+      .collection-head {
+        gap: 14px;
+        margin-bottom: 16px;
+      }
+
+      .collection-head h2 {
+        font-size: 21px;
+      }
+
+      .collection-head .eyebrow {
+        font-size: 8px;
+      }
+
+      .route-filters {
+        width: 100%;
+        justify-content: space-between;
+        gap: 0;
+      }
+
+      .route-filters button {
+        padding: 0 13px;
+        font-size: 11px;
+      }
+
+      .route-grid {
+        gap: 12px;
+      }
+
+      .route-card {
+        padding: 7px 7px 13px;
+        border-radius: 18px;
+      }
+
+      .route-card-art {
+        height: 123px;
+        border-radius: 12px;
+      }
+
+      .route-index {
+        font-size: 20px;
+        left: 10px;
+        top: 8px;
+      }
+
+      .route-card h3 {
+        font-size: 16px;
+        margin: 13px 6px 6px;
+      }
+
+      .route-card p {
+        font-size: 10px;
+        margin: 0 6px;
+      }
+
+      .route-card-bottom {
+        font-size: 9px;
+        margin: 11px 6px 0;
+        gap: 2px;
+      }
+
+      .own-wall-card {
+        padding: 22px 18px;
+        gap: 12px;
+        border-radius: 20px;
+      }
+
+      .own-wall-symbol {
+        display: none;
+      }
+
+      .own-wall-card strong {
+        font-size: 17px;
+        line-height: 1.6;
+      }
+
+      .own-wall-card small {
+        font-size: 8px;
+      }
+
+      .own-wall-card span span {
+        font-size: 10px;
+      }
+
+      .own-wall-card .round-arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 21px;
+      }
+
+      .library-foot {
+        font-size: 9px;
+      }
+
+      .play-shell .play-header {
+        padding: max(8px, env(safe-area-inset-top)) 14px 8px;
+        grid-template-columns: 1fr minmax(140px, 1.5fr) 44px;
+        gap: 4px 9px;
+      }
+
+      .play-header .back-button {
+        padding: 0 8px;
+        gap: 6px;
+        font-size: 11px;
+        background: transparent;
+      }
+
+      .play-header .climb-settings {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        justify-content: end;
+        font-size: 10px;
+      }
+
+      .play-header .climb-settings label {
+        gap: 8px;
+      }
+
+      .play-header .header-actions {
+        grid-column: 3;
+      }
+
+      .play-header .climb-settings select {
+        min-height: 44px;
+      }
+
+      .play-header .route select {
+        font-size: 12px;
+        padding-left: 30px;
+        padding-right: 24px;
+      }
+
+      .play-shell .stage {
+        border-radius: 18px;
+      }
+
+      .play-shell .stage-meta {
+        top: 12px;
+        left: 14px;
+        right: 14px;
+      }
+
+      .route-challenge {
+        font-size: 9px;
+        max-width: 68%;
+      }
+
+      .stage-meta .counter {
+        padding: 7px 10px;
+        font-size: 9px;
+      }
+
+      .counter b {
+        font-size: 16px;
+      }
+
+      .view-tools {
+        right: 10px;
+        bottom: 10px;
+      }
+
+      #balanceAid {
+        bottom: 12px;
+        left: 12px;
+        max-width: 104px;
+        font-size: 10px;
+      }
+
+      .play-shell .play-dock {
+        padding: 8px 14px max(8px, env(safe-area-inset-bottom));
+      }
+
+      .action-shelf {
+        display: grid;
+        grid-template-columns: 66px minmax(0, 1fr);
+        grid-template-rows: 48px 44px;
+        gap: 4px 12px;
+        min-height: 96px;
+      }
+
+      .mode-switch {
+        grid-row: 1 / 3;
+        flex-direction: column;
+        border-radius: 15px;
+        align-self: stretch;
+        justify-content: space-between;
+        padding: 3px;
+      }
+
+      .mode-switch button {
+        min-width: 0;
+        padding: 0 8px;
+        min-height: 44px;
+      }
+
+      .limb-panel {
+        justify-content: space-between;
+        gap: 6px;
+      }
+
+      .limb-chip {
+        min-width: 44px;
+        width: auto;
+        flex: 1;
+        min-height: 46px;
+        font-size: 14px;
+      }
+
+      .action-shelf .limb-actions {
+        grid-column: 2;
+        width: 100%;
+        justify-content: space-between;
+        gap: 6px;
+        margin-left: 0;
+      }
+
+      .action-shelf .selection {
+        font-size: 11px;
+      }
+
+      .action-hint {
+        font-size: 9px;
+        margin-top: 3px;
+      }
+
+      .action-button {
+        font-size: 12px;
+        padding: 0 12px;
+        min-width: 64px;
+      }
+
+      .body-panel {
+        grid-column: 2;
+        grid-row: 1 / 3;
+        align-self: stretch;
+        flex-direction: column;
+        align-items: start;
+        gap: 4px;
+      }
+
+      .nudge-tools {
+        width: 100%;
+        justify-content: space-between;
+      }
+
+      .nudge-tools button {
+        flex: 1;
+      }
+
+      .body-panel .turn {
+        width: 100%;
+        height: 44px;
+        justify-content: space-between;
+        padding: 0;
+      }
+
+      .action-shelf[data-mode="body"] .limb-actions {
+        display: none;
+      }
+
+      .play-dock .controls {
+        gap: 5px;
+        padding-top: 6px;
+        margin-top: 6px;
+      }
+
+      .play-dock .history {
+        gap: 0;
+      }
+
+      .play-dock .label-button {
+        padding: 0 8px;
+        gap: 4px;
+      }
+
+      .play-dock .label-button .button-label {
+        font-size: 10px;
+      }
+
+      .play-dock #redo {
+        flex-direction: column;
+        gap: 2px;
+        width: 44px;
+        padding: 0;
+      }
+
+      .comparison-entry {
+        padding: 0 12px;
+        gap: 6px;
+        font-size: 10px;
+      }
+
+      .comparison-entry>span[aria-hidden] {
+        font-size: 15px;
+      }
+
+      .play-dock #openPhotos {
+        flex-direction: column;
+        width: 52px;
+        padding: 0;
+        gap: 2px;
+        flex-shrink: 0;
+      }
+
+      .play-dock #openPhotos .button-label {
+        font-size: 9px;
+      }
+
+      .comparison-dialog {
+        width: 100%;
+        max-width: none;
+        margin: auto 0 0;
+        max-height: 92dvh;
+        padding: 22px 18px max(22px, env(safe-area-inset-bottom));
+        border-radius: 26px 26px 0 0;
+      }
+
+      .sheet-head h2 {
+        font-size: 22px;
+      }
+
+      .comparison-grid {
+        gap: 8px;
+      }
+
+      .pose-card {
+        padding: 12px 9px 0;
+        border-radius: 15px;
+      }
+
+      .pose-card>div:first-child {
+        flex-direction: column;
+        gap: 5px;
+      }
+
+      .pose-card canvas,
+      .empty-comparison {
+        height: 230px;
+        min-height: 230px;
+      }
+
+      .comparison-actions {
+        gap: 8px;
+      }
+
+      .comparison-actions .pill-button {
+        padding: 0 12px;
+        gap: 8px;
+      }
+
+      .photo-library {
+        padding: 18px;
+      }
+
+      .photo-intro {
+        padding: 25px 22px;
+        border-radius: 22px;
+      }
+
+      .photo-library .photo-intro h3 {
+        font-size: 29px;
+      }
+
+      .photo-head {
+        padding: max(12px, env(safe-area-inset-top)) 16px 12px;
+        gap: 8px;
+      }
+
+      #photoSteps {
+        font-size: 10px;
+        padding: 8px 10px;
+      }
+
+      .photo-process {
+        gap: 8px;
+        font-size: 10px;
+        justify-content: space-between;
+      }
+
+      .photo-process b {
+        margin-right: 3px;
+        width: 21px;
+        height: 21px;
+      }
+
+      .photo-side {
+        padding: 12px 18px;
+      }
+
+      .photo-record {
+        gap: 8px;
+        padding: 14px;
+      }
+
+      .photo-record>.record-thumb {
+        width: 54px;
+        height: 70px;
+        flex-basis: 54px;
+      }
+
+      .photo-record strong {
+        min-width: 110px;
+        font-size: 13px;
+      }
+
+      .photo-record .photo-command {
+        padding: 8px 14px;
+        font-size: 12px;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .library-content {
+        padding-left: 16px;
+        padding-right: 16px;
+      }
+
+      .welcome h1 {
+        font-size: 38px;
+      }
+
+      .feature-copy {
+        padding-left: 17px;
+      }
+
+      .feature-copy h2 {
+        font-size: 28px;
+      }
+
+      .route-filters button {
+        padding: 0 10px;
+      }
+
+      .play-shell .play-dock {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .action-shelf {
+        gap: 4px 8px;
+        grid-template-columns: 60px minmax(0, 1fr);
+      }
+
+      .comparison-entry {
+        padding: 0 10px;
+      }
+
+      .play-dock .label-button {
+        padding: 0 6px;
+      }
+    }
+
+    @media (max-height: 500px) and (min-width: 600px) {
+      .play-shell .play-header {
+        padding: 5px 16px;
+        grid-template-columns: 1fr minmax(135px, 190px) minmax(160px, 1fr) 44px;
+        gap: 10px;
+      }
+
+      .play-header .climb-settings {
+        grid-column: 3;
+        grid-row: 1;
+      }
+
+      .play-header .header-actions {
+        grid-column: 4;
+      }
+
+      .play-shell .play-dock {
+        padding: 4px 16px;
+      }
+
+      .action-shelf {
+        min-height: 52px;
+      }
+
+      .action-shelf .mode-switch button {
+        min-width: 48px;
+      }
+
+      .action-shelf .limb-panel {
+        gap: 5px;
+      }
+
+      .limb-chip {
+        width: 46px;
+        min-height: 44px;
+      }
+
+      .play-dock .controls {
+        margin-top: 2px;
+        padding-top: 3px;
+      }
+
+      .play-shell .stage-meta {
+        top: 10px;
+      }
+
+      .body-panel .turn output {
+        width: 40px;
+      }
+
+      .action-shelf[data-mode="body"] .limb-actions {
+        display: none;
+      }
+
+      .comparison-dialog {
+        width: min(820px, 94vw);
+        padding: 18px;
+        max-height: 94dvh;
+      }
+
+      .comparison-grid {
+        float: left;
+        width: 56%;
+        margin-right: 18px;
+      }
+
+      .pose-card canvas,
+      .empty-comparison {
+        height: 140px;
+        min-height: 140px;
+      }
+
+      .comparison-actions {
+        flex-direction: column;
+        margin-top: 16px;
+      }
+
+      .sheet-note {
+        clear: both;
+        padding-top: 10px;
+      }
+
+      .sheet-intro {
+        margin: 10px 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation: none !important;
+        transition: none !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
   <!--
     Icons: Lucide 0.468.0, ISC License.
     Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as
@@ -3023,6 +5013,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       });
       $("hipTarget").disabled = !!anim;
       $("chestTarget").disabled = !!anim;
+      window.sketchbook?.sync();
     }
     function turnRoom(delta) {
       const result = constrainPose(
@@ -4781,7 +6772,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       schedule();
     }
     window.addEventListener("keydown", (e) => {
-      if ($("photoEditor")?.open) return;
+      if ($("photoEditor")?.open || $("comparisonDialog")?.open ||
+        document.body.dataset?.screen === "library") return;
       if (e.key === "Tab")
         document.body.classList.toggle("keyboard-navigation", true);
       if (
@@ -5185,6 +7177,212 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       schedule();
     });
     reset();
+    // Experience navigation and thumbnails share the existing engine. Neither
+    // screen changes nor drawing a preview can change contacts or play history.
+    if (document.createElement) (() => {
+      const library = $("routeLibrary"), shell = $("playShell"),
+        comparison = $("comparisonDialog"), shelf = document.querySelector(".action-shelf");
+      const descriptions = [
+        ["start", "先找脚点，再伸手", "先找到脚下的支撑，再去够更远的地方。", "#dce5ef"],
+        ["start", "把重心慢慢移过去", "向右走不只有一种办法。试着让双脚接过重量。", "#e5eacb"],
+        ["skills", "高脚之后，身体跟上", "抬高一只脚，看看身体能不能再往上一点。", "#f0dfcc"],
+        ["skills", "左边，还是右边？", "选择你的方向，给另一种侧身方式留点余地。", "#d8e7e2"],
+        ["skills", "换脚，转身，再回来", "先离开，再折返。用不同的脚法连接两段动作。", "#e4def0"],
+        ["long", "上升之后，绕到右侧", "一段上升，一次并手，再沿着屋檐向右走。", "#eee1bd"],
+        ["long", "转个方向再出发", "向左探索，再向右上方延伸，试试更连贯的动作。", "#eddae0"],
+        ["long", "走远一点，再回家", "长距离横移、高脚和折返，拼成你自己的走法。", "#d7e6dd"],
+      ];
+      let mode = "limbs", lastSelected = null, filter = "all", entered = false,
+        libraryFocus = $("continueClimb"), resizeFrame = 0;
+      function mini(target, route, pose = null, focus = false, other = null) {
+        const r = target.getBoundingClientRect();
+        if (!r.width || !r.height) return;
+        const d = Math.min(devicePixelRatio || 1, 2), previous = { ctx, holds, activeRoute, scale };
+        target.width = Math.round(r.width * d);
+        target.height = Math.round(r.height * d);
+        ctx = target.getContext("2d"); holds = route.holds; activeRoute = route;
+        ctx.save();
+        try {
+          ctx.setTransform(d, 0, 0, d, 0, 0);
+          const points = pose ? pointsFor(pose) : [],
+            otherPoints = other ? pointsFor(other) : [],
+            bounds = focus && pose
+              ? [...points, ...otherPoints, { x: pose.hip.x - 100, y: pose.hip.y - 185 },
+              { x: pose.hip.x + 100, y: pose.hip.y + 40 },
+              ...(other ? [{ x: other.hip.x - 100, y: other.hip.y - 185 },
+              { x: other.hip.x + 100, y: other.hip.y + 40 }] : [])]
+              : route.holds.flatMap(h => {
+                const b = holdBounds(h);
+                return [{ x: b.left, y: Math.min(b.top, h.y - (h.goal ? 72 : 30)) },
+                { x: b.right, y: b.bottom + 20 }];
+              });
+          const left = Math.min(...bounds.map(p => p.x)) - 40,
+            top = Math.min(...bounds.map(p => p.y)) - 24,
+            right = Math.max(...bounds.map(p => p.x)) + 40,
+            bottom = Math.max(...bounds.map(p => p.y)) + 24;
+          scale = Math.min((r.width - 16) / (right - left), (r.height - 16) / (bottom - top));
+          ctx.translate((r.width - (right - left) * scale) / 2 - left * scale,
+            (r.height - (bottom - top) * scale) / 2 - top * scale);
+          ctx.scale(scale, scale);
+          route.holds.forEach(h => {
+            const b = holdBounds(h);
+            if (!focus || (b.left >= left && b.right <= right &&
+              Math.min(b.top, h.y - (h.goal ? 72 : 0)) >= top && b.bottom <= bottom))
+              drawHold(h);
+          });
+          if (pose) {
+            const f = characterFrame(pose.hip),
+              far = pose.hip.turn >= 0 ? [2, 0] : [3, 1],
+              near = pose.hip.turn >= 0 ? [3, 1] : [2, 0];
+            far.forEach(i => limb(pose.hip, points, i, false, undefined, f));
+            body(pose.hip, f);
+            near.forEach(i => limb(pose.hip, points, i, false, undefined, f));
+          }
+        } finally {
+          ctx.restore();
+          ({ ctx, holds, activeRoute, scale } = previous);
+        }
+      }
+      function renderComparison() {
+        if (!comparison.open) return;
+        $("currentPoseCount").textContent = state.moves + " 次换点";
+        $("savedPoseCount").textContent = savedDraft ? savedDraft.current.state.moves + " 次换点" : "";
+        $("emptyComparison").hidden = !!savedDraft;
+        $("savedPoseCanvas").hidden = !savedDraft;
+        $("saveDraft").innerHTML = savedDraft ? '更新保留 <span aria-hidden="true">＋</span>' : '保留姿势 <span aria-hidden="true">＋</span>';
+        mini($("currentPoseCanvas"), activeRoute, state, true, savedDraft?.current.state);
+        if (savedDraft) mini($("savedPoseCanvas"), activeRoute, savedDraft.current.state, true, state);
+        $("comparisonStatus").textContent = savedDraft
+          ? "已保留 · 两边的动作与撤销记录可随时切换"
+          : "姿势只在本次打开页面时保留。";
+      }
+      function setMode(next) {
+        mode = next;
+        shelf.dataset.mode = mode;
+        $("limbMode").setAttribute("aria-pressed", String(mode === "limbs"));
+        $("bodyMode").setAttribute("aria-pressed", String(mode === "body"));
+        $("limbPanel").hidden = mode !== "limbs";
+        $("bodyPanel").hidden = mode !== "body";
+      }
+      function sync() {
+        const busy = !!drag || !!anim, gestureLocked = !!drag || !!keyboardStep;
+        for (const id of ["backToRoutes", "openPhotos", "openComparison", "reset", "bodyMode", "limbMode"])
+          $(id).disabled = gestureLocked;
+        $("bodyMode").disabled = busy || gestureLocked;
+        document.querySelectorAll("[data-select-limb]").forEach(b => {
+          b.setAttribute("aria-pressed", String(+b.dataset.selectLimb === selected));
+          b.disabled = busy;
+        });
+        document.querySelectorAll("[data-nudge]").forEach(b => { b.disabled = busy; });
+        if ((selected !== null && selected !== lastSelected) || drag?.kind === "limb") setMode("limbs");
+        if (drag?.kind === "hip" || drag?.kind === "chest") setMode("body");
+        lastSelected = selected;
+        $("comparisonDot").hidden = !savedDraft;
+        $("actionHint").textContent = mode === "body" ? "也可直接拖胯部与肩膀"
+          : selected === null ? "选手脚，再点岩点"
+            : selected < 2 ? "点一个手点，或直接拖动手"
+              : isFree(state.limbs[selected]) ? "拖腿微调，点脚点重新踩住"
+                : "点脚点移动，或试试旗式";
+        renderComparison();
+      }
+      function renderLibrary() {
+        const index = routes.indexOf(activeRoute), description = descriptions[index],
+          hasProgress = state.moves > 0 || past.length > 0;
+        $("featureEyebrow").textContent = entered ? "继续刚才的想法" : "从第一条线开始";
+        $("featureTitle").textContent = activeRoute.name;
+        $("featureDescription").textContent = description?.[2] || "在自己的岩壁上，试出不一样的走法。";
+        $("continueClimb").innerHTML = (entered ? "继续试动作" : "开始试动作") + ' <span aria-hidden="true">↗</span>';
+        $("featureProgress").textContent = hasProgress
+          ? state.moves + " 次换点 · 上肢力量" + strengthProfiles[strengthLevel].label
+          : "随时撤销，放心试。";
+        mini($("featureCanvas"), activeRoute, state, !!activeRoute.explore || !!activeRoute.imported);
+        document.querySelectorAll(".route-card").forEach(card => {
+          const route = routes.find(r => r.id === card.dataset.route),
+            data = descriptions[routes.indexOf(route)],
+            bank = route.id === activeRoute.id ? draftSnapshot() : routeDrafts.get(draftKey(route.id))?.active;
+          card.hidden = filter !== "all" && data[0] !== filter;
+          card.querySelector(".route-card-bottom span").textContent = bank && (bank.current.state.moves || bank.past.length)
+            ? "继续 · " + bank.current.state.moves + " 次换点"
+            : route.challenge.split(" · ")[0] + " · " + route.holds.length + " 个岩点";
+          if (!card.hidden) mini(card.querySelector("canvas"), route);
+        });
+      }
+      function enterPlay(id = activeRoute.id) {
+        if (drag) return;
+        if (id !== activeRoute.id && !changeRoute(id)) return;
+        entered = true;
+        library.hidden = true;
+        shell.inert = false;
+        document.body.dataset.screen = "play";
+        draw();
+        canvas.focus({ preventScroll: true });
+        sync();
+      }
+      function showLibrary() {
+        if (drag || keyboardStep) return;
+        window.photoRoutes.pause();
+        library.hidden = false;
+        shell.inert = true;
+        document.body.dataset.screen = "library";
+        renderLibrary();
+        (libraryFocus?.isConnected && !libraryFocus.hidden ? libraryFocus : $("continueClimb")).focus({ preventScroll: true });
+      }
+      descriptions.forEach((data, index) => {
+        const route = routes[index], card = document.createElement("button");
+        card.className = "route-card"; card.dataset.route = route.id;
+        card.setAttribute("aria-label", route.name + " · " + data[1]);
+        card.innerHTML = `<div class="route-card-art" style="--card-color:${data[3]}"><canvas aria-hidden="true"></canvas><span class="route-index">${String(index + 1).padStart(2, "0")}</span></div><h3>${route.name}</h3><p>${data[1]}</p><div class="route-card-bottom"><span></span><b aria-hidden="true">↗</b></div>`;
+        bindCommand(card, () => { libraryFocus = card; enterPlay(route.id); });
+        $("routeCards").append(card);
+      });
+      bindCommand($("continueClimb"), () => { libraryFocus = $("continueClimb"); enterPlay(); });
+      bindCommand($("backToRoutes"), showLibrary);
+      bindCommand($("limbMode"), () => { setMode("limbs"); sync(); });
+      bindCommand($("bodyMode"), () => {
+        if (drag || anim) return;
+        selected = null; preview = null; hover = null; setMode("body"); update(); schedule();
+      });
+      document.querySelectorAll("[data-select-limb]").forEach(b =>
+        bindCommand(b, () => { setMode("limbs"); selectLimb(+b.dataset.selectLimb); }));
+      document.querySelectorAll("[data-nudge]").forEach(b => bindCommand(b, () => {
+        if (drag || anim) return;
+        finishKeyboardStep();
+        const before = snapshot(), [dx, dy] = b.dataset.nudge.split(",").map(Number);
+        changeHip({ ...state.hip, x: state.hip.x + dx, y: state.hip.y + dy });
+        remember(before);
+        if (blocked) notify(poseSignal() || "到活动边界了 · 换个方向试试");
+        blocked = false; update(); schedule();
+      }));
+      document.querySelectorAll("[data-route-filter]").forEach(b => bindCommand(b, () => {
+        filter = b.dataset.routeFilter;
+        document.querySelectorAll("[data-route-filter]").forEach(el =>
+          el.setAttribute("aria-pressed", String(el === b)));
+        renderLibrary();
+      }));
+      document.querySelectorAll("[data-open-photos]").forEach(b => bindCommand(b, () => {
+        libraryFocus = b; window.photoRoutes.openEditor(b);
+      }));
+      bindCommand($("openComparison"), () => {
+        if (drag || keyboardStep) return;
+        window.photoRoutes.pause(); comparison.showModal(); renderComparison();
+      });
+      bindCommand($("closeComparison"), () => comparison.close());
+      comparison.addEventListener("close", () => $("openComparison").focus({ preventScroll: true }));
+      window.addEventListener("resize", () => {
+        cancelAnimationFrame(resizeFrame);
+        resizeFrame = requestAnimationFrame(() => {
+          if (!library.hidden) renderLibrary();
+          renderComparison();
+        });
+      });
+      window.sketchbook = {
+        sync, enterPlay, mini,
+        refreshLibrary: () => { if (!library.hidden) renderLibrary(); }
+      };
+      setMode("limbs");
+      sync();
+      renderLibrary();
+    })();
   </script>
   <script>
     (() => {
@@ -5632,7 +7830,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         $("photoEditor").querySelector(".photo-side").scrollTop = 0;
         $("photoLibrary").hidden = step !== -1;
         $("photoWork").hidden = step === -1;
-        $("photoSteps").textContent = step < 0 ? "" : step === 1 ? "一面墙" : "一次尝试";
+        $("photoSteps").textContent = step < 0 ? "" : step === 1 ? "02 / 生成岩壁" : "03 / 调整与开爬";
         $("photoBack").hidden = step !== 2;
         $("photoSave").hidden = true;
         $("photoSaved").hidden = step < 0;
@@ -6368,6 +8566,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           api.put(route);
           dirty = false;
           dialog.close();
+          window.sketchbook?.enterPlay();
           epoch++;
         } catch (error) {
           status(
@@ -6395,7 +8594,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           if (token !== epoch || !dialog.open || step !== -1) return;
           records = saved;
           records.sort((a, b) => b.updated - a.updated);
-          if (!records.length) container.textContent = "暂无照片线路";
+          if (!records.length) {
+            const empty = document.createElement("p");
+            empty.className = "photo-empty";
+            empty.textContent = "还没有自己的岩壁。选一张照片，从熟悉的线路开始。";
+            container.append(empty);
+          }
           for (const record of records) {
             const row = document.createElement("div");
             row.className = "photo-record";
@@ -6418,6 +8622,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                   if (busy) return;
                   api.put(route);
                   dialog.close();
+                  window.sketchbook?.enterPlay();
                   epoch++;
                 }),
               );
@@ -6489,6 +8694,13 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               }),
             );
             container.append(row);
+            if (route) {
+              const thumb = document.createElement("canvas");
+              thumb.className = "record-thumb";
+              thumb.setAttribute("aria-label", route.name + "线路预览");
+              row.prepend(thumb);
+              window.sketchbook?.mini(thumb, route);
+            }
           }
         } catch (error) {
           status(
@@ -6497,8 +8709,10 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           );
         }
       }
-      api.bindCommand($("openPhotos"), async () => {
+      let editorReturnFocus = null;
+      async function openEditor(origin = $("openPhotos")) {
         if (dialog.open) return;
+        editorReturnFocus = origin;
         api.pause();
         epoch++;
         draft = null;
@@ -6509,6 +8723,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         status("照片线路是平面动作草稿，不代表真实攀爬能力。");
         await library();
         await checkVision();
+      }
+      api.openEditor = openEditor;
+      api.bindCommand($("openPhotos"), openEditor);
+      dialog.addEventListener("close", () => {
+        window.sketchbook?.refreshLibrary();
+        if (editorReturnFocus?.getClientRects().length && !editorReturnFocus.closest("[inert]"))
+          editorReturnFocus.focus({ preventScroll: true });
+        else if (document.body.dataset.screen === "play")
+          $("canvas").focus({ preventScroll: true });
       });
       async function closeEditor() {
         if (visionController) {
