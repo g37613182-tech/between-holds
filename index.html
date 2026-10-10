@@ -4,29 +4,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#f3f2e9" />
+  <meta name="theme-color" content="#dce2d5" />
   <title>岩间 · 侧上方</title>
-  <style>
+  <style id="game-design">
+    /* Game shell source; embedded by build-game-style.cjs into the standalone page. */
     :root {
       color-scheme: light;
-      --ink: #181b16;
-      --muted: #70746b;
-      --accent: #e45b2f;
-      --sun: #f3b72f;
-      --sky: #3b92cf;
-      --line: #dedfd3;
-      --paper: #f8f4e9;
-      --surface: #fffdf4;
-      --wall: #eef0e8;
-      --forest: #3f745f;
-      --sage: #dfe9d8;
-      --clay: #f2dfca;
-      --shadow: 0 10px 28px #1b241314;
+      --ink: #263c35;
+      --muted: #6c756a;
+      --paper: #efeee3;
+      --surface: #fffdf2;
+      --wall: #f1f2ec;
+      --forest: #355f50;
+      --sage: #dce5d6;
+      --clay: #efb389;
+      --line: #d4d9cc;
+      --accent: #b9623d;
+      --sun: #e9c977;
     }
 
     * {
       box-sizing: border-box;
-      letter-spacing: 0;
     }
 
     html,
@@ -38,195 +36,57 @@
 
     body {
       height: 100dvh;
-      min-height: 340px;
-      display: grid;
-      grid-template-rows: auto minmax(180px, 1fr) auto;
-      background:
-        linear-gradient(135deg, #f5f0e1 0 28%, transparent 28% 100%),
-        var(--paper);
+      overflow: hidden;
+      background: #dce2d5;
       color: var(--ink);
-      font-family: "PingFang SC", "Microsoft YaHei UI", "Microsoft YaHei", sans-serif;
+      font-family: "Trebuchet MS", "Microsoft YaHei UI", "PingFang SC", sans-serif;
       overscroll-behavior: none;
     }
 
+    [hidden] {
+      display: none !important;
+    }
+
     button,
+    select,
+    input,
     a {
-      color: inherit;
       font: inherit;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
+      color: inherit;
     }
 
     button {
+      min-width: 44px;
+      min-height: 44px;
+      border: 0;
       cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+      transition: transform .16s, background .16s, box-shadow .16s;
     }
 
     button:disabled {
+      opacity: .36;
       cursor: default;
-      opacity: 0.38;
+    }
+
+    button:active:not(:disabled) {
+      transform: translateY(3px);
     }
 
     button:focus-visible,
+    select:focus-visible,
+    summary:focus-visible,
     a:focus-visible,
     .keyboard-navigation canvas:focus-visible {
-      outline: 3px solid var(--sun);
-      outline-offset: 2px;
+      outline: 3px solid #ad5837;
+      outline-offset: 4px;
     }
 
-    header {
-      display: grid;
-      grid-template-columns: minmax(80px, 1fr) minmax(140px, 220px) minmax(60px, 1fr);
-      align-items: center;
-      gap: 8px 16px;
-      width: 100%;
-      max-width: 1120px;
-      margin: auto;
-      padding: 16px max(24px, env(safe-area-inset-right)) 10px max(24px, env(safe-area-inset-left));
-      padding-top: max(18px, env(safe-area-inset-top));
-      background: var(--paper);
-      border-bottom: 1px solid transparent;
-    }
-
-    h1 {
-      margin: 0;
-      width: max-content;
-      padding: 1px 9px 3px;
-      border-radius: 15px;
-      background: var(--sun);
-      box-shadow: 5px 5px 0 #161914;
-      font-size: 28px;
-      line-height: 1.15;
-      font-family: "STKaiti", "KaiTi", "STSong", "SimSun", serif;
-      font-weight: 700;
-      letter-spacing: 1px;
-    }
-
-    h1 span {
-      color: #fffaf0;
-    }
-
-    .brand small {
-      display: block;
-      margin-top: 9px;
-      font-size: 8px;
-      color: #4f574e;
-      letter-spacing: 1.4px;
-    }
-
-    .route {
-      position: relative;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      min-height: 48px;
-      font-size: 13px;
-      white-space: nowrap;
-      border: 1px solid #23251f;
-      border-radius: 18px;
-      background: var(--surface);
-      box-shadow: 4px 4px 0 #20231d;
-      color: var(--ink);
-    }
-
-    .route i {
-      position: absolute;
-      left: 14px;
-      width: 10px;
-      height: 10px;
-      background: var(--sky);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .climb-settings {
-      grid-column: 1 / -1;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      color: var(--muted);
-      font-size: 11px;
-      min-height: 44px;
-    }
-
-    .climb-settings label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-shrink: 0;
-    }
-
-    .climb-settings select {
-      color: var(--ink);
-      background: var(--surface);
-      border: 1px solid #d2d5c7;
-      border-radius: 16px;
-      min-width: 64px;
-      min-height: 44px;
-      padding: 0 10px;
-      font: inherit;
-      cursor: pointer;
-    }
-
-    .climb-settings select:focus-visible {
-      outline: 3px solid var(--sun);
-    }
-
-    .view-tools {
-      position: absolute;
-      right: 12px;
-      bottom: 12px;
-      display: flex;
-      gap: 2px;
-      padding: 4px;
-      border: 1px solid #d9dccf;
-      border-radius: 18px;
-      background: #fffdf4f2;
-      box-shadow: 0 8px 20px #1b241314;
-    }
-
-    .view-tools .icon-button {
-      width: 44px;
-      height: 44px;
-      flex-basis: 44px;
-      font-size: 12px;
-      color: var(--forest);
-    }
-
-    .view-tools .icon-button svg {
-      width: 17px;
-      height: 17px;
-    }
-
-    .route select {
-      appearance: none;
-      -webkit-appearance: none;
-      width: 100%;
-      height: 48px;
-      padding: 0 34px 0 34px;
-      border: 0;
-      border-radius: 18px;
-      background: transparent;
-      color: inherit;
-      font: inherit;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .route select:focus-visible {
-      outline: 3px solid var(--sun);
-      outline-offset: 2px;
-    }
-
-    .route select:disabled {
-      opacity: 0.5;
-    }
-
-    .route svg {
-      position: absolute;
-      right: 12px;
-      width: 14px;
-      height: 14px;
+    svg {
+      width: 24px;
+      height: 24px;
       fill: none;
       stroke: currentColor;
       stroke-width: 1.8;
@@ -235,399 +95,12 @@
       pointer-events: none;
     }
 
-    .header-actions,
-    .history,
-    .draft-tools,
-    .turn {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    .header-actions {
-      justify-self: end;
-    }
-
-    .icon-button {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      flex: 0 0 44px;
-      width: 44px;
-      height: 44px;
-      padding: 0;
-      border: 1px solid transparent;
-      border-radius: 15px;
-      background: transparent;
-      text-decoration: none;
-      transition: background 140ms, border-color 140ms, color 140ms, opacity 140ms, transform 140ms;
-    }
-
-    .icon-button svg {
-      width: 22px;
-      height: 22px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 1.65;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      pointer-events: none;
-    }
-
-    .icon-button:active:not(:disabled) {
-      background: var(--sage);
-      transform: translateY(1px);
-    }
-
-    .icon-button::after {
-      content: attr(data-tip);
-      position: absolute;
-      left: 50%;
-      bottom: calc(100% + 8px);
-      transform: translateX(-50%);
-      padding: 6px 9px;
-      border-radius: 8px;
-      background: #181b16;
-      color: white;
-      font-size: 11px;
-      white-space: nowrap;
-      pointer-events: none;
-      opacity: 0;
-      z-index: 5;
-    }
-
-    .header-actions .icon-button::after {
-      top: calc(100% + 8px);
-      bottom: auto;
-      left: auto;
-      right: 0;
-      transform: none;
-    }
-
-    .draft-tools {
-      pointer-events: auto;
-      gap: 2px;
-    }
-
-    .draft-tools .counter {
-      margin-right: 8px;
-    }
-
-    .draft-tools .icon-button::after {
-      top: calc(100% + 5px);
-      bottom: auto;
-      left: auto;
-      right: 0;
-      transform: none;
-    }
-
-    #swapDraft:not(:disabled) {
-      color: var(--forest);
-      background: var(--sage);
-      border-color: #bfd1b8;
-    }
-
-    #undo:not(:disabled) {
-      background: var(--sage);
-      color: var(--forest);
-      border-color: #bfd1b8;
-    }
-
-    @media (hover: hover) {
-      .icon-button:hover:not(:disabled) {
-        background: var(--surface);
-        border-color: #d2d5c7;
-      }
-
-      .icon-button:hover:not(:disabled)::after {
-        opacity: 1;
-      }
-    }
-
-    .icon-button:focus-visible::after {
-      opacity: 1;
-    }
-
-    .stage {
-      position: relative;
-      min-height: 0;
-      overflow: hidden;
-      isolation: isolate;
-      background: var(--wall);
-      border: 1px solid #d9dccf;
-      border-radius: 24px;
-      box-shadow: var(--shadow);
-    }
-
     canvas {
       display: block;
       width: 100%;
       height: 100%;
       touch-action: none;
       outline: none;
-    }
-
-    .stage-meta {
-      position: absolute;
-      top: 12px;
-      left: 16px;
-      right: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      pointer-events: none;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .selection {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      min-width: 80px;
-      height: 36px;
-      padding: 0 10px;
-      border-radius: 999px;
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-      background: #fffdf4c7;
-    }
-
-    .selection::before {
-      content: "";
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      opacity: 0;
-    }
-
-    .selection.active::before {
-      opacity: 1;
-    }
-
-    .selection.active {
-      color: #7b3d28;
-      background: #f7dfc6;
-    }
-
-    .limb-actions {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .limb-actions .selection {
-      min-width: 40px;
-    }
-
-    .action-button {
-      min-width: 60px;
-      height: 44px;
-      padding: 0 10px;
-      border: 1px solid #1f4639;
-      border-radius: 999px;
-      background: var(--forest);
-      color: #fffdf8;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 600;
-      white-space: nowrap;
-      pointer-events: auto;
-      box-shadow: 3px 3px 0 #1b2413;
-    }
-
-    .action-button:active:not(:disabled) {
-      background: #3e5747;
-    }
-
-    .action-button[hidden] {
-      display: none;
-    }
-
-    .action-button:disabled {
-      background: var(--sage);
-      color: var(--forest);
-      opacity: 0.6;
-      box-shadow: none;
-    }
-
-    .counter {
-      padding: 0 9px;
-      border-radius: 999px;
-      background: #fffdf4c7;
-      font-variant-numeric: tabular-nums;
-      font-size: 10px;
-    }
-
-    .counter b {
-      color: #46564b;
-      font-size: 17px;
-      font-weight: 600;
-      margin-right: 4px;
-    }
-
-    .outcome {
-      position: absolute;
-      top: 72px;
-      left: 12px;
-      width: max-content;
-      max-width: calc(100% - 24px);
-      padding: 9px 14px;
-      border: 1px solid #d9dccf;
-      border-radius: 16px;
-      background: #fffdf4f5;
-      box-shadow: 0 8px 22px #1b241314;
-      text-align: center;
-      pointer-events: none;
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--forest);
-      font-weight: 500;
-      z-index: 3;
-    }
-
-    .outcome[hidden] {
-      display: none;
-    }
-
-    .pick {
-      position: absolute;
-      width: 48px;
-      height: 48px;
-      margin: -24px 0 0 -24px;
-      padding: 0;
-      border: 0;
-      border-radius: 50%;
-      background: transparent;
-      color: transparent;
-      pointer-events: none;
-    }
-
-    .pick:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 0;
-    }
-
-    footer {
-      background: var(--paper);
-      border-top: 1px solid transparent;
-      padding: 12px max(18px, env(safe-area-inset-right)) max(12px, env(safe-area-inset-bottom)) max(18px, env(safe-area-inset-left));
-    }
-
-    .controls {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      max-width: 580px;
-      margin: auto;
-      padding: 4px;
-      border: 1px solid #d9dccf;
-      border-radius: 22px;
-      background: #fffdf4d9;
-      box-shadow: 0 8px 22px #1b24130f;
-    }
-
-    .turn {
-      gap: 3px;
-    }
-
-    .turn output {
-      display: block;
-      width: 48px;
-      text-align: center;
-      font-size: 11px;
-      color: var(--forest);
-    }
-
-    .turn button {
-      color: var(--forest);
-    }
-
-    .button-label {
-      font-size: 10px;
-      line-height: 1.2;
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    .label-button {
-      flex-direction: column;
-      gap: 3px;
-      height: 48px;
-    }
-
-    .label-button svg {
-      width: 19px;
-      height: 19px;
-    }
-
-    .label-button::after {
-      display: none;
-    }
-
-    footer .label-button {
-      height: 52px;
-    }
-
-    footer .history {
-      gap: 6px;
-    }
-
-    .orientation {
-      text-align: center;
-    }
-
-    .orientation>span {
-      display: block;
-      margin-bottom: 4px;
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    #openPhotos {
-      flex-basis: 76px;
-      width: 76px;
-      border-color: #d5956d;
-      background: var(--clay);
-      color: #7b3d28;
-    }
-
-    #openPhotos:active {
-      background: #e9d4c1;
-    }
-
-    #balanceAid {
-      position: absolute;
-      bottom: 14px;
-      left: 16px;
-      min-height: 44px;
-      max-width: 110px;
-      border: 1px solid #d9dccf;
-      border-radius: 18px;
-      background: #fffdf4f2;
-      color: var(--forest);
-      padding: 0 8px;
-      font: inherit;
-      font-size: 11px;
-      cursor: pointer;
-    }
-
-    #routeScale {
-      position: absolute;
-      bottom: 64px;
-      right: 18px;
-      font-size: 11px;
-      color: var(--muted);
-      pointer-events: none;
-    }
-
-    select:focus-visible {
-      outline: 3px solid var(--sun);
-      outline-offset: 2px;
     }
 
     .sr-only {
@@ -642,282 +115,1673 @@
       border: 0;
     }
 
-    @media (max-width: 420px) {
-      header {
-        padding: max(12px, env(safe-area-inset-top)) max(12px, env(safe-area-inset-right)) 8px max(16px, env(safe-area-inset-left));
-        grid-template-columns: 1fr minmax(128px, 160px) 44px;
-        gap: 6px 10px;
+    .game-primary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+      min-height: 60px;
+      border-radius: 18px 18px 23px 17px;
+      padding: 0 24px;
+      background: var(--forest);
+      color: var(--surface);
+      box-shadow: 0 5px 0 #223f34, inset 0 1px 0 #ffffff25;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .game-primary:active:not(:disabled) {
+      box-shadow: 0 2px 0 #223f34;
+    }
+
+    .game-round,
+    .icon-button {
+      position: relative;
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      gap: 3px;
+      width: 54px;
+      height: 56px;
+      padding: 6px;
+      border: 0;
+      border-radius: 20px;
+      background: var(--surface);
+      box-shadow: 0 3px 0 #c9d0bf;
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .game-round span {
+      font-size: 11px;
+      line-height: 14px;
+    }
+
+    .quiet-button,
+    .pill-button,
+    .pause-secondary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      border-radius: 13px;
+      min-height: 48px;
+      padding: 0 18px;
+      background: var(--sage);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    @media (hover:hover) {
+      button:hover:not(:disabled) {
+        filter: brightness(1.045);
       }
 
-      h1 {
-        font-size: 26px;
-      }
-
-      .route {
-        font-size: 12px;
-        width: 100%;
-      }
-
-      .stage-meta {
-        left: 12px;
-        right: 12px;
+      .route-node:hover {
+        transform: translateY(-3px) rotate(-3deg);
       }
     }
 
-    @media (max-height: 500px) and (min-width: 600px) {
-      header {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        grid-template-columns: minmax(65px, 1fr) minmax(135px, 190px) minmax(210px, 1.6fr) 44px;
-        gap: 12px;
+    /* The selection scene uses the actual route, with a separate, uncommitted focus. */
+    .route-library {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      overflow: auto;
+      overscroll-behavior: contain;
+      background: #dce2d5;
+    }
+
+    .basecamp {
+      position: relative;
+      width: min(1080px, calc(100% - 100px));
+      min-height: min(840px, 100dvh);
+      margin: auto;
+      padding: 26px 0 38px;
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      grid-template-rows: 58px 1fr auto;
+      gap: 26px 70px;
+      align-content: center;
+    }
+
+    .camp-nav {
+      grid-column: 1/-1;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .camp-sign {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: #596e5f;
+    }
+
+    .photo-entry {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: #edf0e7;
+      border-radius: 16px;
+      padding: 0 15px;
+      box-shadow: 0 3px 0 #c5cdbd;
+      font-size: 12px;
+    }
+
+    .photo-entry svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .camp-title {
+      grid-column: 1;
+      grid-row: 2;
+      padding: 30px 0 215px;
+      align-self: center;
+    }
+
+    .english-title {
+      font-size: 12px;
+      letter-spacing: 4px;
+      font-weight: 700;
+    }
+
+    .camp-title h1 {
+      position: relative;
+      margin: 16px 0 22px;
+      font-size: 104px;
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -7px;
+      transform: rotate(-5deg);
+    }
+
+    .camp-title h1 span {
+      display: inline-block;
+      transform: translateY(12px);
+    }
+
+    .camp-title h1 i {
+      display: inline-block;
+      font-style: normal;
+      font-size: 64px;
+      color: #9aab88;
+      transform: translate(12px, -29px);
+    }
+
+    .camp-title p {
+      margin: 28px 0 0;
+      font-size: 15px;
+      letter-spacing: 3px;
+    }
+
+    .route-wall {
+      position: relative;
+      grid-column: 2;
+      grid-row: 2/4;
+      min-height: 615px;
+      overflow: hidden;
+      isolation: isolate;
+      background: var(--wall);
+      border-radius: 150px 150px 32px 32px;
+      box-shadow: 9px 11px 0 #bfcbb980;
+    }
+
+    .route-wall::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid #e0e3d7;
+      border-radius: 140px 140px 22px 22px;
+      pointer-events: none;
+    }
+
+    .wall-caption {
+      position: absolute;
+      top: 36px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      z-index: 1;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: #778473;
+    }
+
+    .wall-caption span {
+      padding-left: 10px;
+      color: #536950;
+    }
+
+    .wall-watermark {
+      position: absolute;
+      top: 94px;
+      left: 35px;
+      font-size: 48px;
+      font-weight: 900;
+      line-height: .92;
+      letter-spacing: -2px;
+      color: #e4e7dc;
+      transform: rotate(-8deg);
+      pointer-events: none;
+    }
+
+    #routePreview {
+      position: absolute;
+      inset: 60px 0 250px;
+      height: calc(100% - 310px);
+      touch-action: pan-y;
+    }
+
+    .preview-status {
+      position: absolute;
+      left: 28px;
+      bottom: 258px;
+      border-radius: 6px;
+      padding: 7px 11px;
+      background: #e2e9da;
+      font-size: 11px;
+      transform: rotate(-4deg);
+    }
+
+    .route-picker {
+      grid-column: 1;
+      grid-row: 2;
+      min-width: 0;
+      align-self: end;
+      padding-bottom: 12px;
+      z-index: 1;
+    }
+
+    .picker-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 16px;
+      color: #5c705e;
+    }
+
+    #routePosition {
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .route-path {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px 16px;
+    }
+
+    .route-node {
+      position: relative;
+      width: 100%;
+      height: 57px;
+      border-radius: 23px 17px 24px 16px;
+      background: #edf0e5;
+      box-shadow: 0 4px 0 #c0cbbb;
+      font-size: 20px;
+      font-weight: 700;
+      color: #667461;
+    }
+
+    .route-node:nth-child(2n) {
+      border-radius: 16px 26px 17px 24px;
+    }
+
+    .route-node[aria-pressed="true"] {
+      background: var(--forest);
+      color: var(--surface);
+      box-shadow: 0 4px 0 #27483c;
+      transform: rotate(-5deg);
+    }
+
+    .route-node::before {
+      content: "";
+      position: absolute;
+      width: 7px;
+      height: 7px;
+      right: 9px;
+      top: 9px;
+      border-radius: 50%;
+      background: var(--route-color);
+    }
+
+    .route-node[data-complete="true"]::after {
+      content: "✓";
+      position: absolute;
+      font-size: 12px;
+      left: 9px;
+      top: 4px;
+    }
+
+    .continue-climb {
+      background: transparent;
+      font-size: 12px;
+      padding: 12px 0 0;
+      color: var(--forest);
+      width: 100%;
+      text-align: left;
+    }
+
+    .continue-climb span {
+      float: right;
+    }
+
+    .route-brief {
+      grid-column: 2;
+      grid-row: 3;
+      z-index: 2;
+      position: relative;
+      padding: 22px 28px 14px;
+      background: #f9f8ec;
+      border-radius: 23px;
+      margin: 0 22px 16px;
+      box-shadow: 0 5px 0 #d0d7c7;
+    }
+
+    .brief-heading {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .route-number {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--forest);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .route-grade {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .brief-heading h2 {
+      font-size: 25px;
+      margin: 3px 0 0;
+      line-height: 1.2;
+      letter-spacing: 1px;
+    }
+
+    .route-brief p {
+      font-size: 12px;
+      color: var(--muted);
+      margin: 12px 0 18px;
+    }
+
+    .route-brief .game-primary {
+      min-height: 56px;
+      background: #eab18a;
+      color: #443e2e;
+      box-shadow: 0 4px 0 #be8a65;
+    }
+
+    .route-brief .game-primary:active {
+      box-shadow: 0 1px 0 #be8a65;
+    }
+
+    .start-hint {
+      display: block;
+      text-align: center;
+      font-size: 11px;
+      color: #7d806f;
+      margin: 15px 0 0;
+    }
+
+    /* All HUD controls float over a stable wall; opening a panel never resizes it. */
+    .play-shell {
+      position: relative;
+      margin: auto;
+      width: min(1120px, calc(100% - 64px));
+      height: 100dvh;
+    }
+
+    body[data-screen="library"] .play-shell {
+      visibility: hidden;
+    }
+
+    .stage {
+      position: absolute;
+      inset: 20px 0;
+      overflow: hidden;
+      border-radius: 28px;
+      background: var(--wall);
+    }
+
+    .play-header {
+      position: absolute;
+      z-index: 3;
+      top: max(38px, env(safe-area-inset-top));
+      left: 22px;
+      right: 22px;
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      gap: 16px;
+      pointer-events: none;
+    }
+
+    .play-header>* {
+      pointer-events: auto;
+    }
+
+    .hud-route {
+      position: relative;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 11px 22px 11px 12px;
+      min-height: 64px;
+      border-radius: 8px 19px 17px 8px;
+      background: #e3e8d8;
+      box-shadow: 0 3px 0 #ccd5c2;
+    }
+
+    #hudNumber {
+      display: grid;
+      place-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 6px 12px 9px 6px;
+      background: var(--forest);
+      color: var(--surface);
+      font-size: 23px;
+      font-weight: 800;
+    }
+
+    .hud-route strong {
+      display: block;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    #hudGoal {
+      display: block;
+      color: #687861;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    #routeDot {
+      position: absolute;
+      top: -3px;
+      left: 20px;
+      width: 30px;
+      height: 7px;
+      opacity: .7;
+      transform: rotate(-5deg);
+    }
+
+    #openSettings {
+      width: 54px;
+      height: 60px;
+      border-radius: 21px;
+    }
+
+    #openSettings svg {
+      stroke-width: 3;
+      width: 21px;
+    }
+
+    .stage-meta {
+      position: absolute;
+      left: 26px;
+      right: 26px;
+      top: 97px;
+      display: flex;
+      justify-content: space-between;
+      pointer-events: none;
+      font-size: 11px;
+      color: #78836e;
+    }
+
+    .counter b {
+      font-size: 16px;
+      color: #68795d;
+      padding-right: 4px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .camera-hud {
+      position: absolute;
+      right: 18px;
+      bottom: 112px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .camera-hud .game-round {
+      background: #e7ebdfe8;
+      box-shadow: 0 3px 0 #d1d8c7;
+      width: 48px;
+      height: 54px;
+      border-radius: 17px;
+    }
+
+    .camera-hud svg {
+      width: 19px;
+      height: 19px;
+    }
+
+    .play-dock {
+      position: absolute;
+      z-index: 2;
+      bottom: max(38px, env(safe-area-inset-bottom));
+      left: 22px;
+      right: 22px;
+      pointer-events: none;
+    }
+
+    .controls {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 10px;
+      align-items: end;
+    }
+
+    .controls button {
+      pointer-events: auto;
+    }
+
+    .history {
+      display: flex;
+      gap: 8px;
+    }
+
+    .history .icon-button {
+      width: 56px;
+      height: 60px;
+      border-radius: 20px;
+    }
+
+    .history .button-label {
+      font-size: 11px;
+    }
+
+    #undo:not(:disabled) {
+      background: #e0e8d5;
+    }
+
+    .comparison-entry {
+      justify-self: end;
+      width: 56px;
+      height: 60px;
+    }
+
+    #comparisonDot {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      border-radius: 50%;
+      width: 6px;
+      height: 6px;
+      background: var(--forest);
+    }
+
+    .limb-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 7px;
+      align-self: center;
+    }
+
+    .selection {
+      font-size: 12px;
+      color: #79816f;
+      white-space: nowrap;
+    }
+
+    .selection.active {
+      color: #946442;
+    }
+
+    .action-button {
+      background: var(--forest);
+      color: var(--surface);
+      padding: 0 24px;
+      border-radius: 20px 16px 20px 16px;
+      box-shadow: 0 4px 0 #223f34;
+      font-size: 15px;
+      font-weight: 700;
+      min-height: 48px;
+    }
+
+    .action-button:disabled {
+      opacity: .7;
+      background: #d9e4d0;
+      box-shadow: none;
+      color: var(--forest);
+    }
+
+    .outcome {
+      position: absolute;
+      z-index: 4;
+      max-width: calc(100% - 32px);
+      width: max-content;
+      padding: 9px 14px;
+      background: #fffcf1ed;
+      box-shadow: 0 3px 12px #273a2920;
+      border-radius: 12px;
+      color: #68734f;
+      font-size: 13px;
+      pointer-events: none;
+    }
+
+    .pick {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      min-height: 48px;
+      margin: -24px 0 0 -24px;
+      padding: 0;
+      border-radius: 50%;
+      background: transparent;
+      color: transparent;
+      pointer-events: none;
+    }
+
+    #routeScale {
+      display: none;
+    }
+
+    .top-celebration {
+      position: absolute;
+      z-index: 5;
+      left: 50%;
+      top: 143px;
+      transform: translateX(-50%);
+      width: max-content;
+      max-width: calc(100% - 32px);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 8px 12px 16px;
+      border-radius: 22px;
+      background: #dce8ca;
+      box-shadow: 0 4px 0 #c0cdae;
+      animation: top-arrive .35s ease-out;
+    }
+
+    .top-stamp {
+      font-size: 36px;
+      color: #5b7749;
+    }
+
+    .top-celebration strong {
+      display: block;
+      font-size: 18px;
+    }
+
+    .top-celebration div span {
+      display: block;
+      font-size: 11px;
+      margin-top: 4px;
+      color: #627852;
+    }
+
+    .top-celebration button {
+      background: #f7faed;
+      border-radius: 12px;
+      font-size: 12px;
+      padding: 0 12px;
+    }
+
+    .top-celebration #dismissTop {
+      background: transparent;
+      font-size: 22px;
+      padding: 0;
+    }
+
+    @keyframes top-arrive {
+      from {
+        opacity: 0;
+        transform: translate(-50%, -16px) rotate(-3deg);
       }
 
-      .brand small,
-      #routeChallenge {
-        display: none;
+      to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+      }
+    }
+
+    /* Pause is the menu. Play options sit one level below its three main actions. */
+    dialog {
+      border: 0;
+      color: var(--ink);
+      background: var(--paper);
+    }
+
+    dialog::backdrop {
+      background: #26382e70;
+      backdrop-filter: blur(5px);
+    }
+
+    .settings-dialog {
+      width: min(390px, calc(100vw - 32px));
+      max-height: calc(100dvh - 32px);
+      margin: auto;
+      padding: 28px;
+      border-radius: 30px;
+      box-shadow: 0 8px 0 #97aa88;
+      overflow: auto;
+    }
+
+    .sheet-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .sheet-head h2 {
+      font-size: 27px;
+      margin: 5px 0 0;
+      letter-spacing: 1px;
+    }
+
+    .sheet-head .icon-button {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      font-size: 26px;
+      box-shadow: none;
+    }
+
+    .pause-caption {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #77856e;
+    }
+
+    .pause-route {
+      font-size: 12px;
+      margin: 18px 0 24px;
+      color: #69785e;
+    }
+
+    .pause-actions .game-primary {
+      font-size: 17px;
+    }
+
+    .pause-actions>div {
+      display: flex;
+      gap: 10px;
+      margin: 18px 0 22px;
+    }
+
+    .pause-secondary {
+      flex: 1;
+      padding: 0 8px;
+      gap: 7px;
+      background: #e1e5d6;
+      font-size: 12px;
+      box-shadow: 0 3px 0 #cfd7c2;
+    }
+
+    .pause-secondary>span {
+      font-size: 21px;
+    }
+
+    .settings-dialog details {
+      border-top: 1px solid var(--line);
+    }
+
+    .settings-dialog summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      min-height: 48px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+
+    .settings-dialog summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .settings-dialog summary::after {
+      content: "＋";
+      font-size: 18px;
+      color: var(--muted);
+    }
+
+    .settings-dialog details[open]>summary::after {
+      content: "−";
+    }
+
+    .settings-fields label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      min-height: 56px;
+      font-size: 12px;
+    }
+
+    .settings-fields select {
+      min-width: 110px;
+      max-width: 66%;
+      min-height: 44px;
+      border: 0;
+      border-radius: 11px;
+      padding: 0 10px;
+      background: var(--surface);
+      font-size: 12px;
+    }
+
+    .settings-tools,
+    .turn {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 0;
+    }
+
+    .settings-tools>button,
+    .turn>button {
+      flex: 1;
+      min-width: 44px;
+      min-height: 44px;
+      height: 44px;
+      width: auto;
+      border-radius: 10px;
+      background: var(--surface);
+      box-shadow: none;
+      font-size: 12px;
+      padding: 0 4px;
+    }
+
+    .nudge-tools button,
+    .view-tools button {
+      font-size: 20px;
+    }
+
+    .turn output {
+      font-size: 12px;
+    }
+
+    .settings-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+      margin: 6px 0 14px;
+    }
+
+    .limb-chip[aria-pressed="true"] {
+      background: var(--clay);
+    }
+
+    .settings-actions {
+      border-top: 1px solid var(--line);
+    }
+
+    .settings-actions>button {
+      width: 100%;
+      justify-content: space-between;
+      background: transparent;
+      padding: 0;
+      font-size: 12px;
+      color: #607356;
+    }
+
+    .comparison-dialog {
+      width: min(650px, calc(100vw - 28px));
+      max-height: calc(100dvh - 24px);
+      padding: 26px;
+      border-radius: 28px;
+      overflow: auto;
+    }
+
+    .sheet-intro {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+      margin: 14px 0 20px;
+    }
+
+    .comparison-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .pose-card {
+      min-width: 0;
+      padding: 14px 12px 0;
+      border-radius: 18px;
+      background: var(--surface);
+    }
+
+    .pose-card.retained {
+      background: #dfe7d5;
+    }
+
+    .pose-card>div:first-child {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 5px;
+      font-size: 12px;
+    }
+
+    .pose-card>div:first-child span {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .pose-card canvas,
+    .empty-comparison {
+      height: 260px;
+      touch-action: pan-y;
+    }
+
+    .empty-comparison {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .empty-comparison>span {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .empty-comparison p {
+      font-size: 11px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .comparison-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .comparison-actions button {
+      flex: 1;
+      padding: 0 12px;
+      font-size: 12px;
+    }
+
+    #swapDraft:not(:disabled) {
+      background: var(--forest);
+      color: var(--surface);
+    }
+
+    .sheet-note {
+      text-align: center;
+      font-size: 11px;
+      line-height: 1.7;
+      color: var(--muted);
+      margin: 16px 0 0;
+    }
+
+    .photo-record-menu {
+      margin-left: auto;
+    }
+
+    .photo-record-menu summary {
+      min-width: 44px;
+      min-height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      list-style: none;
+      cursor: pointer;
+      font-size: 12px;
+    }
+
+    .photo-record-menu summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .photo-record-menu[open] {
+      flex-basis: 100%;
+    }
+
+    .photo-record-menu[open] summary {
+      justify-content: flex-end;
+    }
+
+    .record-actions-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .photo-record-menu:not([open])>.record-actions-row {
+      display: none;
+    }
+
+    @media (max-width: 800px) {
+      .basecamp {
+        width: calc(100% - 48px);
+        grid-template-columns: 260px 1fr;
+        gap: 22px 28px;
       }
 
-      .climb-settings {
-        grid-column: 3;
+      .camp-title h1 {
+        font-size: 82px;
+      }
+
+      .camp-title h1 i {
+        font-size: 46px;
+        transform: translate(10px, -23px);
+      }
+
+      .route-brief {
+        padding: 18px;
+        margin: 0 12px 14px;
+      }
+
+      .route-wall {
+        min-height: 610px;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .basecamp {
+        width: 100%;
+        min-height: 100dvh;
+        height: 100dvh;
+        min-height: 700px;
+        padding: max(14px, env(safe-area-inset-top)) 22px max(22px, env(safe-area-inset-bottom));
+        grid-template-columns: 1fr;
+        grid-template-rows: 44px 75px minmax(160px, 1fr) auto auto;
+        gap: 10px;
+      }
+
+      .camp-nav {
         grid-row: 1;
-        justify-content: end;
       }
 
-      .header-actions {
-        grid-column: 4;
+      .camp-sign {
+        font-size: 10px;
+        letter-spacing: 1px;
+      }
+
+      .photo-entry {
+        padding: 0 12px;
+        gap: 7px;
+      }
+
+      .camp-title {
+        grid-column: 1;
+        grid-row: 2;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        position: relative;
+        z-index: 1;
+      }
+
+      .english-title {
+        font-size: 9px;
+        letter-spacing: 2px;
+      }
+
+      .camp-title h1 {
+        margin: 6px 0 0;
+        font-size: 48px;
+        letter-spacing: -3px;
+      }
+
+      .camp-title h1 span {
+        transform: translateY(4px);
+      }
+
+      .camp-title h1 i {
+        font-size: 36px;
+        transform: translate(9px, -9px);
+      }
+
+      .camp-title p {
+        position: absolute;
+        right: 0;
+        bottom: 2px;
+        font-size: 11px;
+        letter-spacing: 1px;
+        margin: 0;
+      }
+
+      .route-wall {
+        grid-column: 1;
+        grid-row: 3;
+        min-height: 0;
+        border-radius: 65px 65px 24px 24px;
+        box-shadow: 4px 5px 0 #bfcbba90;
+      }
+
+      .route-wall::before {
+        inset: 10px;
+        border-radius: 58px 58px 18px 18px;
+      }
+
+      .wall-caption {
+        top: 19px;
+        font-size: 10px;
+      }
+
+      .wall-watermark {
+        top: 61px;
+        left: 21px;
+        font-size: 32px;
+        color: #e3e6d9;
+      }
+
+      #routePreview {
+        inset: 30px 0 10px;
+        height: calc(100% - 40px);
+      }
+
+      .preview-status {
+        left: 17px;
+        bottom: 15px;
+        font-size: 10px;
+        padding: 5px 8px;
+      }
+
+      .route-picker {
+        grid-column: 1;
+        grid-row: 4;
+        padding: 7px 0 5px;
+      }
+
+      .picker-label {
+        margin-bottom: 10px;
+        font-size: 11px;
+      }
+
+      .picker-label>span:first-child::after {
+        content: " · 左右滑动";
+        font-size: 10px;
+        color: #7c8873;
+      }
+
+      .route-path {
+        grid-template-columns: repeat(8, 1fr);
+        gap: 6px;
+        overflow-x: auto;
+        padding: 4px 2px 8px;
+      }
+
+      .route-node {
+        width: 44px;
+        min-width: 44px;
+        height: 44px;
+        border-radius: 16px 11px 16px 12px;
+        font-size: 17px;
+      }
+
+      .route-node::before {
+        width: 5px;
+        height: 5px;
+        right: 6px;
+        top: 6px;
+      }
+
+      .continue-climb {
+        min-height: 44px;
+        padding: 6px 2px;
+      }
+
+      .route-brief {
+        grid-column: 1;
+        grid-row: 5;
+        display: grid;
+        grid-template-columns: 1fr 115px;
+        gap: 0 14px;
+        margin: 0;
+        padding: 16px;
+        border-radius: 20px;
+      }
+
+      .brief-heading {
+        gap: 10px;
+      }
+
+      .brief-heading h2 {
+        font-size: 20px;
+        letter-spacing: 0;
+      }
+
+      .route-number {
+        font-size: 28px;
+      }
+
+      .route-grade {
+        font-size: 10px;
+      }
+
+      .route-brief p {
+        margin: 9px 0 0;
+        font-size: 11px;
+        grid-column: 1/-1;
+        grid-row: 2;
+      }
+
+      .route-brief .game-primary {
+        grid-column: 2;
         grid-row: 1;
-      }
-
-      .stage {
+        min-height: 52px;
+        font-size: 17px;
+        padding: 0 13px;
         border-radius: 16px;
       }
 
-      footer {
-        padding-top: 3px;
-        padding-bottom: max(3px, env(safe-area-inset-bottom));
+      .route-brief .game-primary svg {
+        width: 16px;
+      }
+
+      .start-hint {
+        margin-top: 11px;
+        grid-column: 1/-1;
+        grid-row: 3;
+        font-size: 10px;
+        text-align: left;
+      }
+
+      .play-shell {
+        width: 100%;
+      }
+
+      .stage {
+        inset: 0;
+        border-radius: 0;
+      }
+
+      .play-header {
+        top: max(18px, env(safe-area-inset-top));
+        left: 16px;
+        right: 16px;
+        gap: 12px;
+      }
+
+      .hud-route {
+        min-height: 60px;
+        padding: 9px 16px 9px 10px;
+        gap: 10px;
+      }
+
+      #hudNumber {
+        width: 36px;
+        height: 36px;
+        font-size: 21px;
+      }
+
+      .hud-route strong {
+        font-size: 15px;
       }
 
       .stage-meta {
-        top: 8px;
+        top: 97px;
+        left: 20px;
+        right: 20px;
       }
 
-    }
-
-    @media (max-width: 380px) {
-      header {
-        gap: 4px 8px;
-        padding-top: 8px;
-        padding-bottom: 6px;
-      }
-
-      .brand small {
-        font-size: 7px;
-        letter-spacing: .5px;
-      }
-
-      .climb-settings {
-        font-size: 10px;
-        gap: 4px;
-      }
-
-      .climb-settings label {
-        gap: 4px;
-      }
-
-      .climb-settings select {
-        min-width: 58px;
-        padding: 0 5px;
-      }
-
-      footer {
-        padding-left: 12px;
-        padding-right: 12px;
+      .play-dock {
+        bottom: max(22px, env(safe-area-inset-bottom));
+        left: 16px;
+        right: 16px;
       }
 
       .controls {
-        gap: 4px;
+        gap: 5px;
       }
 
-      .history,
-      .turn {
-        gap: 0;
+      .camera-hud {
+        right: 16px;
+        bottom: 119px;
       }
 
-      footer .history {
-        gap: 0;
+      .top-celebration {
+        top: 87px;
+        gap: 8px;
+        padding: 8px 4px 8px 12px;
       }
 
-      #openPhotos {
-        width: 60px;
-        flex-basis: 60px;
+      .stage:has(#topCelebration:not([hidden])) .stage-meta {
+        visibility: hidden;
       }
 
-      .turn output {
-        width: 36px;
+      .top-stamp {
+        display: none;
       }
 
-      footer {
-        padding-top: 8px;
-        padding-bottom: max(8px, env(safe-area-inset-bottom));
+      .top-celebration strong {
+        font-size: 16px;
       }
 
-      .counter {
-        font-size: 9px;
+      .top-celebration div span {
+        font-size: 10px;
       }
 
-      .counter b {
-        font-size: 14px;
+      .top-celebration button {
+        padding: 0 8px;
+        font-size: 11px;
       }
 
-      .draft-tools .counter {
-        margin-right: 3px;
+      .settings-dialog {
+        padding: 24px;
       }
 
-      #balanceAid {
-        left: 12px;
-        max-width: 102px;
+      .comparison-dialog {
+        padding: 20px 16px;
       }
 
-      .view-tools {
-        right: 8px;
+      .pose-card {
+        padding: 12px 9px 0;
+      }
+
+      .pose-card canvas,
+      .empty-comparison {
+        height: 220px;
       }
     }
 
-    @media (min-width: 900px) {
-      .stage {
-        width: calc(100% - 48px);
-        max-width: 1072px;
-        margin: 0 auto;
+    @media (max-width: 360px) {
+      .basecamp {
+        padding-left: 16px;
+        padding-right: 16px;
       }
 
-      footer {
-        padding-top: 16px;
-        padding-bottom: max(16px, env(safe-area-inset-bottom));
+      .route-brief {
+        grid-template-columns: 1fr 98px;
+        padding: 14px;
+        gap: 0 8px;
       }
 
-      .stage-meta {
-        left: 24px;
-        right: 24px;
-        top: 16px;
+      .brief-heading h2 {
+        font-size: 18px;
+      }
+
+      .brief-heading {
+        gap: 7px;
+      }
+
+      .route-number {
+        font-size: 25px;
+      }
+
+      .history {
+        gap: 5px;
+      }
+
+      .history .icon-button,
+      .comparison-entry {
+        width: 48px;
       }
 
       .selection {
-        font-size: 13px;
+        font-size: 11px;
       }
 
-      .draft-tools {
-        gap: 4px;
+      .action-button {
+        padding: 0 18px;
+      }
+    }
+
+    @media (max-height: 650px) and (max-width: 600px) {
+      .basecamp {
+        min-height: 520px;
+        grid-template-rows: 44px 62px minmax(135px, 1fr) auto auto;
+        gap: 8px;
+        padding-top: 10px;
+        padding-bottom: 16px;
       }
 
-      .draft-tools .counter {
-        margin-right: 16px;
+      .camp-title h1 {
+        font-size: 40px;
       }
 
-      .header-actions .label-button {
-        width: 52px;
+      .camp-title h1 i {
+        font-size: 30px;
+      }
+
+      .start-hint {
+        display: none;
+      }
+
+      .wall-watermark {
+        font-size: 26px;
+      }
+
+      .pose-card canvas,
+      .empty-comparison {
+        height: 175px;
+      }
+    }
+
+    @media (max-height: 500px) and (min-width: 601px) {
+      .basecamp {
+        width: calc(100% - 64px);
+        height: auto;
+        min-height: 100dvh;
+        padding: 12px 0 22px;
+        grid-template-columns: 240px 1fr;
+        grid-template-rows: 44px 1fr auto;
+        gap: 10px 32px;
+        align-content: start;
+      }
+
+      .camp-title {
+        padding: 0;
+        align-self: start;
+      }
+
+      .camp-title h1 {
+        font-size: 54px;
+        margin: 7px 0;
+      }
+
+      .camp-title h1 i {
+        font-size: 34px;
+      }
+
+      .camp-title p {
+        font-size: 11px;
+        margin: 17px 0;
+      }
+
+      .english-title {
+        font-size: 9px;
+      }
+
+      .route-wall {
+        min-height: 290px;
+        border-radius: 62px 62px 23px 23px;
+      }
+
+      .wall-caption {
+        top: 14px;
+      }
+
+      .wall-watermark {
+        font-size: 29px;
+        top: 43px;
+        left: 20px;
+      }
+
+      #routePreview {
+        inset: 27px 0 117px;
+        height: calc(100% - 144px);
+      }
+
+      .preview-status {
+        bottom: 120px;
+      }
+
+      .route-path {
+        gap: 9px;
+      }
+
+      .route-node {
+        height: 44px;
+        font-size: 17px;
+      }
+
+      .picker-label {
+        margin-bottom: 9px;
+      }
+
+      .route-picker {
+        grid-row: 3;
+        padding: 0;
+      }
+
+      .route-brief {
+        display: grid;
+        grid-template-columns: 1fr 105px;
+        padding: 13px 16px;
+        gap: 5px 12px;
+        margin: 0 14px 10px;
+      }
+
+      .brief-heading h2 {
+        font-size: 18px;
+      }
+
+      .route-number {
+        font-size: 26px;
+      }
+
+      .route-brief p {
+        margin: 0;
+        font-size: 11px;
+        grid-row: 2;
+        grid-column: 1/-1;
+      }
+
+      .route-brief .game-primary {
+        grid-column: 2;
+        grid-row: 1;
+        min-height: 48px;
+        padding: 0 13px;
+        font-size: 17px;
+      }
+
+      .start-hint {
+        display: none;
+      }
+
+      .play-shell {
+        width: 100%;
+      }
+
+      .stage {
+        inset: 0;
+        border-radius: 0;
+      }
+
+      .play-header {
+        top: max(12px, env(safe-area-inset-top));
+        left: 16px;
+        right: 16px;
+      }
+
+      .hud-route {
+        min-height: 54px;
+        padding: 7px 16px 7px 10px;
+      }
+
+      .hud-route strong {
+        font-size: 14px;
+      }
+
+      .stage-meta {
+        top: 84px;
+        left: 18px;
+        right: 20px;
+      }
+
+      .play-dock {
+        bottom: max(16px, env(safe-area-inset-bottom));
+        left: 16px;
+        right: 16px;
+      }
+
+      .camera-hud {
+        right: 16px;
+        bottom: 99px;
+        flex-direction: row;
+      }
+
+      .top-celebration {
+        top: 70px;
+      }
+
+      .settings-dialog {
+        max-height: calc(100dvh - 24px);
+        padding: 20px 24px;
+      }
+
+      .pause-route {
+        margin: 9px 0 16px;
+      }
+
+      .pause-actions>div {
+        margin: 14px 0 16px;
+      }
+
+      .comparison-dialog {
+        padding: 16px;
+      }
+
+      .pose-card canvas,
+      .empty-comparison {
+        height: 130px;
+      }
+
+      .sheet-intro {
+        margin: 7px 0 10px;
+      }
+
+      .comparison-actions {
+        margin-top: 12px;
       }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      * {
+
+      *,
+      *::before,
+      *::after {
         transition: none !important;
+        animation: none !important;
+        scroll-behavior: auto !important;
       }
     }
   </style>
 </head>
 
 <body data-screen="library">
-  <section id="routeLibrary" class="route-library" aria-label="线路册">
-    <nav class="library-nav" aria-label="主导航">
-      <a class="wordmark" href="#routes" aria-label="岩间线路册">岩间<span>BETWEEN<br>HOLDS</span></a>
-      <span class="nav-caption">把每一种走法，都试一遍。</span>
-      <button class="pill-button" data-open-photos>我的岩壁 <span aria-hidden="true">↗</span></button>
-    </nav>
-    <div class="library-content">
-      <section class="welcome">
-        <div><span class="eyebrow">A LITTLE ROOM TO EXPLORE</span>
-          <h1>下一步，<br class="phone-break">换个走法。</h1>
-        </div>
-        <p>找脚点，移重心，试试另一种可能。<br>这是你的攀爬动作草稿本。</p>
+  <section id="routeLibrary" class="route-library" aria-label="攀岩练习场">
+    <div class="basecamp">
+      <nav class="camp-nav" aria-label="主导航">
+        <span class="camp-sign">自由攀爬 · 八条线路</span>
+        <button class="photo-entry" data-open-photos><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 6h4l2-2h4l2 2h4v14H4z" />
+            <circle cx="12" cy="12" r="4" />
+          </svg><span>我的岩壁</span></button>
+      </nav>
+      <div class="camp-title">
+        <span class="english-title">BETWEEN HOLDS</span>
+        <h1>岩<span>间</span><i aria-hidden="true">↗</i></h1>
+        <p>下一点，试着够到。</p>
+      </div>
+      <div class="route-wall">
+        <span class="wall-caption">线路预览 <span id="previewStrength">标准</span></span>
+        <span class="wall-watermark" aria-hidden="true">CLIMB<br>YOUR WAY.</span>
+        <canvas id="routePreview" aria-label="所选线路与人物预览"></canvas>
+        <span id="previewStatus" class="preview-status">起步就位</span>
+      </div>
+      <section id="routes" class="route-picker" aria-label="选择线路">
+        <div class="picker-label"><span>挑一条线</span><span id="routePosition">01 / 08</span></div>
+        <div id="routeCards" class="route-path"></div>
+        <button id="continueClimb" class="continue-climb" hidden>返回正在攀爬的线路 <span aria-hidden="true">↗</span></button>
       </section>
-      <section class="library-feature" aria-label="开始攀爬">
-        <div class="feature-copy">
-          <span id="featureEyebrow" class="eyebrow">从第一条线开始</span>
-          <h2 id="featureTitle">侧上方</h2>
-          <p id="featureDescription">先找到脚下的支撑，<br>再去够更远的地方。</p>
-          <button id="continueClimb" class="pill-button dark-button">开始试动作 <span aria-hidden="true">↗</span></button>
-          <span id="featureProgress" class="feature-progress">随时撤销，放心试。</span>
-        </div>
-        <div class="feature-wall">
-          <span class="wall-label">YOUR NEXT MOVE</span>
-          <canvas id="featureCanvas" aria-label="当前线路与人物姿势预览"></canvas>
-          <span class="feature-sticker" aria-hidden="true">试<br>试看</span>
-        </div>
-      </section>
-      <section id="routes" class="route-collection" aria-labelledby="collectionTitle">
-        <div class="collection-head">
-          <div><span class="eyebrow">THE ROUTE COLLECTION</span>
-            <h2 id="collectionTitle">选一条，慢慢琢磨<span>08</span></h2>
-          </div>
-          <div class="route-filters" role="group" aria-label="按线路类型筛选">
-            <button data-route-filter="all" aria-pressed="true">全部</button>
-            <button data-route-filter="start" aria-pressed="false">找感觉</button>
-            <button data-route-filter="skills" aria-pressed="false">换走法</button>
-            <button data-route-filter="long" aria-pressed="false">长线挑战</button>
+      <section class="route-brief" aria-live="polite">
+        <div class="brief-heading"><span id="previewNumber" class="route-number">01</span>
+          <div><span id="previewChallenge" class="route-grade"></span>
+            <h2 id="previewTitle">侧上方</h2>
           </div>
         </div>
-        <div id="routeCards" class="route-grid"></div>
+        <p id="previewDescription">先找脚点，再伸手</p>
+        <button id="startClimb" class="game-primary"><span id="startLabel">开爬</span><svg viewBox="0 0 24 24"
+            aria-hidden="true">
+            <path d="m9 5 7 7-7 7" />
+          </svg></button>
+        <span class="start-hint">拖动手脚攀爬 · 随时退一步</span>
       </section>
-      <button class="own-wall-card" data-open-photos>
-        <span class="own-wall-symbol" aria-hidden="true">＋</span>
-        <span><small>BRING YOUR OWN WALL</small><strong>把常爬的岩壁，放进口袋。</strong><span>选张照片 · 生成岩点 · 开始试动作</span></span>
-        <span class="round-arrow" aria-hidden="true">↗</span>
-      </button>
-      <div class="library-foot"><span>小小一步，也有很多种走法。</span><span>岩间 / 动作实验室</span></div>
     </div>
   </section>
   <div id="playShell" class="play-shell" inert>
     <header class="play-header">
-      <div class="brand">
-        <button id="backToRoutes" class="back-button" aria-label="返回线路册"><span
-            aria-hidden="true">←</span><span>线路册</span></button>
-        <span class="play-wordmark">岩间</span>
+      <div class="hud-route"><span id="hudNumber">01</span>
+        <div><strong id="hudTitle">侧上方</strong><span id="hudGoal">触碰 TOP 岩点</span></div><i id="routeDot"
+          aria-hidden="true"></i>
       </div>
-      <div class="route">
-        <i id="routeDot" aria-hidden="true"></i>
-        <select id="routeSelect" aria-label="选择线路">
-          <option value="side">01 侧上方</option>
-          <option value="traverse">02 横移</option>
-          <option value="rise">03 高一步</option>
-          <option value="fork">04 两条路</option>
-          <option value="return">05 折返</option>
-          <option value="ladder">06 绕过屋檐</option>
-          <option value="switch">07 回旋</option>
-          <option value="west">08 长路回家</option>
-        </select>
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path d="m6 9 6 6 6-6" />
-        </svg>
-      </div>
-      <div class="header-actions">
-        <button id="reset" class="icon-button label-button" aria-label="重新开始" data-tip="重新开始">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M20 9V7a2 2 0 0 0-2-2h-6" />
-            <path d="m15 2-3 3 3 3" />
-            <path d="M20 13v5a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h2" />
-          </svg>
-          <span class="button-label">重来</span>
-        </button>
-      </div>
-      <div class="climb-settings">
-        <label for="strengthSelect">上肢力量
-          <select id="strengthSelect" title="各档分别保留进度；首次切换从起点开始">
-            <option value="gentle">较弱</option>
-            <option value="standard" selected>标准</option>
-            <option value="strong">较强</option>
-          </select>
-        </label>
-      </div>
+      <button id="openSettings" class="game-round" aria-label="暂停" aria-haspopup="dialog"><svg viewBox="0 0 24 24"
+          aria-hidden="true">
+          <path d="M8 5v14M16 5v14" />
+        </svg><span>暂停</span></button>
     </header>
     <main class="stage" aria-label="攀岩练习">
       <canvas id="canvas" tabindex="0" aria-label="岩间攀岩墙"></canvas>
@@ -933,59 +1797,23 @@
       <button class="pick" id="chestTarget" aria-label="胸肩侧身"></button>
       <div id="poseNote" class="outcome" role="status" hidden></div>
       <div id="announcement" class="sr-only" aria-live="polite"></div>
-      <select id="balanceAid" aria-label="重心辅助">
-        <option value="auto">重心 · 自动</option>
-        <option value="on">重心 · 常开</option>
-        <option value="off">重心 · 关闭</option>
-      </select>
-      <div class="view-tools" role="group" aria-label="岩壁视角">
-        <button id="viewOut" class="icon-button" aria-label="缩小视角" data-tip="缩小">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M5 12h14" />
-          </svg>
-        </button>
-        <button id="viewIn" class="icon-button" aria-label="放大视角" data-tip="放大">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M5 12h14M12 5v14" />
-          </svg>
-        </button>
-        <button id="viewFit" class="icon-button" aria-label="查看整条线路" data-tip="查看整条线路">全线</button>
-        <button id="viewPerson" class="icon-button" aria-label="回到人物" data-tip="回到人物">人物</button>
-      </div>
       <span id="routeScale"></span>
+      <div class="camera-hud" role="group" aria-label="岩壁视角">
+        <button id="viewFit" class="game-round" aria-label="查看整条线路"><svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M9 4H4v5M15 4h5v5M4 15v5h5M20 15v5h-5" />
+          </svg><span>全线</span></button>
+        <button id="viewPerson" class="game-round" aria-label="回到人物"><svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="12" cy="6" r="2.5" />
+            <path d="m5 11 7-2 7 2M12 9v6m-5 5 5-5 5 5" />
+          </svg><span>人物</span></button>
+      </div>
+      <div id="topCelebration" class="top-celebration" role="status" hidden>
+        <span class="top-stamp" aria-hidden="true">↗</span>
+        <div><strong>TOP！到顶了</strong><span>这条线，有了你的走法。</span></div>
+        <button id="nextRoute" aria-label="选择下一条线路">下一条 ↗</button><button id="dismissTop" aria-label="收起登顶提示">×</button>
+      </div>
     </main>
     <footer class="play-dock">
-      <div class="action-shelf">
-        <div class="mode-switch" role="group" aria-label="操作对象">
-          <button id="limbMode" aria-pressed="true">手脚</button>
-          <button id="bodyMode" aria-pressed="false">身体</button>
-        </div>
-        <div id="limbPanel" class="limb-panel" role="group" aria-label="选择手脚">
-          <button class="limb-chip" data-select-limb="0" aria-pressed="false"><span>左</span>手</button>
-          <button class="limb-chip" data-select-limb="1" aria-pressed="false"><span>右</span>手</button>
-          <button class="limb-chip" data-select-limb="2" aria-pressed="false"><span>左</span>脚</button>
-          <button class="limb-chip" data-select-limb="3" aria-pressed="false"><span>右</span>脚</button>
-        </div>
-        <div id="bodyPanel" class="body-panel" hidden>
-          <div class="nudge-tools" role="group" aria-label="微调重心">
-            <span>重心</span>
-            <button data-nudge="-8,0" aria-label="重心向左">←</button>
-            <button data-nudge="0,-8" aria-label="重心向上">↑</button>
-            <button data-nudge="0,8" aria-label="重心向下">↓</button>
-            <button data-nudge="8,0" aria-label="重心向右">→</button>
-          </div>
-          <div class="turn" role="group" aria-label="身体朝向">
-            <button id="turnLeft" class="icon-button" aria-label="向左侧身" data-tip="向左侧身">↶</button>
-            <output id="orientation" aria-live="polite">正对</output>
-            <button id="turnRight" class="icon-button" aria-label="向右侧身" data-tip="向右侧身">↷</button>
-          </div>
-        </div>
-        <div class="limb-actions" role="group" aria-label="所选肢体动作">
-          <div><span id="selection" class="selection"></span><span id="actionHint" class="action-hint">选手脚，再点岩点</span>
-          </div>
-          <button id="flagAction" class="action-button" hidden>旗式</button>
-        </div>
-      </div>
       <div class="controls">
         <div class="history" role="group" aria-label="动作历史">
           <button id="undo" class="icon-button label-button" aria-label="撤销" data-tip="退一步" disabled>
@@ -995,7 +1823,7 @@
             </svg>
             <span class="button-label">退一步</span>
           </button>
-          <button id="redo" class="icon-button label-button" aria-label="重做" data-tip="重做" disabled>
+          <button id="redo" class="icon-button label-button" aria-label="重做" data-tip="重做" disabled hidden>
             <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="m15 14 5-5-5-5" />
               <path d="M20 9H9.5A5.5 5.5 0 0 0 4 14.5A5.5 5.5 0 0 0 9.5 20H13" />
@@ -1003,25 +1831,102 @@
             <span class="button-label">重做</span>
           </button>
         </div>
-        <button id="openComparison" class="pill-button comparison-entry" aria-haspopup="dialog"><span
-            aria-hidden="true">▣</span> 姿势对照 <span id="comparisonDot" hidden></span></button>
-        <button id="openPhotos" class="icon-button label-button" aria-label="照片线路" data-tip="照片线路">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3z" />
-            <circle cx="12" cy="13" r="3" />
-          </svg>
-          <span class="button-label">照片线路</span>
-        </button>
+        <div class="limb-actions" role="group" aria-label="所选肢体动作">
+          <span id="selection" class="selection"></span>
+          <button id="flagAction" class="action-button" hidden>旗式</button>
+        </div>
+        <button id="openComparison" class="game-round comparison-entry" aria-label="姿势对照" aria-haspopup="dialog"><svg
+            viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 4h6v16H4zM14 4h6v16h-6z" />
+          </svg><span>对照</span><i id="comparisonDot" hidden></i></button>
       </div>
     </footer>
   </div>
+  <dialog id="settingsDialog" class="settings-dialog" aria-labelledby="settingsTitle">
+    <div class="sheet-head">
+      <div><span class="pause-caption">TAKE A BREATH</span>
+        <h2 id="settingsTitle">歇一会儿</h2>
+      </div><button id="closeSettings" class="icon-button" aria-label="关闭暂停">×</button>
+    </div>
+    <p id="pauseRoute" class="pause-route">01 · 侧上方</p>
+    <div class="pause-actions">
+      <button id="resumeClimb" class="game-primary" autofocus>继续攀爬 <span aria-hidden="true">▶</span></button>
+      <div><button id="reset" class="pause-secondary" aria-label="重新开始"><span
+            aria-hidden="true">↺</span>重新开始</button><button id="backToRoutes" class="pause-secondary"
+          aria-label="返回选关"><span aria-hidden="true">⠿</span>换条线路</button></div>
+    </div>
+    <details id="gameOptions">
+      <summary>游戏选项</summary>
+      <div class="settings-fields">
+        <label for="routeSelect">当前线路
+          <select id="routeSelect" aria-label="选择线路">
+            <option value="side">01 侧上方</option>
+            <option value="traverse">02 横移</option>
+            <option value="rise">03 高一步</option>
+            <option value="fork">04 两条路</option>
+            <option value="return">05 折返</option>
+            <option value="ladder">06 绕过屋檐</option>
+            <option value="switch">07 回旋</option>
+            <option value="west">08 长路回家</option>
+          </select>
+        </label>
+        <label for="strengthSelect">上肢力量
+          <select id="strengthSelect" title="各档分别保留进度；首次切换从起点开始">
+            <option value="gentle">较弱</option>
+            <option value="standard" selected>标准</option>
+            <option value="strong">较强</option>
+          </select>
+        </label>
+        <label for="balanceAid">重心辅助
+          <select id="balanceAid" aria-label="重心辅助">
+            <option value="auto">自动</option>
+            <option value="on">常开</option>
+            <option value="off">关闭</option>
+          </select>
+        </label>
+      </div>
+      <details id="viewSettings">
+        <summary>视角</summary>
+        <div class="settings-tools view-tools" role="group" aria-label="岩壁视角">
+          <button id="viewOut" class="icon-button" aria-label="缩小视角">−</button>
+          <button id="viewIn" class="icon-button" aria-label="放大视角">＋</button>
+        </div>
+        <p class="settings-note">也可以拖动空白处、双指缩放。</p>
+      </details>
+      <details id="assistSettings">
+        <summary>辅助操作</summary>
+        <div id="limbPanel" class="settings-tools" role="group" aria-label="选择手脚">
+          <button class="limb-chip" data-select-limb="0" aria-pressed="false">左手</button>
+          <button class="limb-chip" data-select-limb="1" aria-pressed="false">右手</button>
+          <button class="limb-chip" data-select-limb="2" aria-pressed="false">左脚</button>
+          <button class="limb-chip" data-select-limb="3" aria-pressed="false">右脚</button>
+        </div>
+        <div id="bodyPanel">
+          <p class="settings-note">微调重心</p>
+          <div class="settings-tools nudge-tools" role="group" aria-label="微调重心">
+            <button data-nudge="-8,0" aria-label="重心向左">←</button><button data-nudge="0,-8" aria-label="重心向上">↑</button>
+            <button data-nudge="0,8" aria-label="重心向下">↓</button><button data-nudge="8,0" aria-label="重心向右">→</button>
+          </div>
+          <div class="turn" role="group" aria-label="身体朝向">
+            <button id="turnLeft" class="quiet-button" aria-label="向左侧身">向左侧身</button>
+            <output id="orientation" aria-live="polite">正对</output>
+            <button id="turnRight" class="quiet-button" aria-label="向右侧身">向右侧身</button>
+          </div>
+        </div>
+      </details>
+    </details>
+    <div class="settings-actions">
+      <button id="openPhotos" class="quiet-button" aria-label="照片线路">我的岩壁 · 从照片开爬<span
+          aria-hidden="true">↗</span></button>
+    </div>
+  </dialog>
   <dialog id="comparisonDialog" class="comparison-dialog" aria-labelledby="comparisonTitle">
     <div class="sheet-head">
-      <div><span class="eyebrow">TRY ANOTHER WAY</span>
-        <h2 id="comparisonTitle">一个动作，两种想法。</h2>
+      <div>
+        <h2 id="comparisonTitle">姿势对照</h2>
       </div><button id="closeComparison" class="icon-button" aria-label="关闭姿势对照">×</button>
     </div>
-    <p class="sheet-intro">保留现在的姿势，再试另一种走法。切换时，两边的撤销记录也会一起回来。</p>
+    <p class="sheet-intro">保留一个姿势，试试另一种走法。</p>
     <div class="comparison-grid">
       <section class="pose-card">
         <div><strong>正在尝试</strong><span id="currentPoseCount"></span></div><canvas id="currentPoseCanvas"
@@ -1557,951 +2462,7 @@
     <input id="photoFile" type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" hidden />
     <input id="photoCapture" type="file" accept="image/*" capture="environment" hidden />
   </dialog>
-  <style id="experience-design">
-    :root {
-      --ink: #242721;
-      --muted: #686e62;
-      --paper: #f3f2e9;
-      --surface: #fffef8;
-      --wall: #f1f2ec;
-      --line: #dddfd3;
-      --forest: #386756;
-      --sage: #e2e9da;
-      --clay: #f3d5ba;
-      --sun: #f3cf55;
-      --accent: #a8492d;
-    }
-
-    [hidden] {
-      display: none !important;
-    }
-
-    body {
-      display: block;
-      overflow: hidden;
-      background: var(--paper);
-      min-height: 340px;
-    }
-
-    button,
-    select {
-      font-family: inherit;
-    }
-
-    button {
-      -webkit-user-select: none;
-      user-select: none;
-    }
-
-    button:focus-visible,
-    a:focus-visible,
-    select:focus-visible {
-      outline: 3px solid #bb552f;
-      outline-offset: 3px;
-    }
-
-    .eyebrow {
-      display: block;
-      font: 600 10px/1.5 "Trebuchet MS", sans-serif;
-      letter-spacing: 1.6px;
-    }
-
-    .pill-button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      border: 0;
-      min-height: 48px;
-      padding: 0 22px;
-      border-radius: 999px;
-      background: var(--surface);
-      color: var(--ink);
-      font-size: 13px;
-      font-weight: 600;
-      transition: background .16s, transform .16s;
-    }
-
-    .pill-button>span[aria-hidden] {
-      font-size: 20px;
-      line-height: 1;
-    }
-
-    .dark-button {
-      background: var(--ink);
-      color: var(--surface);
-    }
-
-    .pill-button:active:not(:disabled),
-    .route-card:active {
-      transform: translateY(2px);
-    }
-
-    .route-library {
-      position: fixed;
-      inset: 0;
-      z-index: 10;
-      background: var(--paper);
-      overflow: auto;
-      overscroll-behavior: contain;
-    }
-
-    .library-nav {
-      max-width: 1248px;
-      margin: auto;
-      min-height: 106px;
-      padding: max(24px, env(safe-area-inset-top)) 40px 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .wordmark {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-      text-decoration: none;
-      font-size: 34px;
-      font-weight: 850;
-      letter-spacing: -2px;
-    }
-
-    .wordmark span {
-      padding-left: 12px;
-      border-left: 1px solid #b8bcaf;
-      font: 800 9px/1.35 "Trebuchet MS", sans-serif;
-      letter-spacing: .8px;
-    }
-
-    .nav-caption {
-      margin-left: auto;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .library-nav .pill-button {
-      background: var(--sage);
-    }
-
-    .library-content {
-      max-width: 1248px;
-      margin: auto;
-      padding: 26px 40px 30px;
-    }
-
-    .route-library canvas,
-    .comparison-dialog canvas,
-    .record-thumb {
-      pointer-events: none;
-      touch-action: auto;
-    }
-
-    .welcome {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 28px;
-      margin-bottom: 32px;
-    }
-
-    .welcome .eyebrow {
-      color: var(--forest);
-      margin-bottom: 14px;
-    }
-
-    .welcome h1 {
-      width: auto;
-      padding: 0;
-      margin: 0;
-      border-radius: 0;
-      background: none;
-      box-shadow: none;
-      font-family: inherit;
-      font-size: clamp(38px, 4.4vw, 62px);
-      line-height: 1.22;
-      font-weight: 850;
-      letter-spacing: -3px;
-    }
-
-    .welcome p {
-      margin: 0 4px 6px 0;
-      font-size: 13px;
-      line-height: 1.95;
-      color: var(--muted);
-    }
-
-    .phone-break {
-      display: none;
-    }
-
-    .library-feature {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      min-height: 336px;
-      background: var(--sun);
-      border-radius: 28px;
-      overflow: hidden;
-    }
-
-    .feature-copy {
-      padding: 38px 48px;
-      display: flex;
-      align-items: start;
-      flex-direction: column;
-    }
-
-    .feature-copy h2 {
-      font-size: 45px;
-      font-weight: 850;
-      letter-spacing: -2px;
-      line-height: 1.2;
-      margin: 20px 0 12px;
-    }
-
-    .feature-copy p {
-      font-size: 14px;
-      line-height: 1.8;
-      margin: 0 0 24px;
-    }
-
-    .feature-copy .pill-button {
-      min-width: 182px;
-      margin-top: auto;
-      justify-content: space-between;
-    }
-
-    .feature-progress {
-      font-size: 10px;
-      margin-top: 12px;
-      color: #53523e;
-    }
-
-    .feature-wall {
-      position: relative;
-      min-height: 310px;
-      margin: 16px 16px 16px 0;
-      border-radius: 90px 18px 18px 18px;
-      background: #f7f3d9;
-      overflow: hidden;
-    }
-
-    .feature-wall canvas {
-      position: absolute;
-      inset: 25px 8px 8px;
-      width: calc(100% - 16px);
-      height: calc(100% - 33px);
-    }
-
-    .wall-label {
-      position: absolute;
-      top: 20px;
-      right: 22px;
-      font: 600 9px "Trebuchet MS", sans-serif;
-      letter-spacing: 2px;
-      color: #71745e;
-    }
-
-    .feature-sticker {
-      position: absolute;
-      left: 24px;
-      bottom: 24px;
-      width: 68px;
-      height: 68px;
-      display: grid;
-      place-content: center;
-      border-radius: 50%;
-      background: #e49373;
-      font-size: 17px;
-      line-height: 1.1;
-      font-weight: 800;
-      transform: rotate(-12deg);
-    }
-
-    .route-collection {
-      margin-top: 44px;
-      scroll-margin-top: 24px;
-    }
-
-    .collection-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      gap: 20px;
-      margin-bottom: 22px;
-    }
-
-    .collection-head .eyebrow {
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-
-    .collection-head h2 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: 750;
-      letter-spacing: -1px;
-    }
-
-    .collection-head h2 span {
-      display: inline-block;
-      margin-left: 12px;
-      padding: 4px 8px;
-      vertical-align: middle;
-      background: #e4e6d9;
-      border-radius: 8px;
-      font: 600 12px "Trebuchet MS", sans-serif;
-      letter-spacing: 0;
-    }
-
-    .route-filters {
-      display: flex;
-      gap: 4px;
-    }
-
-    .route-filters button {
-      min-height: 44px;
-      min-width: 44px;
-      padding: 0 17px;
-      border: 0;
-      border-radius: 999px;
-      background: transparent;
-      color: var(--muted);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    .route-filters button[aria-pressed="true"] {
-      background: var(--ink);
-      color: #fffef8;
-    }
-
-    .route-grid {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .route-card {
-      position: relative;
-      text-align: left;
-      padding: 10px 10px 17px;
-      border: 0;
-      border-radius: 22px;
-      background: var(--surface);
-      color: var(--ink);
-      transition: transform .18s, box-shadow .18s;
-    }
-
-    .route-card-art {
-      height: 146px;
-      position: relative;
-      border-radius: 15px;
-      overflow: hidden;
-      background: var(--card-color, #e1e5eb);
-    }
-
-    .route-card-art canvas {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-
-    .route-index {
-      position: absolute;
-      left: 12px;
-      top: 10px;
-      font: 800 24px "Trebuchet MS", sans-serif;
-      letter-spacing: -1px;
-      opacity: .65;
-    }
-
-    .route-card h3 {
-      margin: 17px 8px 7px;
-      font-size: 18px;
-      letter-spacing: -.5px;
-    }
-
-    .route-card p {
-      margin: 0 8px;
-      color: var(--muted);
-      font-size: 11px;
-      line-height: 1.6;
-    }
-
-    .route-card-bottom {
-      margin: 16px 8px 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 6px;
-      font-size: 10px;
-      color: var(--forest);
-    }
-
-    .route-card-bottom b {
-      display: grid;
-      place-content: center;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: var(--ink);
-      color: var(--surface);
-      font-size: 18px;
-      font-weight: 400;
-    }
-
-    .own-wall-card {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-      width: 100%;
-      padding: 28px 32px;
-      margin-top: 26px;
-      border: 0;
-      border-radius: 24px;
-      background: #dce7df;
-      text-align: left;
-      color: var(--ink);
-    }
-
-    .own-wall-symbol {
-      font-size: 60px;
-      font-weight: 300;
-      color: var(--forest);
-      line-height: 1;
-    }
-
-    .own-wall-card small {
-      display: block;
-      font: 600 9px/1.5 "Trebuchet MS", sans-serif;
-      letter-spacing: 1.5px;
-      color: var(--forest);
-    }
-
-    .own-wall-card strong {
-      display: block;
-      margin: 8px 0;
-      font-size: 23px;
-      font-weight: 750;
-    }
-
-    .own-wall-card span span {
-      font-size: 12px;
-      color: #587264;
-    }
-
-    .round-arrow {
-      display: grid;
-      place-content: center;
-      margin-left: auto;
-      width: 48px;
-      height: 48px;
-      flex-shrink: 0;
-      border-radius: 50%;
-      background: var(--forest);
-      color: white;
-      font-size: 25px;
-    }
-
-    .library-foot {
-      display: flex;
-      justify-content: space-between;
-      color: var(--muted);
-      font-size: 10px;
-      padding: 26px 2px 0;
-    }
-
-    .play-shell {
-      display: grid;
-      grid-template-rows: auto minmax(180px, 1fr) auto;
-      height: 100dvh;
-      min-height: 340px;
-    }
-
-    .play-shell .play-header {
-      width: 100%;
-      max-width: 1264px;
-      padding: max(14px, env(safe-area-inset-top)) 32px 14px;
-      margin: auto;
-      grid-template-columns: 1fr minmax(150px, 230px) 1fr 48px;
-      gap: 16px;
-      background: transparent;
-      border: 0;
-    }
-
-    .play-header .brand {
-      display: flex;
-      align-items: center;
-      gap: 22px;
-    }
-
-    .back-button {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      min-width: 44px;
-      min-height: 44px;
-      padding: 0 10px;
-      border: 0;
-      border-radius: 14px;
-      background: var(--surface);
-      font-size: 12px;
-    }
-
-    .back-button>span:first-child {
-      font-size: 20px;
-    }
-
-    .play-wordmark {
-      font-size: 24px;
-      font-weight: 850;
-      letter-spacing: -2px;
-    }
-
-    .play-header .route {
-      background: var(--surface);
-      border: 0;
-      border-radius: 16px;
-      box-shadow: none;
-      min-height: 48px;
-    }
-
-    .play-header .route select {
-      font-size: 14px;
-      border-radius: 16px;
-    }
-
-    .play-header .climb-settings {
-      grid-column: 3;
-      grid-row: 1;
-      justify-content: flex-end;
-      min-height: 44px;
-      font-size: 11px;
-    }
-
-    .play-header .climb-settings select {
-      background: var(--sage);
-      border: 0;
-      border-radius: 12px;
-    }
-
-    .play-header .header-actions {
-      grid-column: 4;
-      grid-row: 1;
-    }
-
-    .play-header .icon-button {
-      background: transparent;
-      width: 44px;
-    }
-
-    .play-shell .stage {
-      width: calc(100% - 64px);
-      max-width: 1200px;
-      margin: 0 auto;
-      border: 0;
-      box-shadow: none;
-      border-radius: 24px;
-      background: var(--wall);
-    }
-
-    .play-shell .stage-meta {
-      top: 18px;
-      left: 24px;
-      right: 24px;
-    }
-
-    .route-challenge {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .stage-meta .counter {
-      background: var(--surface);
-      padding: 8px 12px;
-      color: var(--muted);
-      font-size: 10px;
-    }
-
-    .counter b {
-      color: var(--ink);
-      font: 700 18px "Trebuchet MS", sans-serif;
-    }
-
-    .view-tools {
-      padding: 2px;
-      gap: 0;
-      border: 0;
-      box-shadow: none;
-      background: var(--surface);
-      border-radius: 999px;
-    }
-
-    .view-tools .icon-button {
-      border-radius: 50%;
-      font-size: 11px;
-    }
-
-    #balanceAid {
-      border: 0;
-      border-radius: 999px;
-      background: var(--surface);
-      max-width: 110px;
-    }
-
-    .outcome {
-      border: 0;
-      color: #365745;
-      background: #fffef8f5;
-      box-shadow: 0 6px 24px #2433270d;
-    }
-
-    .play-shell .play-dock {
-      padding: 10px 24px max(12px, env(safe-area-inset-bottom));
-      background: var(--paper);
-      border: 0;
-    }
-
-    .action-shelf {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      min-height: 66px;
-      max-width: 940px;
-      margin: auto;
-    }
-
-    .mode-switch {
-      display: flex;
-      flex: 0 0 auto;
-      padding: 4px;
-      border-radius: 16px;
-      background: #e4e6da;
-    }
-
-    .mode-switch button {
-      min-height: 44px;
-      min-width: 60px;
-      padding: 0 12px;
-      border: 0;
-      background: transparent;
-      border-radius: 12px;
-      font-size: 12px;
-      color: var(--muted);
-    }
-
-    .mode-switch button[aria-pressed="true"] {
-      background: var(--surface);
-      color: var(--ink);
-      font-weight: 700;
-    }
-
-    .limb-panel {
-      display: flex;
-      gap: 8px;
-    }
-
-    .limb-chip {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      width: 62px;
-      min-height: 48px;
-      border: 0;
-      border-radius: 14px;
-      background: var(--surface);
-      color: var(--ink);
-      font-size: 15px;
-    }
-
-    .limb-chip span {
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .limb-chip[aria-pressed="true"] {
-      background: var(--clay);
-      color: #723c27;
-    }
-
-    .limb-chip[aria-pressed="true"] span {
-      color: #723c27;
-    }
-
-    .action-shelf .limb-actions {
-      margin-left: auto;
-      gap: 12px;
-    }
-
-    .action-shelf .selection {
-      display: block;
-      min-width: 0;
-      height: auto;
-      padding: 0;
-      border-radius: 0;
-      background: none;
-      font-size: 13px;
-      font-weight: 650;
-      color: var(--ink);
-    }
-
-    .action-shelf .selection::before {
-      display: none;
-    }
-
-    .action-hint {
-      display: block;
-      margin-top: 4px;
-      font-size: 10px;
-      color: var(--muted);
-      white-space: nowrap;
-    }
-
-    .action-button {
-      min-width: 68px;
-      height: 44px;
-      padding: 0 14px;
-      background: var(--forest);
-      border: 0;
-      box-shadow: none;
-      border-radius: 999px;
-      font-size: 13px;
-    }
-
-    .body-panel {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-    }
-
-    .nudge-tools {
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-
-    .nudge-tools>span {
-      font-size: 11px;
-      margin-right: 5px;
-      color: var(--muted);
-    }
-
-    .nudge-tools button {
-      min-width: 44px;
-      height: 44px;
-      border: 0;
-      background: var(--surface);
-      border-radius: 12px;
-      font-size: 19px;
-    }
-
-    .body-panel .turn {
-      padding: 2px;
-      border-radius: 14px;
-      background: var(--sage);
-      gap: 0;
-    }
-
-    .turn .icon-button {
-      font-size: 24px;
-      flex-basis: 44px;
-    }
-
-    .turn output {
-      width: 48px;
-      font-size: 11px;
-    }
-
-    .play-dock .controls {
-      max-width: 940px;
-      padding: 8px 0 0;
-      margin-top: 6px;
-      border: 0;
-      border-top: 1px solid var(--line);
-      border-radius: 0;
-      box-shadow: none;
-      background: none;
-    }
-
-    .play-dock .history {
-      gap: 6px;
-    }
-
-    .play-dock .label-button {
-      height: 44px;
-      width: auto;
-      flex-basis: auto;
-      flex-direction: row;
-      gap: 7px;
-      padding: 0 12px;
-      border-radius: 999px;
-    }
-
-    .play-dock .label-button .button-label {
-      font-size: 11px;
-    }
-
-    .play-dock .label-button svg {
-      width: 17px;
-      height: 17px;
-    }
-
-    .play-dock #openPhotos {
-      background: transparent;
-      color: var(--forest);
-      border: 0;
-    }
-
-    .comparison-entry {
-      margin-left: auto;
-      min-height: 44px;
-      padding: 0 17px;
-      background: var(--ink);
-      color: white;
-      font-size: 11px;
-    }
-
-    #comparisonDot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--sun);
-    }
-
-    .comparison-dialog {
-      width: min(680px, calc(100vw - 40px));
-      max-height: calc(100dvh - 48px);
-      padding: 28px;
-      border: 0;
-      border-radius: 28px;
-      background: var(--paper);
-      color: var(--ink);
-      overflow: auto;
-    }
-
-    .comparison-dialog::backdrop,
-    #photoEditor::backdrop {
-      background: #242c2680;
-      backdrop-filter: blur(6px);
-    }
-
-    .sheet-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .sheet-head .eyebrow {
-      color: var(--forest);
-      font-size: 9px;
-    }
-
-    .sheet-head h2 {
-      font-size: 24px;
-      margin: 8px 0 0;
-      letter-spacing: -1px;
-    }
-
-    .sheet-head .icon-button {
-      background: var(--surface);
-      border-radius: 50%;
-      font-size: 24px;
-    }
-
-    .sheet-intro {
-      font-size: 12px;
-      line-height: 1.9;
-      color: var(--muted);
-      margin: 18px 0;
-    }
-
-    .comparison-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .pose-card {
-      min-width: 0;
-      background: var(--surface);
-      border-radius: 20px;
-      padding: 16px 12px 0;
-    }
-
-    .pose-card.retained {
-      background: #e2e9da;
-    }
-
-    .pose-card>div:first-child {
-      display: flex;
-      justify-content: space-between;
-      gap: 4px;
-      font-size: 12px;
-    }
-
-    .pose-card>div:first-child span {
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .pose-card canvas {
-      height: 270px;
-      width: 100%;
-    }
-
-    .empty-comparison {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      min-height: 270px;
-      text-align: center;
-    }
-
-    .empty-comparison>span {
-      font-size: 34px;
-      color: var(--forest);
-      margin-bottom: 18px;
-    }
-
-    .empty-comparison strong {
-      font-size: 12px;
-    }
-
-    .empty-comparison p {
-      font-size: 11px;
-      line-height: 1.8;
-      color: var(--muted);
-    }
-
-    .comparison-actions {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-top: 22px;
-    }
-
-    .comparison-actions>button {
-      flex: 1;
-      font-size: 12px;
-    }
-
-    .comparison-actions #swapDraft:not(:disabled) {
-      background: var(--forest);
-      color: var(--surface);
-    }
-
-    .sheet-note {
-      font-size: 10px;
-      color: var(--muted);
-      text-align: center;
-      margin: 18px 0 0;
-      line-height: 1.6;
-    }
-
+  <style id="photo-design">
     #photoEditor {
       background: var(--paper);
     }
@@ -2594,7 +2555,7 @@
       background: var(--sage);
     }
 
-    .photo-record .photo-command:first-of-type {
+    .photo-record>.photo-command:first-of-type {
       background: var(--forest);
       color: var(--surface);
     }
@@ -2660,568 +2621,10 @@
       font: 600 11px "Trebuchet MS", sans-serif;
     }
 
-    @media (hover: hover) {
-      .route-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 24px #2733220b;
-      }
-
-      .route-filters button:hover:not([aria-pressed="true"]) {
-        background: #e7e9df;
-      }
-
-      .pill-button:hover:not(:disabled) {
-        background: #e3e8d8;
-        color: var(--ink);
-      }
-
-      .dark-button:hover:not(:disabled),
-      .comparison-entry:hover:not(:disabled) {
-        background: var(--forest);
-        color: white;
-      }
-
-      .limb-chip:hover {
-        background: var(--clay);
-      }
-    }
-
-    @media (max-width: 960px) {
-      .library-nav {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      .library-content {
-        padding-left: 24px;
-        padding-right: 24px;
-      }
-
-      .route-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .route-card-art {
-        height: 180px;
-      }
-
-      .collection-head {
-        align-items: start;
-        flex-direction: column;
-        gap: 14px;
-      }
-
-      .feature-copy {
-        padding: 30px;
-      }
-
-      .play-header .play-wordmark {
-        display: none;
-      }
-
-      .play-shell .play-header {
-        padding-left: 18px;
-        padding-right: 18px;
-        gap: 12px;
-      }
-
-      .play-shell .stage {
-        width: 100%;
-        border-radius: 20px;
-      }
-
-      .action-shelf {
-        gap: 10px;
-      }
-
-      .limb-chip {
-        width: 50px;
-      }
-
-      .body-panel {
-        gap: 6px;
-      }
-
-      .body-panel .nudge-tools>span {
-        display: none;
-      }
-    }
 
     @media (max-width: 600px) {
-      .library-nav {
-        min-height: 84px;
-        padding: max(20px, env(safe-area-inset-top)) 20px 16px;
-        gap: 10px;
-      }
-
-      .wordmark {
-        font-size: 30px;
-        gap: 9px;
-      }
-
-      .wordmark span {
-        font-size: 8px;
-        padding-left: 9px;
-      }
-
-      .nav-caption {
-        display: none;
-      }
-
-      .library-nav .pill-button {
-        font-size: 11px;
-        min-height: 44px;
-        padding: 0 14px;
-        gap: 10px;
-      }
-
-      .library-content {
-        padding: 16px 20px 24px;
-      }
-
-      .welcome {
-        display: block;
-        margin-bottom: 22px;
-      }
-
-      .phone-break {
-        display: initial;
-      }
-
-      .welcome h1 {
-        font-size: 42px;
-        letter-spacing: -2px;
-      }
-
-      .welcome p {
-        font-size: 11px;
-        margin-top: 14px;
-        line-height: 1.8;
-      }
-
-      .welcome .eyebrow {
-        font-size: 8px;
-        margin-bottom: 10px;
-      }
-
-      .library-feature {
-        grid-template-columns: 54% 46%;
-        border-radius: 22px;
-        min-height: 278px;
-      }
-
-      .feature-copy {
-        padding: 24px 0 24px 22px;
-        position: relative;
-        z-index: 1;
-      }
-
-      .feature-copy .eyebrow {
-        font-size: 9px;
-        letter-spacing: .3px;
-      }
-
-      .feature-copy h2 {
-        font-size: 31px;
-        letter-spacing: -1.5px;
-        margin: 19px 0 12px;
-      }
-
-      .feature-copy p {
-        font-size: 11px;
-        line-height: 1.7;
-        margin-bottom: 24px;
-      }
-
-      .feature-copy .pill-button {
-        min-width: 0;
-        font-size: 11px;
-        padding: 0 14px;
-        gap: 12px;
-        min-height: 44px;
-      }
-
-      .feature-progress {
-        font-size: 9px;
-      }
-
-      .feature-wall {
-        margin: 10px 10px 10px 0;
-        min-height: 0;
-        border-radius: 65px 14px 14px 14px;
-      }
-
-      .feature-wall canvas {
-        inset: 28px 0 0;
-        width: 100%;
-        height: calc(100% - 28px);
-      }
-
-      .wall-label {
-        top: 16px;
-        right: 8px;
-        font-size: 6px;
-        letter-spacing: 1px;
-      }
-
-      .feature-sticker {
-        width: 44px;
-        height: 44px;
-        left: 10px;
-        bottom: 16px;
-        font-size: 13px;
-      }
-
-      .route-collection {
-        margin-top: 30px;
-      }
-
-      .collection-head {
-        gap: 14px;
-        margin-bottom: 16px;
-      }
-
-      .collection-head h2 {
-        font-size: 21px;
-      }
-
-      .collection-head .eyebrow {
-        font-size: 8px;
-      }
-
-      .route-filters {
-        width: 100%;
-        justify-content: space-between;
-        gap: 0;
-      }
-
-      .route-filters button {
-        padding: 0 13px;
-        font-size: 11px;
-      }
-
-      .route-grid {
-        gap: 12px;
-      }
-
-      .route-card {
-        padding: 7px 7px 13px;
-        border-radius: 18px;
-      }
-
-      .route-card-art {
-        height: 123px;
-        border-radius: 12px;
-      }
-
-      .route-index {
-        font-size: 20px;
-        left: 10px;
-        top: 8px;
-      }
-
-      .route-card h3 {
-        font-size: 16px;
-        margin: 13px 6px 6px;
-      }
-
-      .route-card p {
-        font-size: 10px;
-        margin: 0 6px;
-      }
-
-      .route-card-bottom {
-        font-size: 9px;
-        margin: 11px 6px 0;
-        gap: 2px;
-      }
-
-      .own-wall-card {
-        padding: 22px 18px;
-        gap: 12px;
-        border-radius: 20px;
-      }
-
-      .own-wall-symbol {
-        display: none;
-      }
-
-      .own-wall-card strong {
-        font-size: 17px;
-        line-height: 1.6;
-      }
-
-      .own-wall-card small {
-        font-size: 8px;
-      }
-
-      .own-wall-card span span {
-        font-size: 10px;
-      }
-
-      .own-wall-card .round-arrow {
-        width: 38px;
-        height: 38px;
-        font-size: 21px;
-      }
-
-      .library-foot {
-        font-size: 9px;
-      }
-
-      .play-shell .play-header {
-        padding: max(8px, env(safe-area-inset-top)) 14px 8px;
-        grid-template-columns: 1fr minmax(140px, 1.5fr) 44px;
-        gap: 4px 9px;
-      }
-
-      .play-header .back-button {
-        padding: 0 8px;
-        gap: 6px;
-        font-size: 11px;
-        background: transparent;
-      }
-
-      .play-header .climb-settings {
-        grid-column: 1 / -1;
-        grid-row: 2;
-        justify-content: end;
-        font-size: 10px;
-      }
-
-      .play-header .climb-settings label {
-        gap: 8px;
-      }
-
-      .play-header .header-actions {
-        grid-column: 3;
-      }
-
-      .play-header .climb-settings select {
-        min-height: 44px;
-      }
-
-      .play-header .route select {
-        font-size: 12px;
-        padding-left: 30px;
-        padding-right: 24px;
-      }
-
-      .play-shell .stage {
-        border-radius: 18px;
-      }
-
-      .play-shell .stage-meta {
-        top: 12px;
-        left: 14px;
-        right: 14px;
-      }
-
-      .route-challenge {
-        font-size: 9px;
-        max-width: 68%;
-      }
-
-      .stage-meta .counter {
-        padding: 7px 10px;
-        font-size: 9px;
-      }
-
-      .counter b {
-        font-size: 16px;
-      }
-
-      .view-tools {
-        right: 10px;
-        bottom: 10px;
-      }
-
-      #balanceAid {
-        bottom: 12px;
-        left: 12px;
-        max-width: 104px;
-        font-size: 10px;
-      }
-
-      .play-shell .play-dock {
-        padding: 8px 14px max(8px, env(safe-area-inset-bottom));
-      }
-
-      .action-shelf {
-        display: grid;
-        grid-template-columns: 66px minmax(0, 1fr);
-        grid-template-rows: 48px 44px;
-        gap: 4px 12px;
-        min-height: 96px;
-      }
-
-      .mode-switch {
-        grid-row: 1 / 3;
-        flex-direction: column;
-        border-radius: 15px;
-        align-self: stretch;
-        justify-content: space-between;
-        padding: 3px;
-      }
-
-      .mode-switch button {
-        min-width: 0;
-        padding: 0 8px;
-        min-height: 44px;
-      }
-
-      .limb-panel {
-        justify-content: space-between;
-        gap: 6px;
-      }
-
-      .limb-chip {
-        min-width: 44px;
-        width: auto;
-        flex: 1;
-        min-height: 46px;
-        font-size: 14px;
-      }
-
-      .action-shelf .limb-actions {
-        grid-column: 2;
-        width: 100%;
-        justify-content: space-between;
-        gap: 6px;
-        margin-left: 0;
-      }
-
-      .action-shelf .selection {
-        font-size: 11px;
-      }
-
-      .action-hint {
-        font-size: 9px;
-        margin-top: 3px;
-      }
-
-      .action-button {
-        font-size: 12px;
-        padding: 0 12px;
-        min-width: 64px;
-      }
-
-      .body-panel {
-        grid-column: 2;
-        grid-row: 1 / 3;
-        align-self: stretch;
-        flex-direction: column;
-        align-items: start;
-        gap: 4px;
-      }
-
-      .nudge-tools {
-        width: 100%;
-        justify-content: space-between;
-      }
-
-      .nudge-tools button {
-        flex: 1;
-      }
-
-      .body-panel .turn {
-        width: 100%;
-        height: 44px;
-        justify-content: space-between;
-        padding: 0;
-      }
-
-      .action-shelf[data-mode="body"] .limb-actions {
-        display: none;
-      }
-
-      .play-dock .controls {
-        gap: 5px;
-        padding-top: 6px;
-        margin-top: 6px;
-      }
-
-      .play-dock .history {
-        gap: 0;
-      }
-
-      .play-dock .label-button {
-        padding: 0 8px;
-        gap: 4px;
-      }
-
-      .play-dock .label-button .button-label {
-        font-size: 10px;
-      }
-
-      .play-dock #redo {
-        flex-direction: column;
-        gap: 2px;
-        width: 44px;
-        padding: 0;
-      }
-
-      .comparison-entry {
-        padding: 0 12px;
-        gap: 6px;
-        font-size: 10px;
-      }
-
-      .comparison-entry>span[aria-hidden] {
-        font-size: 15px;
-      }
-
-      .play-dock #openPhotos {
-        flex-direction: column;
-        width: 52px;
-        padding: 0;
-        gap: 2px;
-        flex-shrink: 0;
-      }
-
-      .play-dock #openPhotos .button-label {
-        font-size: 9px;
-      }
-
-      .comparison-dialog {
-        width: 100%;
-        max-width: none;
-        margin: auto 0 0;
-        max-height: 92dvh;
-        padding: 22px 18px max(22px, env(safe-area-inset-bottom));
-        border-radius: 26px 26px 0 0;
-      }
-
-      .sheet-head h2 {
-        font-size: 22px;
-      }
-
-      .comparison-grid {
-        gap: 8px;
-      }
-
-      .pose-card {
-        padding: 12px 9px 0;
-        border-radius: 15px;
-      }
-
-      .pose-card>div:first-child {
-        flex-direction: column;
-        gap: 5px;
-      }
-
-      .pose-card canvas,
-      .empty-comparison {
-        height: 230px;
-        min-height: 230px;
-      }
-
-      .comparison-actions {
-        gap: 8px;
-      }
-
-      .comparison-actions .pill-button {
-        padding: 0 12px;
+      .photo-head {
+        padding: max(12px, env(safe-area-inset-top)) 16px 12px;
         gap: 8px;
       }
 
@@ -3230,22 +2633,11 @@
       }
 
       .photo-intro {
-        padding: 25px 22px;
-        border-radius: 22px;
+        padding: 22px;
       }
 
       .photo-library .photo-intro h3 {
-        font-size: 29px;
-      }
-
-      .photo-head {
-        padding: max(12px, env(safe-area-inset-top)) 16px 12px;
-        gap: 8px;
-      }
-
-      #photoSteps {
-        font-size: 10px;
-        padding: 8px 10px;
+        font-size: 28px;
       }
 
       .photo-process {
@@ -3262,6 +2654,11 @@
 
       .photo-side {
         padding: 12px 18px;
+      }
+
+      #photoSteps {
+        font-size: 10px;
+        padding: 8px 10px;
       }
 
       .photo-record {
@@ -3283,145 +2680,6 @@
       .photo-record .photo-command {
         padding: 8px 14px;
         font-size: 12px;
-      }
-    }
-
-    @media (max-width: 360px) {
-      .library-content {
-        padding-left: 16px;
-        padding-right: 16px;
-      }
-
-      .welcome h1 {
-        font-size: 38px;
-      }
-
-      .feature-copy {
-        padding-left: 17px;
-      }
-
-      .feature-copy h2 {
-        font-size: 28px;
-      }
-
-      .route-filters button {
-        padding: 0 10px;
-      }
-
-      .play-shell .play-dock {
-        padding-left: 10px;
-        padding-right: 10px;
-      }
-
-      .action-shelf {
-        gap: 4px 8px;
-        grid-template-columns: 60px minmax(0, 1fr);
-      }
-
-      .comparison-entry {
-        padding: 0 10px;
-      }
-
-      .play-dock .label-button {
-        padding: 0 6px;
-      }
-    }
-
-    @media (max-height: 500px) and (min-width: 600px) {
-      .play-shell .play-header {
-        padding: 5px 16px;
-        grid-template-columns: 1fr minmax(135px, 190px) minmax(160px, 1fr) 44px;
-        gap: 10px;
-      }
-
-      .play-header .climb-settings {
-        grid-column: 3;
-        grid-row: 1;
-      }
-
-      .play-header .header-actions {
-        grid-column: 4;
-      }
-
-      .play-shell .play-dock {
-        padding: 4px 16px;
-      }
-
-      .action-shelf {
-        min-height: 52px;
-      }
-
-      .action-shelf .mode-switch button {
-        min-width: 48px;
-      }
-
-      .action-shelf .limb-panel {
-        gap: 5px;
-      }
-
-      .limb-chip {
-        width: 46px;
-        min-height: 44px;
-      }
-
-      .play-dock .controls {
-        margin-top: 2px;
-        padding-top: 3px;
-      }
-
-      .play-shell .stage-meta {
-        top: 10px;
-      }
-
-      .body-panel .turn output {
-        width: 40px;
-      }
-
-      .action-shelf[data-mode="body"] .limb-actions {
-        display: none;
-      }
-
-      .comparison-dialog {
-        width: min(820px, 94vw);
-        padding: 18px;
-        max-height: 94dvh;
-      }
-
-      .comparison-grid {
-        float: left;
-        width: 56%;
-        margin-right: 18px;
-      }
-
-      .pose-card canvas,
-      .empty-comparison {
-        height: 140px;
-        min-height: 140px;
-      }
-
-      .comparison-actions {
-        flex-direction: column;
-        margin-top: 16px;
-      }
-
-      .sheet-note {
-        clear: both;
-        padding-top: 10px;
-      }
-
-      .sheet-intro {
-        margin: 10px 0;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-
-      *,
-      *::before,
-      *::after {
-        animation: none !important;
-        transition: none !important;
-        scroll-behavior: auto !important;
       }
     }
   </style>
@@ -5184,8 +4442,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         canvas.height = h;
       }
       ctx.setTransform(d, 0, 0, d, 0, 0);
-      const topInset = width < 600 ? 70 : 17,
-        availableHeight = height - topInset - (width < 600 ? 62 : 17);
+      const topInset = width < 600 ? 124 : 110,
+        availableHeight = height - topInset - 108;
       scale = Math.max(
         0.1,
         Math.min(
@@ -5227,7 +4485,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       applyView();
     }
     function personView() {
-      const readableScale = Math.min(0.85, Math.max(0.1, (height - 96) / 440));
+      const readableScale = Math.min(0.85, Math.max(0.1, (height - 96) / 440),
+        activeRoute.explore ? Infinity : Math.max(0.1, (width - 56) / activeRoute.view.width));
       return { x: state.hip.x, y: state.hip.y - 50, zoom: clamp(readableScale / fitScale, 1, 6) };
     }
     function applyView() {
@@ -6745,24 +6004,26 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         if (!el.disabled) command();
       });
     }
-    bindCommand($("turnLeft"), () => turn(-0.25));
-    bindCommand($("turnRight"), () => turn(0.25));
+    bindCommand($("turnLeft"), () => { turn(-0.25); window.sketchbook?.closeSettings(); });
+    bindCommand($("turnRight"), () => { turn(0.25); window.sketchbook?.closeSettings(); });
     bindCommand($("flagAction"), flagSelectedFoot);
     bindCommand($("undo"), undo);
     bindCommand($("redo"), redo);
-    bindCommand($("reset"), reset);
+    bindCommand($("reset"), () => { reset(); window.sketchbook?.closeSettings(); });
     bindCommand($("saveDraft"), saveDraft);
     bindCommand($("swapDraft"), swapDraft);
-    bindCommand($("viewOut"), () => zoomView(1 / 1.25));
-    bindCommand($("viewIn"), () => zoomView(1.25));
-    bindCommand($("viewFit"), () => frameView());
-    bindCommand($("viewPerson"), () => frameView(true));
-    $("routeSelect").addEventListener("change", (event) =>
-      changeRoute(event.target.value),
-    );
-    $("strengthSelect").addEventListener("change", (event) =>
-      changeRoute(activeRoute.id, event.target.value),
-    );
+    bindCommand($("viewOut"), () => { zoomView(1 / 1.25); window.sketchbook?.closeSettings(); });
+    bindCommand($("viewIn"), () => { zoomView(1.25); window.sketchbook?.closeSettings(); });
+    bindCommand($("viewFit"), () => { frameView(); window.sketchbook?.closeSettings(); });
+    bindCommand($("viewPerson"), () => { frameView(true); window.sketchbook?.closeSettings(); });
+    $("routeSelect").addEventListener("change", (event) => {
+      changeRoute(event.target.value);
+      window.sketchbook?.closeSettings();
+    });
+    $("strengthSelect").addEventListener("change", (event) => {
+      changeRoute(activeRoute.id, event.target.value);
+      window.sketchbook?.closeSettings();
+    });
     function finishKeyboardStep() {
       if (!keyboardStep) return;
       remember(keyboardStep);
@@ -6772,7 +6033,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       schedule();
     }
     window.addEventListener("keydown", (e) => {
-      if ($("photoEditor")?.open || $("comparisonDialog")?.open ||
+      if ($("photoEditor")?.open || $("comparisonDialog")?.open || $("settingsDialog")?.open ||
         document.body.dataset?.screen === "library") return;
       if (e.key === "Tab")
         document.body.classList.toggle("keyboard-navigation", true);
@@ -6785,6 +6046,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       if (k === "escape") {
         e.preventDefault();
         if (drag) cancelGesture();
+        else if (selected === null) window.sketchbook?.pause();
         else {
           preview = null;
           selected = null;
@@ -7181,19 +6443,23 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
     // screen changes nor drawing a preview can change contacts or play history.
     if (document.createElement) (() => {
       const library = $("routeLibrary"), shell = $("playShell"),
-        comparison = $("comparisonDialog"), shelf = document.querySelector(".action-shelf");
+        comparison = $("comparisonDialog"), settings = $("settingsDialog");
       const descriptions = [
-        ["start", "先找脚点，再伸手", "先找到脚下的支撑，再去够更远的地方。", "#dce5ef"],
-        ["start", "把重心慢慢移过去", "向右走不只有一种办法。试着让双脚接过重量。", "#e5eacb"],
-        ["skills", "高脚之后，身体跟上", "抬高一只脚，看看身体能不能再往上一点。", "#f0dfcc"],
-        ["skills", "左边，还是右边？", "选择你的方向，给另一种侧身方式留点余地。", "#d8e7e2"],
-        ["skills", "换脚，转身，再回来", "先离开，再折返。用不同的脚法连接两段动作。", "#e4def0"],
-        ["long", "上升之后，绕到右侧", "一段上升，一次并手，再沿着屋檐向右走。", "#eee1bd"],
-        ["long", "转个方向再出发", "向左探索，再向右上方延伸，试试更连贯的动作。", "#eddae0"],
-        ["long", "走远一点，再回家", "长距离横移、高脚和折返，拼成你自己的走法。", "#d7e6dd"],
+        ["先找脚点，再伸手", "#dce5ef"], ["把重心慢慢移过去", "#e5eacb"],
+        ["高脚之后，身体跟上", "#f0dfcc"], ["左边，还是右边？", "#d8e7e2"],
+        ["换脚，转身，再回来", "#e4def0"], ["上升之后，绕到右侧", "#eee1bd"],
+        ["转个方向再出发", "#eddae0"], ["走远一点，再回家", "#d7e6dd"],
       ];
-      let mode = "limbs", lastSelected = null, filter = "all", entered = false,
-        libraryFocus = $("continueClimb"), resizeFrame = 0;
+      let entered = false, libraryFocus = $("startClimb"), resizeFrame = 0,
+        settingsReturnFocus = $("openSettings"), focusedRoute = "side",
+        celebrationKey = "";
+      const completed = new WeakMap();
+      const numberFor = route => route.imported ? "我的" : String(routes.indexOf(route) + 1).padStart(2, "0");
+      const bankFor = route => route.id === activeRoute.id
+        ? draftSnapshot() : routeDrafts.get(draftKey(route.id))?.active;
+      const poseFor = route => bankFor(route)?.current.state || {
+        hip: { ...route.hip }, limbs: clone(route.limbs || [0, 1, 2, 3]), moves: 0, complete: false,
+      };
       function mini(target, route, pose = null, focus = false, other = null) {
         const r = target.getBoundingClientRect();
         if (!r.width || !r.height) return;
@@ -7256,94 +6522,122 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
           ? "已保留 · 两边的动作与撤销记录可随时切换"
           : "姿势只在本次打开页面时保留。";
       }
-      function setMode(next) {
-        mode = next;
-        shelf.dataset.mode = mode;
-        $("limbMode").setAttribute("aria-pressed", String(mode === "limbs"));
-        $("bodyMode").setAttribute("aria-pressed", String(mode === "body"));
-        $("limbPanel").hidden = mode !== "limbs";
-        $("bodyPanel").hidden = mode !== "body";
-      }
       function sync() {
         const busy = !!drag || !!anim, gestureLocked = !!drag || !!keyboardStep;
-        for (const id of ["backToRoutes", "openPhotos", "openComparison", "reset", "bodyMode", "limbMode"])
+        for (const id of ["backToRoutes", "openPhotos", "openComparison", "reset", "openSettings", "nextRoute"])
           $(id).disabled = gestureLocked;
-        $("bodyMode").disabled = busy || gestureLocked;
         document.querySelectorAll("[data-select-limb]").forEach(b => {
           b.setAttribute("aria-pressed", String(+b.dataset.selectLimb === selected));
           b.disabled = busy;
         });
         document.querySelectorAll("[data-nudge]").forEach(b => { b.disabled = busy; });
-        if ((selected !== null && selected !== lastSelected) || drag?.kind === "limb") setMode("limbs");
-        if (drag?.kind === "hip" || drag?.kind === "chest") setMode("body");
-        lastSelected = selected;
         $("comparisonDot").hidden = !savedDraft;
-        $("actionHint").textContent = mode === "body" ? "也可直接拖胯部与肩膀"
-          : selected === null ? "选手脚，再点岩点"
-            : selected < 2 ? "点一个手点，或直接拖动手"
-              : isFree(state.limbs[selected]) ? "拖腿微调，点脚点重新踩住"
-                : "点脚点移动，或试试旗式";
+        $("redo").hidden = future.length === 0;
+        if (selected === null && !drag) $("selection").textContent = "拖动手脚试试看";
+        const number = numberFor(activeRoute), key = draftKey(activeRoute.id);
+        $("hudNumber").textContent = number;
+        $("hudTitle").textContent = activeRoute.name;
+        $("hudGoal").textContent = state.complete ? "✓ 已触碰 TOP" :
+          activeRoute.holds.some(h => h.goal) ? "触碰 TOP 岩点" : "自由探索这面岩壁";
+        $("routeChallenge").textContent = (activeRoute.challenge || "照片线路") +
+          " · " + strengthProfiles[strengthLevel].label;
+        $("pauseRoute").textContent = number + " · " + activeRoute.name + "  /  " + state.moves + " 次换点";
+        if (celebrationKey !== key || !state.complete) $("topCelebration").hidden = true;
+        if (state.complete && !anim && !completed.get(activeRoute)?.has(strengthLevel)) {
+          if (!completed.has(activeRoute)) completed.set(activeRoute, new Set());
+          completed.get(activeRoute).add(strengthLevel);
+          celebrationKey = key;
+          $("topCelebration").hidden = false;
+          $("nextRoute").textContent = routes.indexOf(activeRoute) < 7 ? "下一条 ↗" : "选线路 ↗";
+          announce("到顶了！可以继续探索，或选择下一条线路。");
+        }
         renderComparison();
       }
       function renderLibrary() {
-        const index = routes.indexOf(activeRoute), description = descriptions[index],
-          hasProgress = state.moves > 0 || past.length > 0;
-        $("featureEyebrow").textContent = entered ? "继续刚才的想法" : "从第一条线开始";
-        $("featureTitle").textContent = activeRoute.name;
-        $("featureDescription").textContent = description?.[2] || "在自己的岩壁上，试出不一样的走法。";
-        $("continueClimb").innerHTML = (entered ? "继续试动作" : "开始试动作") + ' <span aria-hidden="true">↗</span>';
-        $("featureProgress").textContent = hasProgress
-          ? state.moves + " 次换点 · 上肢力量" + strengthProfiles[strengthLevel].label
-          : "随时撤销，放心试。";
-        mini($("featureCanvas"), activeRoute, state, !!activeRoute.explore || !!activeRoute.imported);
-        document.querySelectorAll(".route-card").forEach(card => {
-          const route = routes.find(r => r.id === card.dataset.route),
-            data = descriptions[routes.indexOf(route)],
-            bank = route.id === activeRoute.id ? draftSnapshot() : routeDrafts.get(draftKey(route.id))?.active;
-          card.hidden = filter !== "all" && data[0] !== filter;
-          card.querySelector(".route-card-bottom span").textContent = bank && (bank.current.state.moves || bank.past.length)
-            ? "继续 · " + bank.current.state.moves + " 次换点"
-            : route.challenge.split(" · ")[0] + " · " + route.holds.length + " 个岩点";
-          if (!card.hidden) mini(card.querySelector("canvas"), route);
+        const route = routes.find(r => r.id === focusedRoute) || routes[0],
+          index = routes.indexOf(route), pose = poseFor(route), bank = bankFor(route);
+        const progressed = !!bank && (pose.moves > 0 || bank.past.length > 0 || bank.future.length > 0);
+        $("continueClimb").hidden = !entered || focusedRoute === activeRoute.id;
+        $("continueClimb").textContent = "返回 · " + activeRoute.name + " ↗";
+        document.title = "岩间 · 选一条，开爬";
+        $("previewNumber").textContent = numberFor(route);
+        $("routePosition").textContent = numberFor(route) + " / 08";
+        $("previewTitle").textContent = route.name;
+        $("previewChallenge").textContent = route.challenge || "照片线路";
+        $("previewDescription").textContent = descriptions[index]?.[0] || "在熟悉的岩壁上，试试新的走法";
+        $("previewStrength").textContent = strengthProfiles[strengthLevel].label + "力量";
+        $("previewStatus").textContent = completed.get(route)?.has(strengthLevel)
+          ? "✓ 本次已登顶" : progressed ? "上次停在这里" : "起步就位";
+        $("startLabel").textContent = progressed ? "继续" : "开爬";
+        $("startClimb").setAttribute("aria-label", (progressed ? "继续攀爬" : "开爬") + " · " + route.name);
+        document.querySelectorAll(".route-node").forEach(card => {
+          const target = routes.find(r => r.id === card.dataset.route);
+          card.setAttribute("aria-pressed", String(card.dataset.route === route.id));
+          card.dataset.complete = String(!!completed.get(target)?.has(strengthLevel));
         });
+        mini($("routePreview"), route, pose);
+      }
+      function closeSettings() {
+        if (!settings.open) return;
+        settingsReturnFocus = canvas;
+        settings.close();
       }
       function enterPlay(id = activeRoute.id) {
-        if (drag) return;
+        if (drag || keyboardStep) return;
         if (id !== activeRoute.id && !changeRoute(id)) return;
         entered = true;
         library.hidden = true;
         shell.inert = false;
         document.body.dataset.screen = "play";
+        document.title = "岩间 · " + activeRoute.name;
         draw();
         canvas.focus({ preventScroll: true });
         sync();
       }
-      function showLibrary() {
+      function showLibrary(id = activeRoute.id) {
         if (drag || keyboardStep) return;
         window.photoRoutes.pause();
+        if (settings.open) settings.close();
+        focusedRoute = id;
         library.hidden = false;
         shell.inert = true;
         document.body.dataset.screen = "library";
         renderLibrary();
-        (libraryFocus?.isConnected && !libraryFocus.hidden ? libraryFocus : $("continueClimb")).focus({ preventScroll: true });
+        const node = library.querySelector(`[data-route="${focusedRoute}"]`);
+        (node || $("startClimb")).focus({ preventScroll: true });
       }
       descriptions.forEach((data, index) => {
         const route = routes[index], card = document.createElement("button");
-        card.className = "route-card"; card.dataset.route = route.id;
-        card.setAttribute("aria-label", route.name + " · " + data[1]);
-        card.innerHTML = `<div class="route-card-art" style="--card-color:${data[3]}"><canvas aria-hidden="true"></canvas><span class="route-index">${String(index + 1).padStart(2, "0")}</span></div><h3>${route.name}</h3><p>${data[1]}</p><div class="route-card-bottom"><span></span><b aria-hidden="true">↗</b></div>`;
-        bindCommand(card, () => { libraryFocus = card; enterPlay(route.id); });
+        card.className = "route-node"; card.dataset.route = route.id;
+        card.setAttribute("aria-label", route.name + " · " + data[0]);
+        card.style.setProperty("--route-color", route.color || "#6682be");
+        card.textContent = String(index + 1).padStart(2, "0");
+        bindCommand(card, () => { libraryFocus = card; focusedRoute = route.id; renderLibrary(); });
         $("routeCards").append(card);
       });
+      bindCommand($("startClimb"), () => enterPlay(focusedRoute));
       bindCommand($("continueClimb"), () => { libraryFocus = $("continueClimb"); enterPlay(); });
       bindCommand($("backToRoutes"), showLibrary);
-      bindCommand($("limbMode"), () => { setMode("limbs"); sync(); });
-      bindCommand($("bodyMode"), () => {
-        if (drag || anim) return;
-        selected = null; preview = null; hover = null; setMode("body"); update(); schedule();
+      function pause() {
+        if (drag || keyboardStep) return;
+        window.photoRoutes.pause();
+        settingsReturnFocus = $("openSettings");
+        for (const id of ["gameOptions", "viewSettings", "assistSettings"]) $(id).open = false;
+        settings.showModal();
+      }
+      bindCommand($("openSettings"), pause);
+      bindCommand($("closeSettings"), () => settings.close());
+      bindCommand($("resumeClimb"), closeSettings);
+      bindCommand($("dismissTop"), () => { $("topCelebration").hidden = true; canvas.focus({ preventScroll: true }); });
+      bindCommand($("nextRoute"), () => {
+        const index = routes.indexOf(activeRoute);
+        showLibrary(routes[index >= 0 && index < 7 ? index + 1 : 0].id);
+      });
+      settings.addEventListener("close", () => {
+        if (!$("photoEditor").open && library.hidden) settingsReturnFocus.focus({ preventScroll: true });
       });
       document.querySelectorAll("[data-select-limb]").forEach(b =>
-        bindCommand(b, () => { setMode("limbs"); selectLimb(+b.dataset.selectLimb); }));
+        bindCommand(b, () => { selectLimb(+b.dataset.selectLimb); closeSettings(); }));
       document.querySelectorAll("[data-nudge]").forEach(b => bindCommand(b, () => {
         if (drag || anim) return;
         finishKeyboardStep();
@@ -7351,13 +6645,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         changeHip({ ...state.hip, x: state.hip.x + dx, y: state.hip.y + dy });
         remember(before);
         if (blocked) notify(poseSignal() || "到活动边界了 · 换个方向试试");
-        blocked = false; update(); schedule();
-      }));
-      document.querySelectorAll("[data-route-filter]").forEach(b => bindCommand(b, () => {
-        filter = b.dataset.routeFilter;
-        document.querySelectorAll("[data-route-filter]").forEach(el =>
-          el.setAttribute("aria-pressed", String(el === b)));
-        renderLibrary();
+        blocked = false; update(); schedule(); closeSettings();
       }));
       document.querySelectorAll("[data-open-photos]").forEach(b => bindCommand(b, () => {
         libraryFocus = b; window.photoRoutes.openEditor(b);
@@ -7376,10 +6664,9 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
         });
       });
       window.sketchbook = {
-        sync, enterPlay, mini,
+        sync, enterPlay, mini, closeSettings, pause,
         refreshLibrary: () => { if (!library.hidden) renderLibrary(); }
       };
-      setMode("limbs");
       sync();
       renderLibrary();
     })();
@@ -8616,6 +7903,15 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 : "估算比例"
               : "待完善草稿";
             row.append(tag);
+            const management = document.createElement("details"),
+              summary = document.createElement("summary"),
+              actions = document.createElement("div");
+            management.className = "photo-record-menu";
+            management.id = "photo-management-" + container.childElementCount;
+            summary.textContent = "管理";
+            summary.setAttribute("aria-label", "管理" + title.textContent);
+            actions.className = "record-actions-row";
+            management.append(summary, actions);
             if (route) {
               row.append(
                 actionButton("打开", () => {
@@ -8628,7 +7924,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
               );
             }
             if (restored) {
-              row.append(actionButton("改名", async () => {
+              actions.append(actionButton("改名", async () => {
                 if (busy) return;
                 const name = prompt("线路名称", title.textContent)?.trim().slice(0, 40);
                 if (!name || name === title.textContent) return;
@@ -8644,7 +7940,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                   status("改名未保存，请重试。", true);
                 } finally { busy = false; }
               }));
-              row.append(
+              (route ? actions : row).append(
                 actionButton("编辑", async () => {
                   if (busy) return;
                   busy = true;
@@ -8671,7 +7967,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 }),
               );
             }
-            row.append(
+            actions.append(
               actionButton("删除", async () => {
                 if (
                   busy ||
@@ -8693,6 +7989,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
                 }
               }),
             );
+            row.append(management);
             container.append(row);
             if (route) {
               const thumb = document.createElement("canvas");
@@ -8712,7 +8009,8 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
       let editorReturnFocus = null;
       async function openEditor(origin = $("openPhotos")) {
         if (dialog.open) return;
-        editorReturnFocus = origin;
+        editorReturnFocus = origin === $("openPhotos") ? $("openSettings") : origin;
+        window.sketchbook?.closeSettings();
         api.pause();
         epoch++;
         draft = null;
